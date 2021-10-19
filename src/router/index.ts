@@ -6,7 +6,7 @@ export const routes: Array<RouteRecordRaw> = [
   {
     path: '',
     name: 'main',
-    component: () => import('@/views/Main/index.vue'),
+    component: () => import('@/views/mys/Main/index.vue'),
   },
   generalBusiRoutes,
   adminBusiRoutes,
