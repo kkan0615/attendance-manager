@@ -17,7 +17,7 @@
         params: { busiId: 'test' }
       }"
     >
-      test
+      to test busi
     </router-link>
   </div>
 </template>

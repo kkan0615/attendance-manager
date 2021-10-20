@@ -373,6 +373,11 @@
   resolved "https://registry.yarnpkg.com/@vue/shared/-/shared-3.2.20.tgz#53746961f731a8ea666e3316271e944238dc31db"
   integrity sha512-FbpX+hD5BvXCQerEYO7jtAGHlhAkhTQ4KIV73kmLWNlawWhTiVuQxizgVb0BOkX5oG9cIRZ42EG++d/k/Efp0w==
 
+"@vueform/multiselect@^2.2.0":
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/@vueform/multiselect/-/multiselect-2.2.0.tgz#4de789e48312bd9e1edc9320cf5bdf9f8dc3f3e7"
+  integrity sha512-ozY8/JDAmrBITgEmgB61Grffw3xlQm0E7od/wRsCjx9eFFCAlguLsPOAXZz5Y8eHVjLR7RPA2M5L6A3Exttmeg==
+
 acorn-jsx@^5.2.0, acorn-jsx@^5.3.1:
   version "5.3.2"
   resolved "https://registry.yarnpkg.com/acorn-jsx/-/acorn-jsx-5.3.2.tgz#7ed5bb55908b3b2f1bc55c6af1653bada7f07937"
