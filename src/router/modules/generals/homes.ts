@@ -4,10 +4,10 @@ import HomeGeneralLayout from '@/layouts/generals/Home/index.vue'
 
 export const generalHomeRoutes: Array<RouteRecordRaw> = [
   {
-    path: 'home',
+    path: '',
     name: RouterNameEnum.GENERAL_HOME_LAYOUT,
     component: HomeGeneralLayout,
-    redirect: { name: RouterNameEnum.GENERAL_HOME_LAYOUT },
+    redirect: { name: RouterNameEnum.GENERAL_HOME_MAIN },
     children: [
       {
         path: '',
