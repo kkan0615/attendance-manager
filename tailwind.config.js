@@ -20,6 +20,9 @@ module.exports = {
       },
       fontSize: {
         cxs: ['0.5rem', '1rem']
+      },
+      height: {
+        '18': '4.5rem'
       }
     },
   },

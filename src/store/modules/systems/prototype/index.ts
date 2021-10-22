@@ -6,7 +6,7 @@ import {
 } from 'vuex'
 import { RootState } from '@/store'
 import { prototypeState, PrototypeState } from './state'
-import { applicationGetters, PrototypeGetters } from './getters'
+import { prototypeGetters, PrototypeGetters } from './getters'
 import { prototypeMutations, PrototypeMutations } from './mutations'
 import { prototypeActions, PrototypeActions } from './actions'
 
@@ -36,7 +36,7 @@ export const prototypeModule: Module<PrototypeState, RootState> = {
   // namespaced: true,
   namespaced: false,
   state: prototypeState,
-  getters: applicationGetters,
+  getters: prototypeGetters,
   mutations: prototypeMutations,
   actions: prototypeActions,
 }

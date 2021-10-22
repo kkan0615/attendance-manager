@@ -6,6 +6,6 @@ export type PrototypeGetters<S = PrototypeState> = {
   test(state: S): any
 }
 
-export const applicationGetters: GetterTree<PrototypeState, RootState> & PrototypeGetters = {
+export const prototypeGetters: GetterTree<PrototypeState, RootState> & PrototypeGetters = {
   test: (state) => state.test,
 }
