@@ -14,7 +14,7 @@
     lang="ts"
 >
 export default {
-  name: 'BaseGeneralLayoutAppbar',
+  name: 'BaseAdminLayoutAppbar',
 }
 </script>
 <script setup lang="ts">

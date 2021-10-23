@@ -50,7 +50,7 @@
   lang="ts"
 >
 export default {
-  name: 'BaseGeneralLayoutSidebar',
+  name: 'AdminGeneralLayoutSidebar',
 }
 </script>
 <script setup lang="ts">

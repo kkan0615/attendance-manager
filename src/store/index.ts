@@ -2,18 +2,22 @@ import { InjectionKey } from 'vue'
 import { createLogger, createStore, Store } from 'vuex'
 import { PrototypeState } from '@/store/modules/systems/prototype/state'
 import { prototypeModule, PrototypeStore } from '@/store/modules/systems/prototype'
-import { ApplicationActions } from '@/store/modules/systems/application/actions'
-import { applicationModule } from '@/store/modules/systems/application'
+import { applicationModule, ApplicationStore } from '@/store/modules/systems/application'
+import { CurrentState } from '@/store/modules/systems/current/state'
+import { ApplicationState } from '@/store/modules/systems/application/state'
+import { currentModule, CurrentStore } from '@/store/modules/systems/current'
 
 // define your typings for the store state
 export interface RootState {
   prototype: PrototypeState
-  application: ApplicationActions
+  application: ApplicationState
+  current: CurrentState
 }
 
 export type RootStore =
   PrototypeStore<Pick<RootState, 'prototype'>> &
-  PrototypeStore<Pick<RootState, 'application'>>
+  ApplicationStore<Pick<RootState, 'application'>> &
+  CurrentStore<Pick<RootState, 'current'>>
 
 // define injection key
 export const key: InjectionKey<Store<RootState>> = Symbol()
@@ -26,6 +30,7 @@ export const store = createStore<RootState>({
   modules: {
     prototype: prototypeModule,
     application: applicationModule,
+    current: currentModule,
   }
 })
 

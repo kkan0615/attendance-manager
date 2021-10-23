@@ -2,11 +2,11 @@
   <div
     class="tw-flex tw-h-full"
   >
-    <sidebar-base-general-layout />
+    <base-general-layout-sidebar />
     <c-main-layout
       class="tw-flex-1"
     >
-      <appbar-base-general-layout
+      <base-general-layout-appbar
         class="mb-2"
       />
       <router-view />
@@ -22,6 +22,6 @@ export default {
 </script>
 <script setup lang="ts">
 import CMainLayout from '@/components/commons/layouts/Main/index.vue'
-import AppbarBaseGeneralLayout from '@/layouts/generals/Base/components/Appbar.vue'
-import SidebarBaseGeneralLayout from '@/layouts/generals/Base/components/Sidebar.vue'
+import BaseGeneralLayoutSidebar from '@/layouts/generals/Base/components/Sidebar.vue'
+import BaseGeneralLayoutAppbar from '@/layouts/generals/Base/components/Appbar.vue'
 </script>

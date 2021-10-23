@@ -1,15 +1,19 @@
 <template>
   <div>
     <div
-      class="tw-text-lg tw-text-gray-500 hover:tw-text-white tw-p-2 tw-px-4 hover:tw-bg-gray-700 rounded tw-cursor-pointer"
+      class="c-sidebar-layout-menu-group"
+      :class="{
+        'c-sidebar-layout-menu-group--active': active,
+      }"
     >
       {{ label }}
     </div>
-    <ul
+    <c-sidebar-layout-menu-list
       class="tw-pl-4"
+      text-size="base"
     >
       <slot />
-    </ul>
+    </c-sidebar-layout-menu-list>
   </div>
 </template>
 <script
@@ -21,12 +25,30 @@ export default {
 </script>
 <script setup lang="ts">
 import { defineProps } from 'vue'
+import CSidebarLayoutMenuList from '@/components/commons/layouts/Sidebar/components/MenuList.vue'
 
 const props = defineProps({
   label: {
     type: String,
     required: false,
     default: '',
+  },
+  active: {
+    type: Boolean,
+    required: false,
+    default: false,
   }
 })
 </script>
+<style
+  scoped
+  lang="scss"
+>
+.c-sidebar-layout-menu-group {
+  @apply tw-text-lg tw-capitalize tw-text-gray-500 tw-flex tw-items-center tw-p-1 tw-px-4 tw-cursor-pointer tw-transition tw-ease-out tw-duration-200 hover:tw-text-current;
+
+  &--active {
+    @apply tw-bg-gray-500 tw-text-current tw-rounded;
+  }
+}
+</style>
