@@ -44,6 +44,22 @@
         </c-sidebar-layout-menu-item>
       </c-sidebar-layout-menu-list>
     </c-sidebar-layout-content>
+    <!--   footer   -->
+    <div
+      class="tw-mt-auto py-3"
+    >
+      <c-sidebar-layout-menu-item>
+        <router-link :to="{ name: RouterNameEnum.ADMIN_HOME_MAIN, params: { busiId: 'test' } }">
+          <c-material-icon
+            size="2xl"
+            left
+          >
+            admin_panel_settings
+          </c-material-icon>
+          Menu item 2
+        </router-link>
+      </c-sidebar-layout-menu-item>
+    </div>
   </c-sidebar-layout>
 </template>
 <script
@@ -61,4 +77,5 @@ import CSidebarLayoutMenuGroup from '@/components/commons/layouts/Sidebar/compon
 import CSidebarLayoutMenuItem from '@/components/commons/layouts/Sidebar/components/MenuItem.vue'
 import CSidebarLayoutMenuList from '@/components/commons/layouts/Sidebar/components/MenuList.vue'
 import CMaterialIcon from '@/components/commons/icons/Material/index.vue'
+import { RouterNameEnum } from '@/types/systems/routers/keys'
 </script>

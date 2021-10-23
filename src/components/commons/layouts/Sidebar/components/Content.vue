@@ -1,6 +1,6 @@
 <template>
   <div
-    class="tw-flex flex-column tw-p-2"
+    class="tw-flex tw-flex-col tw-p-2"
   >
     <slot />
   </div>

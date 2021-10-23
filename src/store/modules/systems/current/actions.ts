@@ -4,8 +4,10 @@ import { CurrentMutations, CurrentMutationTypes } from './mutations'
 import { CurrentState } from './state'
 
 export enum CurrentActionTypes {
-  LOAD_USER = 'current/ADD_TOAST',
-  RESET_USER = 'current/REMOVE_TOAST',
+  LOAD_USER = 'current/LOAD_USER',
+  RESET_USER = 'current/RESET_USER',
+  LOAD_BUSI_USER = 'current/LOAD_BUSI_USER',
+  RESET_BUSI_USER = 'current/RESET_BUSI_USER',
 }
 
 export type AugmentedActionContext = {
@@ -16,13 +18,19 @@ export type AugmentedActionContext = {
 } & Omit<ActionContext<CurrentState, RootState>, 'commit'>
 
 export interface CurrentActions {
-  [CurrentActionTypes.LOAD_USER](
+  [CurrentActionTypes.LOAD_USER] (
     { commit }: AugmentedActionContext,
-    payload: any
+    payload: string
   ): void
-  [CurrentActionTypes.RESET_USER](
+  [CurrentActionTypes.RESET_USER] (
     { commit }: AugmentedActionContext,
-    payload: any
+  ): void
+  [CurrentActionTypes.LOAD_BUSI_USER] (
+    { commit }: AugmentedActionContext,
+    payload: string
+  ): void
+  [CurrentActionTypes.RESET_BUSI_USER] (
+    { commit }: AugmentedActionContext,
   ): void
 }
 
@@ -30,7 +38,13 @@ export const currentActions: ActionTree<CurrentState, RootState> & CurrentAction
   [CurrentActionTypes.LOAD_USER] ({ commit }, payload) {
     commit(CurrentMutationTypes.SET_USER, {})
   },
-  [CurrentActionTypes.RESET_USER] ({ commit }, payload) {
+  [CurrentActionTypes.RESET_USER] ({ commit }) {
     commit(CurrentMutationTypes.SET_USER, {})
+  },
+  [CurrentActionTypes.LOAD_BUSI_USER] ({ commit }, payload) {
+    commit(CurrentMutationTypes.SET_BUSI_USER, {})
+  },
+  [CurrentActionTypes.RESET_BUSI_USER] ({ commit }) {
+    commit(CurrentMutationTypes.SET_BUSI_USER, {})
   },
 }

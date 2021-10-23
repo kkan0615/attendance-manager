@@ -1,6 +1,6 @@
 <template>
   <div>
-    Home Admin
+    Home at Admin
   </div>
 </template>
 <script
