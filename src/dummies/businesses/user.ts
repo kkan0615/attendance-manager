@@ -2,11 +2,13 @@ import { BusiUser } from '@/types/model/businesses/user'
 import { v4 } from 'uuid'
 import faker from 'faker'
 import dayjs from 'dayjs'
-import { DEMO_DUMMY_BUSINESS_ID, dummyBusinesses } from '@/dummies/businesses/business'
+import { DEMO_DUMMY_BUSINESS_ID } from '@/dummies/businesses/business'
 import { dummyUsers, SUPER_ADMIN_USER_ID } from '@/dummies/user'
 
 // eslint-disable-next-line
 export let dummyBusiUsers: BusiUser[] = []
+
+export const SUPER_ADMIN_BUSI_USER_ID = 'SUPER_ADMIN_BUSI_USER_ID'
 
 export const initDummyBusiUsers = () => {
   dummyBusiUsers = [...Array(30).keys()].map(() => {
@@ -30,8 +32,8 @@ export const initDummyBusiUsers = () => {
   })
 
   /* Add Super admin */
-  dummyBusinesses.unshift({
-    id: v4(),
+  dummyBusiUsers.unshift({
+    id: SUPER_ADMIN_BUSI_USER_ID,
     busiId: DEMO_DUMMY_BUSINESS_ID,
     userId: SUPER_ADMIN_USER_ID,
     nickname: 'Demo Super Admin',

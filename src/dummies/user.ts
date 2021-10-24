@@ -25,7 +25,7 @@ export const initDummyUsers = () => {
   })
 
   /* Add Super admin id */
-  dummyBusinesses.unshift({
+  dummyUsers.unshift({
     id: SUPER_ADMIN_USER_ID,
     nickname: 'Demo Super Admin',
     auth: 'superAdmin',
