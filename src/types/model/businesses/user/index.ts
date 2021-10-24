@@ -3,4 +3,5 @@ import { User } from '@/types/model/user'
 
 export interface BusiUser extends DefaultAttributes, User {
   busiId: string
+  userId: string
 }
