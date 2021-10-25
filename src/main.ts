@@ -2,6 +2,7 @@ import { createApp } from 'vue'
 import App from './App.vue'
 /* Router */
 import { router } from '@/router'
+import '@/router/beforeEach'
 /* Store */
 import { store } from '@/store'
 /* Bootstrap */

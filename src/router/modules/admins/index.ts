@@ -7,10 +7,10 @@ export const adminBusiRoutes: RouteRecordRaw = {
   path: '/admin/busi/:busiId',
   name: RouterNameEnum.ADMIN_BASE_LAYOUT,
   component: BaseAdminLayout,
-  meta: {
-    isGuild: true,
-  },
   children: [
     ...adminHomeRoutes,
-  ]
+  ],
+  meta: {
+    isBusiness: true,
+  },
 }

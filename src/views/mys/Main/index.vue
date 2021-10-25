@@ -11,14 +11,26 @@
     >
       test
     </button>
-    <router-link
-      :to="{
-        name: RouterNameEnum.GENERAL_HOME_MAIN,
-        params: { busiId: 'test' }
-      }"
-    >
-      to test busi
-    </router-link>
+    <div>
+      <router-link
+        :to="{
+          name: RouterNameEnum.GENERAL_HOME_MAIN,
+          params: { busiId: DEMO_DUMMY_BUSINESS_ID }
+        }"
+      >
+        to demo page
+      </router-link>
+    </div>
+    <div>
+      <router-link
+        :to="{
+          name: RouterNameEnum.AUTH_BUSINESS_LOGIN,
+          params: { busiId: DEMO_DUMMY_BUSINESS_ID }
+        }"
+      >
+        Demo login
+      </router-link>
+    </div>
   </div>
 </template>
 <script
@@ -32,6 +44,7 @@ export default {
 import { RouterNameEnum } from '@/types/systems/routers/keys'
 import useStore from '@/store'
 import { PrototypeActionTypes } from '@/store/modules/systems/prototype/actions'
+import { DEMO_DUMMY_BUSINESS_ID } from '@/dummies/businesses/business'
 
 const store = useStore()
 

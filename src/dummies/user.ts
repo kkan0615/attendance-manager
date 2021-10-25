@@ -2,12 +2,11 @@ import { User } from '@/types/model/user'
 import { v4 } from 'uuid'
 import * as faker from 'faker'
 import dayjs from 'dayjs'
-import { dummyBusinesses } from '@/dummies/businesses/business'
 
 // eslint-disable-next-line
 export let dummyUsers: User[] = []
 
-export const SUPER_ADMIN_USER_ID = 'SUPER_ADMIN_USER_ID'
+export const DEMO_SUPER_ADMIN_USER_ID = 'SUPER_ADMIN_USER_ID'
 
 export const initDummyUsers = () => {
   dummyUsers = [...Array(30).keys()].map(() => {
@@ -26,7 +25,7 @@ export const initDummyUsers = () => {
 
   /* Add Super admin id */
   dummyUsers.unshift({
-    id: SUPER_ADMIN_USER_ID,
+    id: DEMO_SUPER_ADMIN_USER_ID,
     nickname: 'Demo Super Admin',
     auth: 'superAdmin',
     name: 'SuperAdmin name',

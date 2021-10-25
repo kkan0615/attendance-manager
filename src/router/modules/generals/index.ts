@@ -9,5 +9,8 @@ export const generalBusiRoutes: RouteRecordRaw = {
   component: BaseGeneralLayout,
   children: [
     ...generalHomeRoutes,
-  ]
+  ],
+  meta: {
+    isBusiness: true,
+  },
 }

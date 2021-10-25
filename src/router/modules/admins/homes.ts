@@ -4,7 +4,7 @@ import AdminHomeLayout from '@/layouts/admins/Home/index.vue'
 
 export const adminHomeRoutes: Array<RouteRecordRaw> = [
   {
-    path: 'home',
+    path: '',
     name: RouterNameEnum.ADMIN_HOME_LAYOUT,
     component: AdminHomeLayout,
     redirect: { name: RouterNameEnum.ADMIN_HOME_MAIN },
@@ -14,6 +14,9 @@ export const adminHomeRoutes: Array<RouteRecordRaw> = [
         name: RouterNameEnum.ADMIN_HOME_MAIN,
         component: () => import('@/views/admins/Home/index.vue'),
       },
-    ]
+    ],
+    meta: {
+      isBusiness: true,
+    },
   },
 ]

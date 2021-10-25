@@ -14,6 +14,9 @@ export const generalHomeRoutes: Array<RouteRecordRaw> = [
         name: RouterNameEnum.GENERAL_HOME_MAIN,
         component: () => import('@/views/generals/Home/index.vue'),
       },
-    ]
+    ],
+    meta: {
+      isBusiness: true,
+    },
   },
 ]

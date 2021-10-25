@@ -1,10 +1,12 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
-import { adminBusiRoutes } from '@/router/modules/admins'
-import { generalBusiRoutes } from '@/router/modules/generals'
 import { myRoutes } from '@/router/modules/mys'
+import { authRoutes } from '@/router/modules/auths'
+import { generalBusiRoutes } from '@/router/modules/generals'
+import { adminBusiRoutes } from '@/router/modules/admins'
 
 export const routes: Array<RouteRecordRaw> = [
   myRoutes,
+  authRoutes,
   generalBusiRoutes,
   adminBusiRoutes,
 ]
