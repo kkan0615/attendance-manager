@@ -1,6 +1,6 @@
 {
   "name": "attendance-manager",
-  "version": "0.0.2a",
+  "version": "0.0.2b",
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc --noEmit && vite build",

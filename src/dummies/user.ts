@@ -31,7 +31,7 @@ export const initDummyUsers = () => {
     name: 'SuperAdmin name',
     color: faker.internet.color(),
     img: faker.internet.avatar(),
-    email: faker.internet.email(),
+    email: 'demo@demo.com',
     createdAt: dayjs().toISOString(),
     updatedAt: dayjs().toISOString(),
   } as User)

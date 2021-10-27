@@ -39,14 +39,15 @@
         >
           <div>
             <label
-              id="user-input"
+              id="email-input"
               class="form-label tw-mb-0"
             >
-              User id
+              Email
             </label>
             <c-base-input
-              id="user-input"
-              placeholder="User id"
+              id="email-input"
+              v-model="email"
+              placeholder="Email"
             />
           </div>
           <div>
@@ -58,6 +59,7 @@
             </label>
             <c-base-input
               id="password-input"
+              v-model="password"
               :type="isShowPassword ? 'text' : 'password'"
               placeholder="Password"
             >
@@ -124,8 +126,16 @@ import { ref } from 'vue'
 import CForm from '@/components/commons/Form/index.vue'
 import CBaseInput from '@/components/commons/inputs/Base/index.vue'
 import CMaterialIcon from '@/components/commons/icons/Material/index.vue'
+import useStore from '@/store'
+import { CurrentActionTypes } from '@/store/modules/systems/current/actions'
+import { useRoute, useRouter } from 'vue-router'
+import { RouterNameEnum } from '@/types/systems/routers/keys'
 
-const userId = ref('')
+const store = useStore()
+const router = useRouter()
+const route = useRoute()
+
+const email = ref('')
 const password = ref('')
 const isShowPassword = ref(false)
 
@@ -133,8 +143,26 @@ const onClickPasswordVisibilityBtn = () => {
   isShowPassword.value = !isShowPassword.value
 }
 
-const onClickLoginBtn = () => {
-  console.log('onClickLoginBtn')
+const onClickLoginBtn = async () => {
+  try {
+    await store.dispatch(CurrentActionTypes.LOGIN, {
+      email: email.value,
+      password: password.value,
+    })
+
+    if (route.name === RouterNameEnum.AUTH_BUSINESS_LOGIN) {
+      const { busiId } = route.params
+      console.log(busiId)
+      console.log('RouterNameEnum.AUTH_BUSINESS_LOGIN')
+      await router.push({ name: RouterNameEnum.GENERAL_HOME_MAIN, params: { busiId, } })
+    } else if (route.name === RouterNameEnum.AUTH_LOGIN) {
+      console.log('AUTH_LOGIN')
+    } else if (route.name === RouterNameEnum.AUTH_BUSINESS_ADMIN_LOGIN) {
+      console.log('RouterNameEnum.AUTH_BUSINESS_ADMIN_LOGIN')
+    }
+  } catch (e) {
+    console.error(e)
+  }
 }
 
 </script>
