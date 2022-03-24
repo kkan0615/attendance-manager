@@ -9,8 +9,10 @@
   },
   "dependencies": {
     "@quasar/extras": "^1.13.3",
+    "pinia": "^2.0.12",
     "quasar": "^2.6.1",
-    "vue": "^3.2.25"
+    "vue": "^3.2.25",
+    "vue-router": "4"
   },
   "devDependencies": {
     "@quasar/vite-plugin": "^1.0.7",
