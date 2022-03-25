@@ -7,6 +7,12 @@ export default {
 }
 </script>
 <script setup lang="ts">
+import { useSettingStore } from '@/store/setting'
+
+const settingStore = useSettingStore()
+
+/* Init all settings about app */
+settingStore.initSetting()
 </script>
 <style
   lang="scss"

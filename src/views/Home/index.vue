@@ -1,9 +1,11 @@
 <template>
-  <router-view />
+  <div>
+    Home
+  </div>
 </template>
 <script lang="ts">
 export default {
-  name: 'AppLayout',
+  name: 'HomeIndex',
 }
 </script>
 <script setup lang="ts">
