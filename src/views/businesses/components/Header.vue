@@ -1,6 +1,7 @@
 <template>
   <q-header
-    class="tw-flex tw-items-center bg-grey-2 text-black"
+    class="tw-flex tw-items-center tw-bg-white tw-text-black"
+    bordered
     style="height: 48px;"
   >
     <q-toolbar>

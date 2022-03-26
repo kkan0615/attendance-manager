@@ -1,24 +1,13 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
+import { busiRoutes } from '@/router/modules/businesses'
 
-export const routes: Array<RouteRecordRaw> = [
+export const routes: RouteRecordRaw[] = [
   {
     path: '/',
     name: 'HomeIndex',
     component: () => import('@/views/Home/index.vue'),
   },
-  {
-    path: '/business',
-    name: 'BusinessLayout',
-    component: () => import('@/views/businesses/index.vue'),
-    redirect: import.meta.env.MODE === 'production' ? undefined : { name: 'BusinessHome', params: { id: 'test' } },
-    children: [
-      {
-        path: ':id/home',
-        name: 'BusinessHome',
-        component: () => import('@/views/businesses/Home/index.vue'),
-      }
-    ]
-  },
+  ...busiRoutes,
 ]
 
 export const router = createRouter({

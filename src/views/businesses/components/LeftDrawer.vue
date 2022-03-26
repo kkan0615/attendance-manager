@@ -1,21 +1,116 @@
 <template>
   <q-drawer
     :model-value="busiSettingStore.IsLeftDrawerOpen"
-    :width="256"
+    :width="250"
     :breakpoint="700"
-    class="bg-primary text-white tw-rounded-r-2xl"
+    show-if-above
+    class="tw-bg-sidenav-dark tw-text-white"
     @update:model-value="onUpdateModelValue"
   >
     <q-scroll-area
       class="fit"
     >
       <div class="q-pa-sm">
+        <!--    My menu list    -->
         <div
-          v-for="n in 50"
-          :key="n"
+          class="text-subtitle2 text-grey-4"
         >
-          Drawer {{ n }} / 50
+          My
         </div>
+        <q-list
+          padding
+        >
+          <q-item
+            :to="{ name: 'BusiMyHome' }"
+            clickable
+            active-class="active-router"
+          >
+            <q-item-section avatar>
+              <q-icon name="home" />
+            </q-item-section>
+            <q-item-section>Home</q-item-section>
+          </q-item>
+          <q-item
+            clickable
+            :to="{ name: 'BusiMyScheduleLayout' }"
+            active-class="active-router"
+          >
+            <q-item-section avatar>
+              <q-icon name="schedule" />
+            </q-item-section>
+            <q-item-section>Schedule</q-item-section>
+          </q-item>
+          <q-item
+            clickable
+            :to="{ name: 'BusiMyHistoryLayout' }"
+            active-class="active-router"
+          >
+            <q-item-section avatar>
+              <q-icon name="history" />
+            </q-item-section>
+            <q-item-section>History</q-item-section>
+          </q-item>
+        </q-list>
+        <!--    App menu list    -->
+        <div
+          class="text-subtitle2 text-grey-4"
+        >
+          App
+        </div>
+        <q-list
+          padding
+        >
+          <q-item
+            clickable
+          >
+            <q-item-section avatar>
+              <q-icon name="people" />
+            </q-item-section>
+            <q-item-section>User</q-item-section>
+          </q-item>
+          <q-item
+            clickable
+          >
+            <q-item-section avatar>
+              <q-icon name="schedule" />
+            </q-item-section>
+            <q-item-section>Schedule</q-item-section>
+          </q-item>
+        </q-list>
+        <!--    App menu list    -->
+        <div
+          class="text-subtitle2 text-grey-4"
+        >
+          Admin
+        </div>
+        <q-list
+          padding
+        >
+          <q-item
+            clickable
+          >
+            <q-item-section avatar>
+              <q-icon name="business" />
+            </q-item-section>
+            <q-item-section>business</q-item-section>
+          </q-item>
+          <q-item
+            clickable
+          >
+            <q-item-section avatar>
+              <q-icon name="people_alt" />
+            </q-item-section>
+            <q-item-section>User</q-item-section>
+          </q-item>
+          <q-item
+            clickable
+          >
+            <q-item-section avatar>
+              <q-icon name="settings" />
+            </q-item-section>
+            <q-item-section>Settings</q-item-section>
+          </q-item>
+        </q-list>
       </div>
     </q-scroll-area>
   </q-drawer>
@@ -31,7 +126,21 @@ import { useBusiSettingStore } from '@/store/businessSetting'
 const busiSettingStore = useBusiSettingStore()
 
 const onUpdateModelValue = (bool: boolean) => {
-  if (!busiSettingStore.IsLeftDrawerOpen !== bool)
-    busiSettingStore.setLeftDrawer(bool)
+  busiSettingStore.setLeftDrawer(bool)
 }
 </script>
+<style
+  lang="scss"
+  scoped
+>
+/*
+   active router
+ */
+.active-router {
+  @apply tw-bg-q-primary tw-rounded-r-full tw-mr-2;
+}
+
+.q-item {
+  min-height: 40px;
+}
+</style>
