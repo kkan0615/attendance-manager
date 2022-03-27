@@ -6,7 +6,7 @@ export const busiRoutes: RouteRecordRaw[] = [
     path: '/business/:id',
     name: 'BusinessLayout',
     component: () => import('@/views/businesses/index.vue'),
-    redirect: import.meta.env.MODE === 'production' ? undefined : { name: 'BusinessMyHome', params: { id: 'test' } },
+    redirect: import.meta.env.MODE === 'production' ? undefined : { name: 'BusiMyLayout', params: { id: 1 } },
     meta: { isBusi: true },
     children: [
       ...busiMyRoutes,

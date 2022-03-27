@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@quasar/extras": "^1.13.3",
+    "dayjs": "^1.11.0",
     "pinia": "^2.0.12",
     "quasar": "^2.6.1",
     "vue": "^3.2.25",

@@ -1,7 +1,9 @@
 import { defineStore } from 'pinia'
 import { User, UserLoginForm } from '@/types/models/users'
 import { Business } from '@/types/models/businesses'
-import { BusiUser } from '@/types/models/users/business'
+import { BusiUser, BusiUserUpdateForm, CurrentBusiUserForm } from '@/types/models/users/business'
+import dayjs from 'dayjs'
+import { LocalStorageKeyEnum } from '@/types/commons/storage'
 
 export interface CurrentState {
   currentUser: User
@@ -45,7 +47,9 @@ export const useCurrentStore = defineStore('current', {
      * Load Current User
      */
     loadCurrentUser () {
-      this.currentUser = {} as User
+      this.currentUser = {
+        id: 1 // @TODO: test
+      } as User
     },
     /**
      * Reset Current User
@@ -56,8 +60,10 @@ export const useCurrentStore = defineStore('current', {
     /**
      * Load Current Business
      */
-    loadCurrentBusiness () {
-      this.currentBusiness = {} as Business
+    loadCurrentBusiness (payload: number) {
+      this.currentBusiness = {
+        id: payload // @TODO: test
+      } as Business
     },
     /**
      * Reset Current Business
@@ -68,8 +74,16 @@ export const useCurrentStore = defineStore('current', {
     /**
      * Load Current Business User
      */
-    loadCurrentBusiUser () {
-      this.currentBusiUser = {} as BusiUser
+    async loadCurrentBusiUser (payload: CurrentBusiUserForm) {
+      this.currentBusiUser = {
+        id: 1,
+        userId: payload.userId,
+        busiId: payload.busiId,
+        status: 'work',
+        startWorkAt: dayjs().subtract(8, 'minutes').toISOString()
+      } as BusiUser // @TODO: test
+
+      return this.currentUser
     },
     /**
      * Reset Current Business User
@@ -88,9 +102,40 @@ export const useCurrentStore = defineStore('current', {
      * Logout
      */
     logout () {
+      localStorage.removeItem(LocalStorageKeyEnum['ACCESS-TOKEN'])
+      localStorage.removeItem(LocalStorageKeyEnum['REFRESH-TOKEN'])
       this.resetCurrentUser()
       this.resetCurrentBusiness()
       this.resetCurrentBusiUser()
+    },
+    /**
+     * Update current Busi User
+     */
+    async updateCurrentBusiUser (payload: BusiUserUpdateForm) {
+      this.currentBusiUser = {
+        ...payload
+      } as BusiUser
+
+      return 0
+    },
+    // @TODO: move to user store
+    async startWork (payload: BusiUserUpdateForm) {
+      this.updateCurrentBusiUser({
+        ...payload,
+        startWorkAt: dayjs().toISOString(),
+        status: 'work' // change to status to work
+      })
+
+      return 0
+    },
+    // @TODO: move to user store
+    async getOffWork (payload: BusiUserUpdateForm) {
+      this.updateCurrentBusiUser({
+        ...payload,
+        startWorkAt: null,
+        status: 'off' // change to status to work
+      })
+      return 0
     },
   }
 })

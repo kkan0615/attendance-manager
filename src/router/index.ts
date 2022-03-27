@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
 import { busiRoutes } from '@/router/modules/businesses'
+import { authRoutes } from '@/router/modules/auth'
 
 export const routes: RouteRecordRaw[] = [
   {
@@ -7,6 +8,7 @@ export const routes: RouteRecordRaw[] = [
     name: 'HomeIndex',
     component: () => import('@/views/Home/index.vue'),
   },
+  ...authRoutes,
   ...busiRoutes,
 ]
 

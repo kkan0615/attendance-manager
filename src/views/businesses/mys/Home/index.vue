@@ -2,12 +2,33 @@
   <q-page
     padding
   >
-    BusinessHome
-    <q-btn
-      color="primary"
+    <div
+      class="home-content"
     >
-      test
-    </q-btn>
+      <q-card
+        class="left-card"
+      >
+        <q-card-section>
+          <!-- Image -->
+          <business-home-profile />
+          <div
+            class="tw-mt-4 tw-space-y-3"
+          >
+            <!-- On the job -->
+            <business-home-work-btn />
+            <!-- status -->
+            <business-home-status-select />
+          </div>
+        </q-card-section>
+      </q-card>
+      <q-card
+        class="right-card"
+      >
+        <q-card-section>
+          right
+        </q-card-section>
+      </q-card>
+    </div>
   </q-page>
 </template>
 <script lang="ts">
@@ -16,5 +37,26 @@ export default {
 }
 </script>
 <script setup lang="ts">
-import { ref } from 'vue'
+import BusinessHomeWorkBtn from '@/views/businesses/mys/Home/components/WorkBtn.vue'
+import BusinessHomeStatusSelect from '@/views/businesses/mys/Home/components/StatusSelect.vue'
+import BusinessHomeProfile from '@/views/businesses/mys/Home/components/Profile.vue'
 </script>
+<style
+  lang="scss"
+  scoped
+>
+/* Left card max width */
+$leftCardMaxWidth: 400px;
+
+.home-content {
+  @apply md:tw-flex md:tw-space-x-2 tw-space-x-0 md:tw-space-y-0 tw-space-y-2;
+
+  .left-card {
+    @apply lg:tw-w-full lg:tw-max-w-md;
+  }
+
+  .right-card {
+    @apply tw-grow;
+  }
+}
+</style>

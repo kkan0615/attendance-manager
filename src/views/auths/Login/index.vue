@@ -1,11 +1,13 @@
 <template>
-  <router-view />
+  <div>
+    AuthLogin
+  </div>
 </template>
 <script lang="ts">
 export default {
-  name: 'BusinessMyLayout',
+  name: 'AuthLogin',
 }
 </script>
 <script setup lang="ts">
-
+import { ref } from 'vue'
 </script>

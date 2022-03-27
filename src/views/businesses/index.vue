@@ -20,5 +20,14 @@ export default {
 <script setup lang="ts">
 import BusiLayoutHeader from '@/views/businesses/components/Header.vue'
 import BusiLayoutLeftDrawer from '@/views/businesses/components/LeftDrawer.vue'
-import BusiLayoutBusiMiniDrawer from '@/views/businesses/components/BusiMiniDrawer.vue'
+import { useCurrentStore } from '@/store/current'
+import { onBeforeUnmount } from 'vue'
+
+const currentStore = useCurrentStore()
+
+onBeforeUnmount(() => {
+  currentStore.resetCurrentBusiness()
+  currentStore.resetCurrentBusiUser()
+})
+
 </script>

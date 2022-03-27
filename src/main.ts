@@ -2,6 +2,7 @@ import { createApp } from 'vue'
 import { i18n } from '@/locale'
 import { createPinia } from 'pinia'
 import { router } from '@/router'
+import '@/router/beforeRoute'
 import App from './App.vue'
 /* Quasar */
 import { Quasar } from 'quasar'

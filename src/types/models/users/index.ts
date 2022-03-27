@@ -4,6 +4,7 @@ export interface User extends DefaultAttributes {
   name: string
   nickname: string
   email: string
+  img?: string
 }
 
 export type UserLoginForm = Pick<User, 'email'> & {

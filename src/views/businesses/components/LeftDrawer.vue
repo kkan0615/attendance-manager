@@ -2,7 +2,6 @@
   <q-drawer
     :model-value="busiSettingStore.IsLeftDrawerOpen"
     :width="250"
-    :breakpoint="700"
     show-if-above
     class="tw-bg-sidenav-dark tw-text-white"
     @update:model-value="onUpdateModelValue"

@@ -16,7 +16,10 @@ module.exports = {
         'q-danger': '#C10015',
         'q-light': '#f8f9fa',
         'q-dark': '#1D1D1D',
-        'sidenav-dark': '#2c323f'
+        'sidenav-dark': '#2c323f',
+        'status-work': '#21BA45',
+        'status-rest': '#F2C037',
+        'status-off': '#C10015',
       }
     },
   },
