@@ -8,11 +8,13 @@
       <q-card
         class="left-card"
       >
-        <q-card-section>
+        <q-card-section
+          class="tw-h-full"
+        >
           <!-- Image -->
           <business-home-profile />
           <div
-            class="tw-mt-4 tw-space-y-3"
+            class="tw-mt-2 tw-space-y-3"
           >
             <!-- On the job -->
             <business-home-work-btn />
@@ -49,10 +51,10 @@ import BusinessHomeProfile from '@/views/businesses/mys/Home/components/Profile.
 $leftCardMaxWidth: 400px;
 
 .home-content {
-  @apply md:tw-flex md:tw-space-x-2 tw-space-x-0 md:tw-space-y-0 tw-space-y-2;
+  @apply md:tw-flex md:tw-space-x-2 tw-space-x-0 md:tw-space-y-0 tw-space-y-2 tw-h-full;
 
   .left-card {
-    @apply lg:tw-w-full lg:tw-max-w-md;
+    @apply lg:tw-w-full lg:tw-max-w-sm tw-h-full;
   }
 
   .right-card {

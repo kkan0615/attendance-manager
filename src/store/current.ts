@@ -77,6 +77,8 @@ export const useCurrentStore = defineStore('current', {
     async loadCurrentBusiUser (payload: CurrentBusiUserForm) {
       this.currentBusiUser = {
         id: 1,
+        name: 'Hanamaru',
+        nickname: 'Hanamaru',
         userId: payload.userId,
         busiId: payload.busiId,
         status: 'work',
