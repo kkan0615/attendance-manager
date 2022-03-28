@@ -1,6 +1,6 @@
 import { RouteRecordRaw } from 'vue-router'
 import { busiHistoryRoutes } from '@/router/modules/businesses/mys/histories'
-import { busiScheduleRoutes } from '@/router/modules/businesses/mys/schedules'
+import { busiMyScheduleRoutes } from '@/router/modules/businesses/mys/schedules'
 
 export const busiMyRoutes: RouteRecordRaw[] = [
   {
@@ -16,7 +16,7 @@ export const busiMyRoutes: RouteRecordRaw[] = [
         component: () => import('@/views/businesses/mys/Home/index.vue'),
         meta: { isBusi: true },
       },
-      ...busiScheduleRoutes,
+      ...busiMyScheduleRoutes,
       ...busiHistoryRoutes,
     ]
   },

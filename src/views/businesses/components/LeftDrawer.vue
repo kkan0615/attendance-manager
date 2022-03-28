@@ -87,6 +87,16 @@
         >
           <q-item
             clickable
+            :to="{ name: 'BusiAdminQRCodeLayout' }"
+            active-class="active-router"
+          >
+            <q-item-section avatar>
+              <q-icon name="qr_code_scanner" />
+            </q-item-section>
+            <q-item-section>QR code Scanner</q-item-section>
+          </q-item>
+          <q-item
+            clickable
           >
             <q-item-section avatar>
               <q-icon name="business" />

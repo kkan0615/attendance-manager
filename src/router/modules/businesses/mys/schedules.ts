@@ -1,6 +1,6 @@
 import { RouteRecordRaw } from 'vue-router'
 
-export const busiScheduleRoutes: RouteRecordRaw[] = [
+export const busiMyScheduleRoutes: RouteRecordRaw[] = [
   {
     path: 'schedule',
     name: 'BusiMyScheduleLayout',

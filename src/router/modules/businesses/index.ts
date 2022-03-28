@@ -1,5 +1,6 @@
 import { RouteRecordRaw } from 'vue-router'
 import { busiMyRoutes } from '@/router/modules/businesses/mys'
+import { busiAdminRoutes } from '@/router/modules/businesses/admins'
 
 export const busiRoutes: RouteRecordRaw[] = [
   {
@@ -10,6 +11,7 @@ export const busiRoutes: RouteRecordRaw[] = [
     meta: { isBusi: true },
     children: [
       ...busiMyRoutes,
+      ...busiAdminRoutes,
     ]
   },
 ]

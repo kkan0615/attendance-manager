@@ -1,13 +1,18 @@
 import { defineStore } from 'pinia'
 import { User, UserLoginForm } from '@/types/models/users'
-import { Business } from '@/types/models/businesses'
-import { BusiUser, BusiUserUpdateForm, CurrentBusiUserForm } from '@/types/models/users/business'
+import { BusinessInfo } from '@/types/models/businesses'
+import {
+  BusiUser,
+  BusiUserQRCodeUpdateForm,
+  BusiUserUpdateForm,
+  CurrentBusiUserForm
+} from '@/types/models/users/business'
 import dayjs from 'dayjs'
 import { LocalStorageKeyEnum } from '@/types/commons/storage'
 
 export interface CurrentState {
   currentUser: User
-  currentBusiness: Business
+  currentBusiness: BusinessInfo
   currentBusiUser: BusiUser
 }
 
@@ -15,7 +20,7 @@ export const useCurrentStore = defineStore('current', {
   state: (): CurrentState => {
     return {
       currentUser: {} as User,
-      currentBusiness: {} as Business,
+      currentBusiness: {} as BusinessInfo,
       currentBusiUser: {} as BusiUser,
     }
   },
@@ -62,14 +67,30 @@ export const useCurrentStore = defineStore('current', {
      */
     loadCurrentBusiness (payload: number) {
       this.currentBusiness = {
-        id: payload // @TODO: test
-      } as Business
+        id: payload,
+        allowedLocations: [
+          {
+            id: 1,
+            busiId: payload,
+            lat: 37.596415,
+            lon: 126.722546,
+            meter: 10,
+          },
+          {
+            id: 2,
+            busiId: payload,
+            lat: 37.601544,
+            lon: 126.728071,
+            meter: 10,
+          },
+        ]
+      } as BusinessInfo // @TODO: test
     },
     /**
      * Reset Current Business
      */
     resetCurrentBusiness () {
-      this.currentBusiness = {} as Business
+      this.currentBusiness = {} as BusinessInfo
     },
     /**
      * Load Current Business User
@@ -122,6 +143,38 @@ export const useCurrentStore = defineStore('current', {
     },
     // @TODO: move to user store
     async startWork (payload: BusiUserUpdateForm) {
+      this.updateCurrentBusiUser({
+        ...payload,
+        startWorkAt: dayjs().toISOString(),
+        status: 'work' // change to status to work
+      })
+
+      return 0
+    },
+    // @TODO: move to user store
+    async startWorkByQRCode (payload: BusiUserQRCodeUpdateForm) {
+      try {
+        const readerTime = dayjs(payload.readerTime)
+        // @TODO: Change 17 to const variable
+        if (dayjs().diff(readerTime, 'seconds') <= 17) {
+          await this.updateCurrentBusiUser({
+            ...payload,
+            startWorkAt: dayjs().toISOString(),
+            status: 'work' // change to status to work
+          })
+
+          return 1
+        } else {
+          throw new Error('Timeout!')
+        }
+      } catch (e) {
+        console.error(e)
+        throw e
+      }
+
+    },
+    // @TODO: move to user store
+    async startWorkByLocation (payload: BusiUserUpdateForm) {
       this.updateCurrentBusiUser({
         ...payload,
         startWorkAt: dayjs().toISOString(),

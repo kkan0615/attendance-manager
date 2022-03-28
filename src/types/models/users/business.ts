@@ -26,3 +26,6 @@ export interface BusiUser extends User {
 
 export type CurrentBusiUserForm = Pick<BusiUser, 'userId' | 'busiId'>
 export type BusiUserUpdateForm = BusiUser
+export type BusiUserQRCodeUpdateForm = BusiUser & {
+  readerTime: string
+}

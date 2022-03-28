@@ -5,10 +5,10 @@
  * @param lat2
  * @param lon2
  * @param unit
- * @return meter data
+ * @return km data
  * ref: https://www.geodatasource.com/developers/javascript
  */
-export const calculateTwoCoord = (lat1: number, lon1: number, lat2: number, lon2: number, unit = 'K') => {
+export const calculateTwoCoord = (lat1: number, lon1: number, lat2: number, lon2: number) => {
   if ((lat1 == lat2) && (lon1 == lon2)) {
     return 0
   } else {
@@ -23,12 +23,8 @@ export const calculateTwoCoord = (lat1: number, lon1: number, lat2: number, lon2
     dist = Math.acos(dist)
     dist = dist * 180 / Math.PI
     dist = dist * 60 * 1.1515
-    if (unit == 'K') {
-      dist = dist * 1.609344
-    }
-    if (unit == 'N') {
-      dist = dist * 0.8684
-    }
+    // Km
+    dist = dist * 1.609344
 
     console.log(dist)
     return dist
