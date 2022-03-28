@@ -31,7 +31,7 @@ const options = ref(userStatusSelectOption)
 
 
 const optionDisabled = (option: { label: string; value: UserStatus }) => {
-  return currentStore.CurrentBusiUser.startWorkAt && option.value === 'off'
+  return !!currentStore.CurrentBusiUser.startWorkAt && option.value === 'off'
 }
 
 const onUpdateModelValue = async (option: { label: string; value: UserStatus }) => {
