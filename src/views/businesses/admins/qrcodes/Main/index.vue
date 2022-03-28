@@ -23,7 +23,7 @@ QRCode ref
         style="height: 400px;"
       >
         <div
-          v-if="hasCamera"
+          v-show="hasCamera"
           class="tw-h-full tw-w-full"
         >
           <video
@@ -40,7 +40,7 @@ QRCode ref
           </q-inner-loading>
         </div>
         <div
-          v-else
+          v-show="!hasCamera"
           class="tw-flex justify-center items-center tw-h-full text-h5"
         >
           Camera is not supported
