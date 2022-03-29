@@ -13,6 +13,18 @@ export const busiAdminUserRoutes: RouteRecordRaw[] = [
         name: 'BusiAdminUserList',
         component: () => import('@/views/businesses/admins/users/List/index.vue'),
         meta: { isBusi: true },
+      },
+      {
+        path: 'form/id/:id',
+        name: 'BusiAdminUserUpdateForm',
+        component: () => import('@/views/businesses/admins/users/Form/index.vue'),
+        meta: { isBusi: true },
+      },
+      {
+        path: 'detail/id/:id',
+        name: 'BusiAdminUserDetail',
+        component: () => import('@/views/businesses/admins/users/Detail/index.vue'),
+        meta: { isBusi: true },
       }
     ]
   },

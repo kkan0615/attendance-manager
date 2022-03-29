@@ -3,7 +3,7 @@
     padding
   >
     <c-layout-menubar
-      tittle="History main"
+      tittle="Admin User list"
       :breadcrumbs="breadcrumbs"
     />
     <div
@@ -54,11 +54,11 @@ export default {
 <script setup lang="ts">
 import { computed, ref } from 'vue'
 import { QBreadcrumbsElProps } from 'quasar'
-import { useBusiUserStore } from '@/store/user'
+import { useBusiUserStore } from '@/store/busiUser'
 import { useCurrentStore } from '@/store/current'
+import { BusiUserStatus, userStatusSelectOption } from '@/types/models/users/business'
 import CLayoutMenubar from '@/components/commons/layouts/Menubar/index.vue'
 import BusiAdminUserListUserCard from '@/views/businesses/admins/users/List/components/UserCard.vue'
-import { BusiUserStatus, userStatusSelectOption } from '@/types/models/users/business'
 
 const busiUserStore = useBusiUserStore()
 const currentStore = useCurrentStore()

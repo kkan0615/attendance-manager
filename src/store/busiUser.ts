@@ -50,7 +50,7 @@ export const useBusiUserStore = defineStore('BusiUserAdmin', {
      * BusiUserAdmin
      * @param state
      */
-    BusiUser (state) {
+    BusiUserAdmin (state) {
       return state.busiUserAdmin
     },
   },

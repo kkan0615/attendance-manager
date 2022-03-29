@@ -11,7 +11,9 @@ QRCode ref
       bordered
       class="tw-mx-auto tw-max-w-xl"
     >
-      <q-card-section>
+      <q-card-section
+        class="q-py-sm"
+      >
         <div
           class="text-h6 text-center"
         >
@@ -20,7 +22,7 @@ QRCode ref
       </q-card-section>
       <q-separator />
       <q-card-section
-        style="height: 400px;"
+        style="height: 515px;"
       >
         <div
           v-show="hasCamera"

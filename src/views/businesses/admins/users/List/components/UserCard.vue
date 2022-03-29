@@ -1,7 +1,8 @@
 <template>
   <q-card>
     <div
-      class="image-container q-mt-md"
+      class="image-container q-mt-md cursor-pointer"
+      @click="onClickCardSection"
     >
       <q-avatar
         color="secondary"
@@ -127,7 +128,9 @@ import dayjs from 'dayjs'
 import { useQuasar } from 'quasar'
 import { showSnackbar } from '@/utils/libs/quasar/notify'
 import { useI18n } from 'vue-i18n'
+import { useRouter } from 'vue-router'
 
+const router = useRouter()
 const $q = useQuasar()
 const i18n = useI18n()
 
@@ -166,6 +169,15 @@ const clearTimer = () => {
   }
 }
 
+const onClickCardSection = () => {
+  if (props.user) {
+    router.push({
+      name: 'BusiAdminUserDetail',
+      params: { id: props.user.id }
+    })
+  }
+}
+
 const onClickWorkOffBtn = () => {
   $q.dialog({
     title: `Get off the work of ${props.user?.name}`,
@@ -183,7 +195,12 @@ const onClickWorkOffBtn = () => {
 }
 
 const onClickEditBtn = () => {
-// @TODO: Add logic
+  if (props.user) {
+    router.push({
+      name: 'BusiAdminUserUpdateForm',
+      params: { id: props.user.id }
+    })
+  }
 }
 
 const onClickDeleteBtn = () => {

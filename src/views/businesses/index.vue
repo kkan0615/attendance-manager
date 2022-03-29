@@ -24,13 +24,31 @@ import { useCurrentStore } from '@/store/current'
 import { onBeforeUnmount } from 'vue'
 import { useQuasar } from 'quasar'
 import { useBusiSettingStore } from '@/store/businessSetting'
+import { showSnackbar } from '@/utils/libs/quasar/notify'
+import { useRouter } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 
+const router = useRouter()
+const i18n = useI18n()
 const currentStore = useCurrentStore()
 const busiSettingStore = useBusiSettingStore()
 const $q = useQuasar()
 
 if (!$q.platform.is.desktop) {
   busiSettingStore.setLeftDrawer(false)
+}
+
+/* Check auth user */
+if (!currentStore.CurrentBusiUser
+    || !currentStore.CurrentBusiUser.id
+    || currentStore.CurrentBusiUser.busiId !== currentStore.CurrentBusiness.id
+) {
+  showSnackbar({
+    message: i18n.t('commons.messages.UnAuthUser'),
+    color: 'negative'
+  })
+  //@TODO: change to redirect to login or user page
+  router.push({ name: 'BusiMyLayout' })
 }
 
 onBeforeUnmount(() => {

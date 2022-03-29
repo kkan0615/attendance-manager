@@ -9,6 +9,7 @@ import {
 } from '@/types/models/users/business'
 import dayjs from 'dayjs'
 import { LocalStorageKeyEnum } from '@/types/commons/storage'
+import { BusiUserDummy } from '@/dummies/users/busiUser'
 
 export interface CurrentState {
   currentUser: User
@@ -97,17 +98,15 @@ export const useCurrentStore = defineStore('current', {
      * Load Current Business User
      */
     async loadCurrentBusiUser (payload: CurrentBusiUserForm) {
-      this.currentBusiUser = {
-        id: 1,
-        email: 'hanamaru@demo.com',
-        name: 'Hanamaru',
-        nickname: 'Hanamaru',
-        userId: payload.userId,
-        busiId: payload.busiId,
-        status: 'work',
-        startWorkAt: dayjs().subtract(8, 'minutes').toISOString(),
-        auth: 'superAdmin',
-      } as BusiUser // @TODO: test
+      if (import.meta.env.VITE_IS_USE_DUMMY) {
+        const foundDummy = BusiUserDummy.find(dummy => dummy.userId === payload.userId && dummy.busiId === payload.busiId)
+        if (!foundDummy) {
+          throw new Error('No found data')
+        }
+        this.currentBusiUser = foundDummy
+      } else {
+        this.currentBusiUser = {} as BusiUser // @TODO: test
+      }
 
       return this.currentUser
     },
