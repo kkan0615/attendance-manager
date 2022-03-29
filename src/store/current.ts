@@ -68,6 +68,7 @@ export const useCurrentStore = defineStore('current', {
     loadCurrentBusiness (payload: number) {
       this.currentBusiness = {
         id: payload,
+        name: 'Demo Business',
         allowedLocations: [
           {
             id: 1,
@@ -98,12 +99,14 @@ export const useCurrentStore = defineStore('current', {
     async loadCurrentBusiUser (payload: CurrentBusiUserForm) {
       this.currentBusiUser = {
         id: 1,
+        email: 'hanamaru@demo.com',
         name: 'Hanamaru',
         nickname: 'Hanamaru',
         userId: payload.userId,
         busiId: payload.busiId,
         status: 'work',
-        startWorkAt: dayjs().subtract(8, 'minutes').toISOString()
+        startWorkAt: dayjs().subtract(8, 'minutes').toISOString(),
+        auth: 'superAdmin',
       } as BusiUser // @TODO: test
 
       return this.currentUser

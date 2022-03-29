@@ -213,7 +213,6 @@ const onCLickWorkBtn = async () => {
         /* Check that location is in the allowed location */
         // @TODO: test : lang and long is, 0.01 is 10 meter
         // 37.6015565, 126.7280587
-        console.log(position.coords.latitude, position.coords.longitude)
         if (currentStore.CurrentBusiness.allowedLocations
           .some(allowedLocation => calculateTwoCoord(allowedLocation.lat, allowedLocation.lon, position.coords.latitude, position.coords.longitude)
               <= allowedLocation.meter * 0.001)) {

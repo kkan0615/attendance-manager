@@ -105,6 +105,8 @@
           </q-item>
           <q-item
             clickable
+            :to="{ name: 'BusiAdminUserLayout' }"
+            active-class="active-router"
           >
             <q-item-section avatar>
               <q-icon name="people_alt" />

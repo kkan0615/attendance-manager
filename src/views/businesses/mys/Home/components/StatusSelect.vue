@@ -24,17 +24,17 @@ export default {
 <script setup lang="ts">
 import { useCurrentStore } from '@/store/current'
 import { ref } from 'vue'
-import { UserStatus, userStatusSelectOption } from '@/types/models/users/business'
+import { BusiUserStatus, userStatusSelectOption } from '@/types/models/users/business'
 
 const currentStore = useCurrentStore()
 const options = ref(userStatusSelectOption)
 
 
-const optionDisabled = (option: { label: string; value: UserStatus }) => {
+const optionDisabled = (option: { label: string; value: BusiUserStatus }) => {
   return !!currentStore.CurrentBusiUser.startWorkAt && option.value === 'off'
 }
 
-const onUpdateModelValue = async (option: { label: string; value: UserStatus }) => {
+const onUpdateModelValue = async (option: { label: string; value: BusiUserStatus }) => {
   try {
     /* Update the data of busi user */
     await currentStore.updateCurrentBusiUser({

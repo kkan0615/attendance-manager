@@ -1,3 +1,11 @@
 export const enDictionary = {
-  // put the data on here
+  commons: {
+    tooltips: {
+      edit: 'Edit'
+    },
+    messages: {
+      Saved: 'Success to saved',
+      SaveFailed: 'Fail to save',
+    }
+  }
 }

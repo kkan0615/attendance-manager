@@ -131,7 +131,6 @@ const onSuccessScan = async (result: string) => {
 const onErrorScan = (error: string | Error) => {
   // console.error(error)
   if (error !== 'No QR code found') {
-    console.log('hi?')
     if (qrScanner.value) {
       // @TODO add notify here
       reRunScanner()

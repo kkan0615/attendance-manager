@@ -26,7 +26,6 @@ export const calculateTwoCoord = (lat1: number, lon1: number, lat2: number, lon2
     // Km
     dist = dist * 1.609344
 
-    console.log(dist)
     return dist
   }
 }
