@@ -5,9 +5,11 @@
     <!-- timer -->
     <div
       v-if="currentStore.CurrentBusiUser.startWorkAt"
-      class="tw-text-center text-h5 tw-mb-2"
+      class="tw-text-center tw-mb-2"
     >
-      {{ hours }}:{{ minutes }}:{{ seconds }}
+      <work-timer
+        :start-time="currentStore.CurrentBusiUser.startWorkAt"
+      />
     </div>
     <q-select
       v-if="!currentStore.CurrentBusiUser.startWorkAt"
@@ -103,6 +105,7 @@ import { useCurrentStore } from '@/store/current'
 import dayjs from 'dayjs'
 import QRCodeStyling from 'qr-code-styling'
 import { calculateTwoCoord } from '@/utils/commons/coordinate'
+import WorkTimer from '@/components/WorkTimer.vue'
 
 const DEFAULT_QRCODE_TIMER_MAX_SECONDS = 15
 

@@ -10,6 +10,8 @@ import '@quasar/extras/material-icons/material-icons.css'
 import 'quasar/src/css/index.sass'
 /* Tailwind */
 import '@/styles/libs/tailwind.css'
+/* Custom Styles */
+import '@/styles/index.scss'
 
 const app = createApp(App)
 app

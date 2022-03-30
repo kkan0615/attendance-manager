@@ -44,7 +44,7 @@ if (!currentStore.CurrentBusiUser
     || currentStore.CurrentBusiUser.busiId !== currentStore.CurrentBusiness.id
 ) {
   showSnackbar({
-    message: i18n.t('commons.messages.UnAuthUser'),
+    message: i18n.t('Commons.Messages.unAuthUser'),
     color: 'negative'
   })
   //@TODO: change to redirect to login or user page

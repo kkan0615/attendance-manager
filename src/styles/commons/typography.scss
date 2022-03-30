@@ -1,0 +1,6 @@
+.c-text-first-uppercase {
+  text-transform: lowercase;
+  &::first-letter {
+    text-transform: uppercase;
+  }
+}

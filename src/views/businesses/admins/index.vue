@@ -23,7 +23,7 @@ if (!currentStore.CurrentBusiUser
     || currentStore.CurrentBusiUser.auth === 'staff')
 ) {
   showSnackbar({
-    message: i18n.t('commons.messages.UnAuthUser'),
+    message: i18n.t('Commons.Messages.unAuthUser'),
     color: 'negative'
   })
   router.push({ name: 'BusiMyLayout' })

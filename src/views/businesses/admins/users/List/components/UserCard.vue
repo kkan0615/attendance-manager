@@ -20,31 +20,26 @@
           fit="cover"
           :src="user.img"
         />
-        <span>
+        <span
+          v-else
+        >
           {{ user.name[0] }}
         </span>
       </q-avatar>
-      <q-badge
-        class="status-badge text-subtitle2"
-        :class="{
-          'tw-bg-status-work': user.status === 'work',
-          'tw-bg-status-rest': user.status === 'rest',
-          'tw-bg-status-off': user.status === 'off',
-        }"
-      >
-        {{ user.status }}
-      </q-badge>
+      <busi-user-status-badge
+        class="status-badge"
+        :status="user.status"
+      />
     </div>
     <q-card-section>
       <div
-        class="text-center text-h5 q-mb-sm"
+        class="text-center q-mb-sm"
         style="min-height: 32px;"
       >
-        <span
+        <work-timer
           v-if="user.startWorkAt"
-        >
-          {{ hours }}:{{ minutes }}:{{ seconds }}
-        </span>
+          :start-time="user.startWorkAt"
+        />
       </div>
       <div
         class="tw-flex"
@@ -129,6 +124,8 @@ import { useQuasar } from 'quasar'
 import { showSnackbar } from '@/utils/libs/quasar/notify'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
+import WorkTimer from '@/components/WorkTimer.vue'
+import BusiUserStatusBadge from '@/components/commons/BusiUserStatusBadge.vue'
 
 const router = useRouter()
 const $q = useQuasar()
@@ -186,7 +183,7 @@ const onClickWorkOffBtn = () => {
   }).onOk(() => {
     console.log('>>>> OK')
     showSnackbar({
-      message: i18n.t('commons.messages.Saved'),
+      message: i18n.t('Commons.Messages.saved'),
       color: 'positive'
     })
   }).onCancel(() => {

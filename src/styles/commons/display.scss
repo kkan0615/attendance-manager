@@ -1,0 +1,34 @@
+/***************************
+Ex)
+label       content
+ **************************/
+.c-display-row {
+  @apply tw-flex tw-py-0.5;
+
+  &--label {
+    // @TODO: Add breakpoint of width
+    @apply tw-font-light tw-w-3/12;
+  }
+
+  &--content {
+    // @TODO: Add breakpoint of width
+    @apply tw-ml-auto tw-w-9/12;
+  }
+}
+
+
+/*******************************
+Ex)
+label                   content
+ ******************************/
+.c-display-row-end {
+  @apply tw-flex tw-py-0.5;
+
+  &--label {
+    @apply tw-font-light;
+  }
+
+  &--content {
+    @apply tw-ml-auto;
+  }
+}

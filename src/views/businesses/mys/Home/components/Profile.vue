@@ -13,13 +13,22 @@
         }"
         size="250px"
       >
-        <!--      https://64.media.tumblr.com/1ad3de751061e49ae796d023844a3f6f/79f2fe531aa3cccf-26/s540x810/b29ec8ff707cadbe5de13889021694cf62a2af6b.png-->
         <q-img
+          v-if="currentStore.CurrentBusiUser.img"
           class="profile-image"
           fit="cover"
-          src="https://64.media.tumblr.com/b5d68d4fb992a1ba0013b5dc412b0eaa/0d1853ff26639c9c-0b/s400x600/7a458c9896d9fecb13dcb5381b10ec34a97075ad.png"
+          :src="currentStore.CurrentBusiUser.img"
         />
+        <span
+          v-else
+        >
+          {{ currentStore.CurrentBusiUser.name[0] }}
+        </span>
       </q-avatar>
+      <busi-user-status-badge
+        class="status-badge"
+        :status="currentStore.CurrentBusiUser.status"
+      />
     </div>
     <div
       class="tw-mt-2"
@@ -39,6 +48,7 @@ export default {
 </script>
 <script setup lang="ts">
 import { useCurrentStore } from '@/store/current'
+import BusiUserStatusBadge from '@/components/commons/BusiUserStatusBadge.vue'
 
 const currentStore = useCurrentStore()
 
@@ -48,7 +58,12 @@ const currentStore = useCurrentStore()
   scoped
 >
 .profile-image-container {
-  @apply tw-text-center;
+  @apply tw-text-center tw-relative;
+
+  .status-badge {
+    @apply tw-absolute tw-bottom-0;
+    left: 65%;
+  }
 }
 
 .profile-image {
