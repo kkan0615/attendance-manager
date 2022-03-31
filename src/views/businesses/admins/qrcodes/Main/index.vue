@@ -70,8 +70,10 @@ export default {
 import { onBeforeUnmount, onMounted, ref } from 'vue'
 import QrScanner from 'qr-scanner'
 import { useCurrentStore } from '@/store/current'
+import { useBusiUserStore } from '@/store/busiUser'
 
 const currentStore = useCurrentStore()
+const busiUserStore = useBusiUserStore()
 
 const qrScanner = ref<QrScanner | null>(null)
 const readLoading = ref(false)
@@ -112,7 +114,7 @@ const onSuccessScan = async (result: string) => {
       readLoading.value = true
       if (qrScanner.value) {
         await qrScanner.value.pause()
-        const res = await currentStore.startWorkByQRCode({
+        const res = await busiUserStore.startWorkByQRCode({
           ...currentStore.CurrentBusiUser,
           userId: json.userId,
           busiId: json.busiId,
