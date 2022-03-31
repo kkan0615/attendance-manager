@@ -21,7 +21,7 @@ if (import.meta.env.VITE_IS_USE_DUMMY) {
   })
   router.push({
     name: 'BusiMyLayout',
-    params: { id: 1 }
+    params: { busiId: 1 }
   })
 }
 </script>

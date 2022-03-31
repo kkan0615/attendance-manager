@@ -12,7 +12,10 @@ export const enDictionary = {
     Messages: {
       saved: 'Success to saved',
       saveFailed: 'Fail to save',
-      unAuthUser: 'unauthorized user'
+      unAuthUser: 'unauthorized user',
+      error: 'Face to error',
+      startWorkFailed: 'Fail to start to work',
+      offWorkFailed: 'Fail to get off the work',
     }
   },
   Types: {
@@ -29,6 +32,11 @@ export const enDictionary = {
           admin: 'admin',
           system: 'system',
           superAdmin: 'super admin'
+        },
+        WorkOptions: {
+          simple: 'simple',
+          qrCode: 'qr code',
+          location: 'location',
         }
       },
     }

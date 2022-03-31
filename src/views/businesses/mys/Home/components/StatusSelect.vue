@@ -3,7 +3,6 @@
     class="tw-w-full"
   >
     <q-select
-      class="tw-border-amber-200"
       outlined
       dense
       :disable="!currentStore.CurrentBusiUser.startWorkAt"
@@ -12,6 +11,7 @@
       :options="options"
       :option-disable="optionDisabled"
       :label="currentStore.CurrentBusiUser.status ? undefined : 'Status'"
+      map-options
       @update:model-value="onUpdateModelValue"
     />
   </div>
@@ -25,10 +25,11 @@ export default {
 import { useCurrentStore } from '@/store/current'
 import { ref } from 'vue'
 import { BusiUserStatus, userStatusSelectOption } from '@/types/models/users/business'
+import { useBusiUserStore } from '@/store/busiUser'
 
 const currentStore = useCurrentStore()
+const busiUserStore = useBusiUserStore()
 const options = ref(userStatusSelectOption)
-
 
 const optionDisabled = (option: { label: string; value: BusiUserStatus }) => {
   return !!currentStore.CurrentBusiUser.startWorkAt && option.value === 'off'
@@ -37,9 +38,14 @@ const optionDisabled = (option: { label: string; value: BusiUserStatus }) => {
 const onUpdateModelValue = async (option: { label: string; value: BusiUserStatus }) => {
   try {
     /* Update the data of busi user */
-    await currentStore.updateCurrentBusiUser({
+    await busiUserStore.updateBusiUser({
       ...currentStore.CurrentBusiUser,
       status: option.value, // change the status
+    })
+    /* Reload current busi user */
+    await currentStore.loadCurrentBusiUser({
+      userId: currentStore.CurrentBusiUser.userId,
+      busiId: currentStore.CurrentBusiUser.busiId
     })
   } catch (e) {
     console.error(e)

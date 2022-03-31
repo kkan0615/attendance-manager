@@ -3,11 +3,9 @@ import { User, UserLoginForm } from '@/types/models/users'
 import { BusinessInfo } from '@/types/models/businesses'
 import {
   BusiUser,
-  BusiUserQRCodeUpdateForm,
   BusiUserUpdateForm,
   CurrentBusiUserForm
 } from '@/types/models/users/business'
-import dayjs from 'dayjs'
 import { LocalStorageKeyEnum } from '@/types/commons/storage'
 import { BusiUserDummy } from '@/dummies/users/busiUser'
 
@@ -85,6 +83,13 @@ export const useCurrentStore = defineStore('current', {
             lon: 126.728071,
             meter: 10,
           },
+          {
+            id: 2,
+            busiId: payload,
+            lat: 37.596312,
+            lon: 126.722515,
+            meter: 10,
+          },
         ]
       } as BusinessInfo // @TODO: test
     },
@@ -98,6 +103,9 @@ export const useCurrentStore = defineStore('current', {
      * Load Current Business User
      */
     async loadCurrentBusiUser (payload: CurrentBusiUserForm) {
+      if (this.currentBusiUser && this.currentBusiUser.id) {
+        this.resetCurrentBusiUser()
+      }
       if (import.meta.env.VITE_IS_USE_DUMMY) {
         const foundDummy = BusiUserDummy.find(dummy => dummy.userId === payload.userId && dummy.busiId === payload.busiId)
         if (!foundDummy) {
@@ -142,57 +150,6 @@ export const useCurrentStore = defineStore('current', {
       } as BusiUser
 
       return 0
-    },
-    // @TODO: move to user store
-    async startWork (payload: BusiUserUpdateForm) {
-      this.updateCurrentBusiUser({
-        ...payload,
-        startWorkAt: dayjs().toISOString(),
-        status: 'work' // change to status to work
-      })
-
-      return 0
-    },
-    // @TODO: move to user store
-    async startWorkByQRCode (payload: BusiUserQRCodeUpdateForm) {
-      try {
-        const readerTime = dayjs(payload.readerTime)
-        // @TODO: Change 17 to const variable
-        if (dayjs().diff(readerTime, 'seconds') <= 17) {
-          await this.updateCurrentBusiUser({
-            ...payload,
-            startWorkAt: dayjs().toISOString(),
-            status: 'work' // change to status to work
-          })
-
-          return 1
-        } else {
-          throw new Error('Timeout!')
-        }
-      } catch (e) {
-        console.error(e)
-        throw e
-      }
-
-    },
-    // @TODO: move to user store
-    async startWorkByLocation (payload: BusiUserUpdateForm) {
-      this.updateCurrentBusiUser({
-        ...payload,
-        startWorkAt: dayjs().toISOString(),
-        status: 'work' // change to status to work
-      })
-
-      return 0
-    },
-    // @TODO: move to user store
-    async getOffWork (payload: BusiUserUpdateForm) {
-      this.updateCurrentBusiUser({
-        ...payload,
-        startWorkAt: null,
-        status: 'off' // change to status to work
-      })
-      return 0
-    },
+    }
   }
 })

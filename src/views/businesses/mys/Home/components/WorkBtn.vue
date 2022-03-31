@@ -11,6 +11,7 @@
         :start-time="currentStore.CurrentBusiUser.startWorkAt"
       />
     </div>
+    <!-- Work option select -->
     <q-select
       v-if="!currentStore.CurrentBusiUser.startWorkAt"
       v-model="workOption"
@@ -19,6 +20,8 @@
       outlined
       rounded
       :options="options"
+      emit-value
+      map-options
     />
     <!-- On the job button -->
     <q-btn
@@ -100,50 +103,28 @@ export default {
 }
 </script>
 <script setup lang="ts">
-import { computed, nextTick, onBeforeUnmount, ref } from 'vue'
+import { nextTick, ref } from 'vue'
 import { useCurrentStore } from '@/store/current'
 import dayjs from 'dayjs'
 import QRCodeStyling from 'qr-code-styling'
 import { calculateTwoCoord } from '@/utils/commons/coordinate'
+import { showSnackbar } from '@/utils/libs/quasar/notify'
+import { useI18n } from 'vue-i18n'
+import { useBusiUserStore } from '@/store/busiUser'
+import { BusiUserWorkOption, busiUserWorkOptionSelectOption } from '@/types/models/users/business'
 import WorkTimer from '@/components/WorkTimer.vue'
 
 const DEFAULT_QRCODE_TIMER_MAX_SECONDS = 15
 
+const i18n = useI18n()
 const currentStore = useCurrentStore()
+const busiUserStore = useBusiUserStore()
 
-const workOption = ref('Simple')
-const options = ref(['Simple', 'Qrcode', 'Location'])
-const timerSeconds = ref(0)
-const timer = ref<NodeJS.Timer | undefined>(undefined)
+const workOption = ref<BusiUserWorkOption>('simple')
+const options = ref(busiUserWorkOptionSelectOption)
 const isQrCodeDialogOpen = ref(false)
 const qrCodeTimerSeconds = ref(0)
 const qrCodeTimer = ref<NodeJS.Timer | undefined>(undefined)
-
-const hours = computed(() => parseInt((timerSeconds.value / (60 * 60)).toString()).toString().padStart(2, '0'))
-const minutes = computed(() => parseInt(((timerSeconds.value / 60) % 60).toString()).toString().padStart(2, '0'))
-const seconds = computed(() => parseInt((timerSeconds.value % 60).toString()).toString().padStart(2, '0'))
-
-const initData = () => {
-  if (currentStore.CurrentBusiUser && currentStore.CurrentBusiUser.id) {
-    if (currentStore.CurrentBusiUser.startWorkAt) {
-      timerSeconds.value = dayjs().diff(dayjs(currentStore.CurrentBusiUser.startWorkAt), 'seconds')
-      initTimer()
-    }
-  }
-}
-
-const initTimer = () => {
-  timer.value = setInterval(() => {
-    timerSeconds.value += 1
-  }, 1000)
-}
-
-const clearTimer = () => {
-  if (timer.value) {
-    clearInterval(timer.value)
-    timer.value = undefined
-  }
-}
 
 const initQRCodeTimer = () => {
   qrCodeTimer.value = setInterval(() => {
@@ -164,7 +145,7 @@ const clearQRCodeTimer = () => {
  * On Click go to work button
  */
 const onCLickWorkBtn = async () => {
-  if (workOption.value === 'Qrcode') {
+  if (workOption.value === 'qrCode') {
     // QR code
     isQrCodeDialogOpen.value = true
     await nextTick(() => {
@@ -193,23 +174,31 @@ const onCLickWorkBtn = async () => {
         initQRCodeTimer()
       } else {
         isQrCodeDialogOpen.value = false
-        // @TODO add notify here
+        showSnackbar({
+          message: i18n.t('Commons.Messages.error'),
+          color: 'negative'
+        })
       }
     })
-  } else if (workOption.value === 'Simple') {
+  } else if (workOption.value === 'simple') {
     // Simple
     try {
-      await currentStore.startWork({
+      await busiUserStore.startWork({
         ...currentStore.CurrentBusiUser,
       })
-
-      timerSeconds.value = 0
-      initTimer()
+      /* Reload current busi user */
+      await currentStore.loadCurrentBusiUser({
+        userId: currentStore.CurrentBusiUser.userId,
+        busiId: currentStore.CurrentBusiUser.busiId
+      })
     } catch (e) {
       console.error(e)
-      // @TODO add notify here
+      showSnackbar({
+        message: i18n.t('Commons.Messages.startWorkFailed'),
+        color: 'negative'
+      })
     }
-  } else if (workOption.value === 'Location') {
+  } else if (workOption.value === 'location') {
     // Location
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(async (position) => {
@@ -220,26 +209,41 @@ const onCLickWorkBtn = async () => {
           .some(allowedLocation => calculateTwoCoord(allowedLocation.lat, allowedLocation.lon, position.coords.latitude, position.coords.longitude)
               <= allowedLocation.meter * 0.001)) {
           try {
-            await currentStore.startWork({
+            await busiUserStore.startWork({
               ...currentStore.CurrentBusiUser,
             })
-
-            timerSeconds.value = 0
-            initTimer()
+            /* Reload current busi user */
+            await currentStore.loadCurrentBusiUser({
+              userId: currentStore.CurrentBusiUser.userId,
+              busiId: currentStore.CurrentBusiUser.busiId
+            })
           } catch (e) {
             console.error(e)
-            // @TODO add notify here
+            showSnackbar({
+              message: i18n.t('Commons.Messages.startWorkFailed'),
+              color: 'negative'
+            })
           }
         } else {
           console.error('Location is wrong')
-          // @TODO add notify here
+          showSnackbar({
+            message: i18n.t('Commons.Messages.error'),
+            color: 'negative'
+          })
         }
       }, (error) => {
         console.error(error)
+        showSnackbar({
+          message: i18n.t('Commons.Messages.error'),
+          color: 'negative'
+        })
       }, { enableHighAccuracy:true })
     } else {
       console.error('Geolocation is not supported')
-      // @TODO add notify here
+      showSnackbar({
+        message: i18n.t('Commons.Messages.error'),
+        color: 'negative'
+      })
     }
   }
 }
@@ -249,14 +253,20 @@ const onCLickWorkBtn = async () => {
  */
 const onCLickGetOffBtn = async () => {
   try {
-    await currentStore.getOffWork({
+    await busiUserStore.getOffWork({
       ...currentStore.CurrentBusiUser,
     })
-
-    timerSeconds.value = 0
-    clearTimer()
+    /* Reload current busi user */
+    await currentStore.loadCurrentBusiUser({
+      userId: currentStore.CurrentBusiUser.userId,
+      busiId: currentStore.CurrentBusiUser.busiId
+    })
   } catch (e) {
     console.error(e)
+    showSnackbar({
+      message: i18n.t('Commons.Messages.offWorkFailed'),
+      color: 'negative'
+    })
   }
 }
 
@@ -265,9 +275,4 @@ const onBeforeHideQRCodeDialog = () => {
   clearQRCodeTimer()
 }
 
-initData()
-
-onBeforeUnmount(() => {
-  clearTimer()
-})
 </script>

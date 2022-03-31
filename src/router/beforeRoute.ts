@@ -5,7 +5,7 @@ router.beforeEach(async (to, from, next) => {
   const currentStore = useCurrentStore()
   try {
     if (to.meta && to.meta.isBusi) {
-      if (!to.params.id) {
+      if (!to.params.busiId) {
         throw new Error('no business id')
       }
       /* Check current user data */

@@ -12,6 +12,15 @@ import 'quasar/src/css/index.sass'
 import '@/styles/libs/tailwind.css'
 /* Custom Styles */
 import '@/styles/index.scss'
+/* Dayjs */
+import { initDayjs } from '@/utils/libs/dayjs'
+initDayjs()
+
+/* Dummy */
+import { initAllDummy } from '@/dummies'
+if (import.meta.env.VITE_IS_USE_DUMMY) {
+  initAllDummy()
+}
 
 const app = createApp(App)
 app

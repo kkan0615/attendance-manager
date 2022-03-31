@@ -117,19 +117,22 @@ export default {
 }
 </script>
 <script setup lang="ts">
-import { computed, onBeforeUnmount, PropType, ref } from 'vue'
+import { PropType } from 'vue'
 import { BusiUserAdminListInfo } from '@/types/models/users/business'
-import dayjs from 'dayjs'
 import { useQuasar } from 'quasar'
 import { showSnackbar } from '@/utils/libs/quasar/notify'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 import WorkTimer from '@/components/WorkTimer.vue'
 import BusiUserStatusBadge from '@/components/commons/BusiUserStatusBadge.vue'
+import { useBusiUserStore } from '@/store/busiUser'
+import { useCurrentStore } from '@/store/current'
 
 const router = useRouter()
 const $q = useQuasar()
 const i18n = useI18n()
+const currentStore = useCurrentStore()
+const busiUserStore = useBusiUserStore()
 
 const props = defineProps({
   user: {
@@ -138,33 +141,6 @@ const props = defineProps({
     default: () => {},
   }
 })
-
-const timerSeconds = ref(0)
-const timer = ref<NodeJS.Timer | undefined>(undefined)
-
-const hours = computed(() => parseInt((timerSeconds.value / (60 * 60)).toString()).toString().padStart(2, '0'))
-const minutes = computed(() => parseInt(((timerSeconds.value / 60) % 60).toString()).toString().padStart(2, '0'))
-const seconds = computed(() => parseInt((timerSeconds.value % 60).toString()).toString().padStart(2, '0'))
-
-const initData = () => {
-  if (props.user && props.user.startWorkAt) {
-    timerSeconds.value = dayjs().diff(dayjs(props.user.startWorkAt), 'seconds')
-    initTimer()
-  }
-}
-
-const initTimer = () => {
-  timer.value = setInterval(() => {
-    timerSeconds.value += 1
-  }, 1000)
-}
-
-const clearTimer = () => {
-  if (timer.value) {
-    clearInterval(timer.value)
-    timer.value = undefined
-  }
-}
 
 const onClickCardSection = () => {
   if (props.user) {
@@ -180,14 +156,30 @@ const onClickWorkOffBtn = () => {
     title: `Get off the work of ${props.user?.name}`,
     message: `Would you get off ${props.user?.name}`,
     cancel: true,
-  }).onOk(() => {
-    console.log('>>>> OK')
-    showSnackbar({
-      message: i18n.t('Commons.Messages.saved'),
-      color: 'positive'
-    })
-  }).onCancel(() => {
-    console.log('>>>> Cancel')
+  }).onOk(async () => {
+    try {
+      if (!props.user) {
+        throw new Error('no user')
+      }
+      await busiUserStore.updateBusiUser({
+        ...props.user,
+        startWorkAt: null,
+        status: 'off'
+      })
+      await busiUserStore.loadBusiUserAdminList({
+        busiId: currentStore.CurrentBusiness.id,
+      })
+      showSnackbar({
+        message: i18n.t('Commons.Messages.saved'),
+        color: 'positive'
+      })
+    } catch (e) {
+      console.error(e)
+      showSnackbar({
+        message: i18n.t('Commons.Messages.saveFailed'),
+        color: 'negative'
+      })
+    }
   })
 }
 
@@ -203,12 +195,6 @@ const onClickEditBtn = () => {
 const onClickDeleteBtn = () => {
 // @TODO: Add logic
 }
-
-initData()
-
-onBeforeUnmount(() => {
-  clearTimer()
-})
 
 </script>
 <style

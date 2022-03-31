@@ -13,7 +13,7 @@
         class="q-mb-md tw-flex tw-w-full"
       >
         <q-btn
-          v-if="busiUserStore.BusiUserAdmin.status === 'work'"
+          v-if="busiUserStore.BusiUserAdmin.status !== 'off'"
           color="negative"
           :label="$t('Commons.Buttons.offWork')"
           @click="onClickWorkOffBtn"
@@ -24,6 +24,7 @@
           <q-btn
             color="primary"
             :label="$t('Commons.Buttons.edit')"
+            @click="onClickEditBtn"
           />
           <q-btn
             outline
@@ -62,6 +63,7 @@ import CLayoutMenubar from '@/components/commons/layouts/Menubar/index.vue'
 import BusiAdminUserDetailProfile from '@/views/businesses/admins/users/Detail/components/Profile.vue'
 import BusiAdminUserDetailHistoryList from '@/views/businesses/admins/users/Detail/components/HistoryList.vue'
 import BusiAdminUserDetailSchedule from '@/views/businesses/admins/users/Detail/components/Schedule.vue'
+import dayjs from 'dayjs'
 
 const route = useRoute()
 const router = useRouter()
@@ -90,10 +92,16 @@ const initData = async () => {
       if (!busiUserStore.BusiUserAdmin || !busiUserStore.BusiUserAdmin.id) {
         throw new Error('BusiUserAdmin is not found')
       }
-
       if (busiUserStore.BusiUserAdmin.busiId !== currentStore.CurrentBusiness.id) {
         throw new Error('Business id is not matched')
       }
+
+      /* Load work history */
+      await busiUserStore.loadBusiUserAdminWorkHistoryList({
+        busiUserId: busiUserStore.BusiUserAdmin.id,
+        startDateAt: dayjs().startOf('week').toISOString(),
+        endDateAt: dayjs().endOf('week').toISOString(),
+      })
     }
   } catch (e) {
     console.error(e)
@@ -106,15 +114,39 @@ const onClickWorkOffBtn = () => {
     title: `Get off the work of ${busiUserStore.BusiUserAdmin.name}`,
     message: `Would you get off ${busiUserStore.BusiUserAdmin.name}`,
     cancel: true,
-  }).onOk(() => {
-    console.log('>>>> OK')
-    showSnackbar({
-      message: i18n.t('Commons.Messages.saved'),
-      color: 'positive'
-    })
-  }).onCancel(() => {
-    console.log('>>>> Cancel')
+  }).onOk(async () => {
+    try {
+      await busiUserStore.updateBusiUser({
+        ...busiUserStore.BusiUserAdmin,
+        startWorkAt: null,
+        status: 'off'
+      })
+      await busiUserStore.loadBusiUser(busiUserStore.BusiUserAdmin.id)
+      showSnackbar({
+        message: i18n.t('Commons.Messages.saved'),
+        color: 'positive'
+      })
+    } catch (e) {
+      console.error(e)
+      showSnackbar({
+        message: i18n.t('Commons.Messages.saveFailed'),
+        color: 'negative'
+      })
+    }
   })
+}
+
+const onClickEditBtn = () => {
+  if (busiUserStore.BusiUserAdmin) {
+    router.push({
+      name: 'BusiAdminUserUpdateForm',
+      params: { id: busiUserStore.BusiUserAdmin.id }
+    })
+  }
+}
+
+const onClickDeleteBtn = () => {
+// @TODO: Add logic
 }
 
 initData()

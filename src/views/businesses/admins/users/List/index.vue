@@ -31,11 +31,13 @@
           <q-btn
             color="primary"
             label="invite"
+            @click="onClickInviteBtn"
           />
         </div>
       </div>
     </div>
     <div
+      v-if="listData && listData.length"
       class="tw-grid md:tw-grid-cols-4 tw-grid-cols-1 tw-gap-4"
     >
       <busi-admin-user-list-user-card
@@ -44,6 +46,9 @@
         :user="data"
       />
     </div>
+    <busi-admin-user-list-invite-modal
+      v-model="isInviteModalOpen"
+    />
   </q-page>
 </template>
 <script lang="ts">
@@ -59,6 +64,7 @@ import { useCurrentStore } from '@/store/current'
 import { BusiUserStatus, userStatusSelectOption } from '@/types/models/users/business'
 import CLayoutMenubar from '@/components/commons/layouts/Menubar/index.vue'
 import BusiAdminUserListUserCard from '@/views/businesses/admins/users/List/components/UserCard.vue'
+import BusiAdminUserListInviteModal from '@/views/businesses/admins/users/List/components/InviteModal.vue'
 
 const busiUserStore = useBusiUserStore()
 const currentStore = useCurrentStore()
@@ -76,6 +82,7 @@ const breadcrumbs = ref<QBreadcrumbsElProps[]>([
 ])
 const statusOption = ref([{ label: 'All', value: 'all' }].concat(userStatusSelectOption))
 const status = ref<BusiUserStatus | 'all'>('all')
+const isInviteModalOpen = ref(false)
 
 const listData = computed(() => {
   let result = busiUserStore.BusiUserAdminList
@@ -94,6 +101,15 @@ const listCount = computed(() => {
 
   return result
 })
+
+const onClickInviteBtn = async () => {
+  try {
+    await busiUserStore.loadBusiUserInviteList(currentStore.CurrentBusiness.id)
+    isInviteModalOpen.value = true
+  } catch (e) {
+    console.error(e)
+  }
+}
 
 const initData = async () => {
   try {
