@@ -23,13 +23,13 @@
           </div>
         </q-card-section>
       </q-card>
-      <q-card
+      <!-- right part -->
+      <div
         class="right-card"
       >
-        <q-card-section>
-          right
-        </q-card-section>
-      </q-card>
+        <!-- Work history -->
+        <business-home-work-history />
+      </div>
     </div>
   </q-page>
 </template>
@@ -39,9 +39,27 @@ export default {
 }
 </script>
 <script setup lang="ts">
+import { onBeforeUnmount } from 'vue'
+import { useCurrentStore } from '@/store/current'
 import BusinessHomeWorkBtn from '@/views/businesses/mys/Home/components/WorkBtn.vue'
 import BusinessHomeStatusSelect from '@/views/businesses/mys/Home/components/StatusSelect.vue'
 import BusinessHomeProfile from '@/views/businesses/mys/Home/components/Profile.vue'
+import BusinessHomeWorkHistory from '@/views/businesses/mys/Home/components/WorkHistory.vue'
+
+const currentStore = useCurrentStore()
+
+const initData = async () => {
+  try {
+    await currentStore.loadCurrentBusiUserWorkHistoryList()
+  } catch (e) {
+    console.error(e)
+  }
+}
+
+initData()
+onBeforeUnmount(async () => {
+  await currentStore.resetCurrentBusiUserWorkHistoryList()
+})
 </script>
 <style
   lang="scss"
@@ -51,14 +69,14 @@ import BusinessHomeProfile from '@/views/businesses/mys/Home/components/Profile.
 $leftCardMaxWidth: 400px;
 
 .home-content {
-  @apply md:tw-flex md:tw-space-x-2 tw-space-x-0 md:tw-space-y-0 tw-space-y-2 tw-h-full;
+  @apply md:tw-flex md:tw-space-x-4 tw-space-x-0 md:tw-space-y-0 tw-space-y-2 tw-h-full;
 
   .left-card {
     @apply lg:tw-w-full lg:tw-max-w-sm tw-h-full;
   }
 
   .right-card {
-    @apply tw-grow;
+    @apply tw-grow tw-w-full;
   }
 }
 </style>

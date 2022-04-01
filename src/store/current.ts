@@ -8,11 +8,15 @@ import {
 } from '@/types/models/users/business'
 import { LocalStorageKeyEnum } from '@/types/commons/storage'
 import { BusiUserDummy } from '@/dummies/users/busiUser'
+import { BusiUserWorkHistory, BusiUserWorkHistorySelectOption } from '@/types/models/users/busiWorkHistory'
+import { BusiUserWorkHistoryDummy } from '@/dummies/users/busiUserWorkHistory'
+import dayjs from 'dayjs'
 
 export interface CurrentState {
   currentUser: User
   currentBusiness: BusinessInfo
   currentBusiUser: BusiUser
+  currentBusiUserWorkHistoryList: BusiUserWorkHistory[]
 }
 
 export const useCurrentStore = defineStore('current', {
@@ -21,6 +25,7 @@ export const useCurrentStore = defineStore('current', {
       currentUser: {} as User,
       currentBusiness: {} as BusinessInfo,
       currentBusiUser: {} as BusiUser,
+      currentBusiUserWorkHistoryList: [],
     }
   },
   getters: {
@@ -44,6 +49,13 @@ export const useCurrentStore = defineStore('current', {
      */
     CurrentBusiUser (state) {
       return state.currentBusiUser
+    },
+    /**
+     * Current Business user work history list
+     * @param state
+     */
+    CurrentBusiUserWorkHistoryList (state) {
+      return state.currentBusiUserWorkHistoryList
     },
   },
   actions: {
@@ -123,6 +135,39 @@ export const useCurrentStore = defineStore('current', {
      */
     resetCurrentBusiUser () {
       this.currentBusiUser = {} as BusiUser
+    },
+    /**
+     * Load list of invite
+     * @param payload - business user id
+     */
+    async loadCurrentBusiUserWorkHistoryList () {
+      try {
+        if (import.meta.env.VITE_IS_USE_DUMMY) {
+          // Reset the data
+          if (this.currentBusiUserWorkHistoryList && this.currentBusiUserWorkHistoryList.length) {
+            await this.resetCurrentBusiUserWorkHistoryList()
+          }
+          const filterDummies = BusiUserWorkHistoryDummy.filter(dummy => dummy.busiUserId === this.currentBusiness.id)
+          this.currentBusiUserWorkHistoryList = filterDummies.filter(dummy => {
+            const startDateAt = dayjs().startOf('week')
+            const endDateAt = dayjs().endOf('week')
+            const updatedAt = dayjs(dummy.updatedAt)
+            return updatedAt.isBetween(startDateAt, endDateAt, null, '[]')
+          })
+        } else {
+          this.currentBusiUserWorkHistoryList = []
+        }
+      } catch (e) {
+        console.error(e)
+        throw e
+      }
+    },
+    /**
+     * Reset BusiUserAdmin list
+     */
+    // @TODO: consider that is async await required
+    async resetCurrentBusiUserWorkHistoryList () {
+      this.currentBusiUserWorkHistoryList = []
     },
     /**
      * Login

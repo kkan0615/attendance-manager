@@ -52,12 +52,12 @@
           class="c-display-row-end"
         >
           <div
-            class="c-text-first-uppercase"
+            class="c-display-row-end--label c-text-first-uppercase"
           >
             {{ $t('Types.Models.BusiUsers.name') }}
           </div>
           <div
-            class="c-display-row-end--content"
+            class="c-display-row-end--content c-text-first-uppercase"
           >
             {{ busiUserStore.BusiUserAdmin.name }}
           </div>

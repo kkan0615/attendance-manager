@@ -42,6 +42,10 @@ export type BusiUserAdminInfo = BusiUser
 export type CurrentBusiUserForm = Pick<BusiUser, 'userId' | 'busiId'>
 export type BusiUserCreateForm = Omit<BusiUser, 'id' | 'createdAt' | 'updatedAt' | 'deletedAt'>
 export type BusiUserUpdateForm = Omit<BusiUser, 'createdAt' | 'updatedAt' | 'deletedAt'>
+export type BusiUserWorkForm = BusiUserUpdateForm & {
+  latitude?: number
+  longitude?: number
+}
 export type BusiUserQRCodeUpdateForm = BusiUser & {
   readerTime: string
 }

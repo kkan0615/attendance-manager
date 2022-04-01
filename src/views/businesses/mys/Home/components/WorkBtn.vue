@@ -183,14 +183,20 @@ const onCLickWorkBtn = async () => {
   } else if (workOption.value === 'simple') {
     // Simple
     try {
+      const { latitude, longitude } = await getCurrentPosition()
+
       await busiUserStore.startWork({
         ...currentStore.CurrentBusiUser,
+        latitude: latitude,
+        longitude: longitude,
       })
       /* Reload current busi user */
       await currentStore.loadCurrentBusiUser({
         userId: currentStore.CurrentBusiUser.userId,
         busiId: currentStore.CurrentBusiUser.busiId
       })
+      /* Reload work history */
+      await currentStore.loadCurrentBusiUserWorkHistoryList()
     } catch (e) {
       console.error(e)
       showSnackbar({
@@ -209,14 +215,18 @@ const onCLickWorkBtn = async () => {
           .some(allowedLocation => calculateTwoCoord(allowedLocation.lat, allowedLocation.lon, position.coords.latitude, position.coords.longitude)
               <= allowedLocation.meter * 0.001)) {
           try {
-            await busiUserStore.startWork({
+            await busiUserStore.startWorkByLocation({
               ...currentStore.CurrentBusiUser,
+              latitude: position.coords.latitude,
+              longitude: position.coords.longitude,
             })
             /* Reload current busi user */
             await currentStore.loadCurrentBusiUser({
               userId: currentStore.CurrentBusiUser.userId,
               busiId: currentStore.CurrentBusiUser.busiId
             })
+            /* Reload work history */
+            await currentStore.loadCurrentBusiUserWorkHistoryList()
           } catch (e) {
             console.error(e)
             showSnackbar({
@@ -261,6 +271,8 @@ const onCLickGetOffBtn = async () => {
       userId: currentStore.CurrentBusiUser.userId,
       busiId: currentStore.CurrentBusiUser.busiId
     })
+    /* Reload work history */
+    await currentStore.loadCurrentBusiUserWorkHistoryList()
   } catch (e) {
     console.error(e)
     showSnackbar({
@@ -275,4 +287,21 @@ const onBeforeHideQRCodeDialog = () => {
   clearQRCodeTimer()
 }
 
+/**
+ * Used for simple work option, <br>
+ * Get current position with async await
+ */
+const getCurrentPosition = (): Promise<{latitude?: number; longitude?: number}> => {
+  return new Promise((resolve) => {
+    navigator.geolocation.getCurrentPosition((position) => {
+      resolve({
+        latitude: position.coords.latitude,
+        longitude: position.coords.longitude
+      })
+    }, () => resolve({
+      latitude: undefined,
+      longitude: undefined,
+    }))
+  })
+}
 </script>

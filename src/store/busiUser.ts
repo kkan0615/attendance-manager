@@ -2,19 +2,24 @@ import { defineStore } from 'pinia'
 import {
   BusiUser,
   BusiUserAdminInfo,
-  BusiUserAdminListInfo, BusiUserCreateForm,
+  BusiUserAdminListInfo,
+  BusiUserCreateForm,
   BusiUserQRCodeUpdateForm,
-  BusiUserUpdateForm
+  BusiUserUpdateForm, BusiUserWorkForm
 } from '@/types/models/users/business'
 import { BusiUserDummy } from '@/dummies/users/busiUser'
-import dayjs from 'dayjs'
 import { UserDummy } from '@/dummies/users/user'
 import { useCurrentStore } from '@/store/current'
 import { BusiUserDummyInvite } from '@/dummies/users/busiUserInvite'
-import { BusiUserInvite, BusiUserInviteListInfo } from '@/types/models/users/busiInvite'
+import { BusiUserInviteListInfo } from '@/types/models/users/busiInvite'
 import { Business } from '@/types/models/businesses'
-import { BusiUserWorkHistory, BusiUserWorkHistorySelectOption } from '@/types/models/users/busiWorkHistory'
+import {
+  BusiUserWorkHistory,
+  BusiUserWorkHistoryCreateForm,
+  BusiUserWorkHistorySelectOption
+} from '@/types/models/users/busiWorkHistory'
 import { BusiUserWorkHistoryDummy } from '@/dummies/users/busiUserWorkHistory'
+import dayjs from 'dayjs'
 
 export interface BusiUserAdminListFilter {
   busiId: number
@@ -301,17 +306,26 @@ export const useBusiUserStore = defineStore('BusiUserAdmin', {
     deleteBusiUser (payload: number) {
       return 0
     },
-    // @TODO: move to user store
-    async startWork (payload: BusiUserUpdateForm) {
-      this.updateBusiUser({
-        ...payload,
-        startWorkAt: dayjs().toISOString(),
-        status: 'work' // change to status to work
-      })
+    async startWork (payload: BusiUserWorkForm) {
+      try {
+        this.updateBusiUser({
+          ...payload,
+          startWorkAt: dayjs().toISOString(),
+          status: 'work' // change to status to work
+        })
 
-      return 0
+        return await this.createBusiUserWorkHistory({
+          workOption: 'simple',
+          busiUserId: payload.id,
+          status: 'work',
+          latitude: payload.latitude,
+          longitude: payload.longitude,
+        })
+      } catch (e) {
+        console.error(e)
+        throw e
+      }
     },
-    // @TODO: move to user store
     async startWorkByQRCode (payload: BusiUserQRCodeUpdateForm) {
       try {
         const readerTime = dayjs(payload.readerTime)
@@ -333,20 +347,43 @@ export const useBusiUserStore = defineStore('BusiUserAdmin', {
       }
 
     },
-    // @TODO: move to user store
-    async startWorkByLocation (payload: BusiUserUpdateForm) {
-      return this.updateBusiUser({
-        ...payload,
-        startWorkAt: dayjs().toISOString(),
-        status: 'work' // change to status to work
-      })
+    async startWorkByLocation (payload: BusiUserWorkForm) {
+      try {
+        await this.updateBusiUser({
+          ...payload,
+          startWorkAt: dayjs().toISOString(),
+          status: 'work' // change to status to work
+        })
+
+        return await this.createBusiUserWorkHistory({
+          workOption: 'location',
+          busiUserId: payload.id,
+          status: 'work',
+          latitude: payload.latitude,
+          longitude: payload.longitude
+        })
+      } catch (e) {
+        console.error(e)
+        throw e
+      }
     },
     async getOffWork (payload: BusiUserUpdateForm) {
-      return await this.updateBusiUser({
-        ...payload,
-        startWorkAt: null,
-        status: 'off' // change to status to work
-      })
+      try {
+        await this.updateBusiUser({
+          ...payload,
+          startWorkAt: null,
+          status: 'off' // change to status to work
+        })
+
+        return await this.createBusiUserWorkHistory({
+          workOption: undefined,
+          busiUserId: payload.id,
+          status: 'off',
+        })
+      } catch (e) {
+        console.error(e)
+        throw e
+      }
     },
     /**
      * @param payload - email
@@ -407,6 +444,31 @@ export const useBusiUserStore = defineStore('BusiUserAdmin', {
             throw new Error('no invite by id')
           }
           BusiUserDummyInvite.splice(foundInviteIndex, 1)
+        }
+      } catch (e) {
+        console.error(e)
+        throw e
+      }
+    },
+    /**
+     *
+     * @param payload
+     */
+    async createBusiUserWorkHistory (payload: BusiUserWorkHistoryCreateForm) {
+      try {
+        if (import.meta.env.VITE_IS_USE_DUMMY) {
+          const newId = BusiUserWorkHistoryDummy.length + 1
+          BusiUserWorkHistoryDummy.push({
+            id: newId,
+            busiUserId: payload.busiUserId,
+            workOption: payload.workOption,
+            status: payload.status,
+            latitude: payload.latitude,
+            longitude: payload.longitude,
+            createdAt: dayjs().toISOString(),
+            updatedAt: dayjs().toISOString(),
+            deletedAt: dayjs().toISOString(),
+          })
         }
       } catch (e) {
         console.error(e)

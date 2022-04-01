@@ -12,7 +12,9 @@
       class="q-mr-sm"
       :name="iconName"
     />
-    {{ status }}
+    <span>
+      {{ status }}
+    </span>
   </q-badge>
 </template>
 <script lang="ts">

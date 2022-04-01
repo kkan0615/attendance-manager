@@ -1,0 +1,32 @@
+.dp__input {
+  border: none !important;
+}
+
+.dp__input_icon_pad {
+  padding-left: 24px !important;
+}
+
+.dp__input_icons {
+  padding-left: 0 !important;
+}
+
+.dp__theme_light {
+  --dp-background-color: #ffffff !important;
+  --dp-text-color: #212121 !important;
+  --dp-hover-color: #f3f3f3 !important;
+  --dp-hover-text-color: #212121 !important;
+  --dp-hover-icon-color: #959595 !important;
+  --dp-primary-color: #FFA726 !important;
+  --dp-primary-text-color: #f8f5f5 !important;
+  --dp-secondary-color: #FFE0B2 !important;
+  --dp-border-color: #ddd !important;
+  --dp-menu-border-color: #ddd !important;
+  --dp-border-color-hover: #FFA726 !important;
+  --dp-disabled-color: #f6f6f6 !important;
+  --dp-scroll-bar-background: #f3f3f3 !important;
+  --dp-scroll-bar-color: #959595 !important;
+  --dp-success-color: #FFA726 !important;
+  --dp-success-color-disabled: #a3d9b1 !important;
+  --dp-icon-color: #959595 !important;
+  --dp-danger-color: #C10015 !important;
+}

@@ -17,6 +17,8 @@ export const initBusiUserWorkHistoryDummy = () => {
       busiUserId: 1,
       status,
       workOption,
+      latitude: workOption !== 'qrCode' ? 37.6015565 : undefined,
+      longitude: workOption !== 'qrCode' ? 126.7280587 : undefined,
       createdAt: dayjs().endOf('week').subtract(parseInt((i / 2).toString()), 'day').toISOString(),
       updatedAt: dayjs().endOf('week').subtract(parseInt((i / 2).toString()), 'day').toISOString(),
     } as BusiUserWorkHistory
@@ -29,6 +31,8 @@ export const initBusiUserWorkHistoryDummy = () => {
       busiUserId: parseInt((i / 15).toString()) + 2,
       status,
       workOption,
+      latitude: workOption !== 'qrCode' ? 37.6015565 : undefined,
+      longitude: workOption !== 'qrCode' ? 126.7280587 : undefined,
       createdAt: dayjs().endOf('week').subtract(parseInt((i / 2 % 15).toString()), 'day').toISOString(),
       updatedAt: dayjs().endOf('week').subtract(parseInt((i / 2 % 15).toString()), 'day').toISOString(),
     } as BusiUserWorkHistory

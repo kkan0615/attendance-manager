@@ -40,9 +40,6 @@
         class="q-mb-md"
       />
       <busi-admin-user-detail-schedule />
-      <div>
-        {{ busiUserStore.BusiUserAdmin }}
-      </div>
     </div>
   </q-page>
 </template>

@@ -3,8 +3,8 @@ import { BusiUserStatus, BusiUserWorkOption } from '@/types/models/users/busines
 
 export interface BusiUserWorkHistory extends DefaultAttributes {
   busiUserId: number
-  workOption: BusiUserWorkOption
   status: BusiUserStatus
+  workOption?: BusiUserWorkOption
   latitude?: number
   longitude?: number
 }
@@ -13,3 +13,5 @@ export type BusiUserWorkHistorySelectOption = Pick<BusiUserWorkHistory, 'busiUse
   startDateAt: string
   endDateAt: string
 }
+
+export type BusiUserWorkHistoryCreateForm = Omit<BusiUserWorkHistory, 'id' | 'createdAt' | 'updatedAt' | 'deletedAt'>

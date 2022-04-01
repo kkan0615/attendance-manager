@@ -15,6 +15,11 @@ import '@/styles/index.scss'
 /* Dayjs */
 import { initDayjs } from '@/utils/libs/dayjs'
 initDayjs()
+/* Datepicker */
+import Datepicker from '@vuepic/vue-datepicker'
+import '@vuepic/vue-datepicker/dist/main.css'
+/* Devextreme */
+import 'devextreme/dist/css/dx.material.orange.light.compact.css'
 
 /* Dummy */
 import { initAllDummy } from '@/dummies'
@@ -33,4 +38,5 @@ app
   })
   .use(createPinia())
   .use(router)
+  .component('date-picker', Datepicker)
   .mount('#app')
