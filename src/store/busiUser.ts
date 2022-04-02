@@ -5,7 +5,7 @@ import {
   BusiUserAdminListInfo,
   BusiUserCreateForm,
   BusiUserQRCodeUpdateForm,
-  BusiUserUpdateForm, BusiUserWorkForm
+  BusiUserUpdateForm, BusiUserUploadImageForm, BusiUserWorkForm
 } from '@/types/models/users/business'
 import { BusiUserDummy } from '@/dummies/users/busiUser'
 import { UserDummy } from '@/dummies/users/user'
@@ -291,6 +291,29 @@ export const useBusiUserStore = defineStore('busiUserAdmin', {
      */
     resetBusiUserAdminTotalWorkSeconds () {
       this.busiUserAdminTotalWorkSeconds = 0
+    },
+    /**
+     * Upload Business user image
+     * @param payload - create form
+     */
+    async uploadBusiUser (payload: BusiUserUploadImageForm) {
+      try {
+        if (import.meta.env.VITE_IS_USE_DUMMY) {
+          const newId = 1
+          const foundDummy = BusiUserDummy.find(dummy => dummy.id === payload.id)
+          if (foundDummy) {
+            foundDummy.img =  URL.createObjectURL(payload.file)
+          }
+
+          return newId
+        } else {
+          // @TODO: Add real logic
+          return 1
+        }
+      } catch (e) {
+        console.error(e)
+        throw e
+      }
     },
     /**
      * Create BusiUserAdmin

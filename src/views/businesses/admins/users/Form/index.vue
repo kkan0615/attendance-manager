@@ -11,7 +11,31 @@
     >
       <q-form
         class="tw-space-y-4"
+        @submit="onSubmitForm"
       >
+        <!-- Image Upload -->
+        <q-file
+          v-model="img"
+          outlined
+          dense
+          label="Image"
+        />
+        <q-avatar
+          class="tw-ring-4 tw-ring-q-primary"
+          size="250px"
+        >
+          <q-img
+            v-if="imgToUrl || busiUserStore.BusiUserAdmin.img"
+            class="profile-image"
+            fit="cover"
+            :src="imgToUrl || busiUserStore.BusiUserAdmin.img"
+          />
+          <span
+            v-else
+          >
+            {{ name ? name[0] : '' }}
+          </span>
+        </q-avatar>
         <!-- Name -->
         <q-input
           v-model="name"
@@ -60,6 +84,7 @@
         >
           <q-btn
             color="primary"
+            type="submit"
             :label="$t('Commons.Buttons.save')"
           />
           <q-btn
@@ -110,7 +135,7 @@ const breadcrumbs = ref<QBreadcrumbsElProps[]>([
   }
 ])
 const authOption = ref(busiUserAuthSelectOption)
-const img = ref('')
+const img = ref<File | undefined>()
 const name = ref('')
 const auth = ref<BusiUserAuth>('user')
 const joinAt = ref<Date>(new Date())
@@ -121,6 +146,7 @@ const currentBusiUserAuthGrade = computed(() => {
   return found ? found.grade : 1
 })
 const isEditMode = computed(() => route.name === 'BusiAdminUserUpdateForm')
+const imgToUrl = computed(() => img.value ? URL.createObjectURL(img.value) : undefined)
 
 const initData = async () => {
   try {
@@ -136,7 +162,6 @@ const initData = async () => {
       }
       /* Set default data if it's edit mode */
       if (isEditMode.value) {
-        img.value = busiUserStore.BusiUserAdmin.img || ''
         name.value = busiUserStore.BusiUserAdmin.name
         auth.value = busiUserStore.BusiUserAdmin.auth
         joinAt.value = dayjs(busiUserStore.BusiUserAdmin.joinAt).toDate()
@@ -155,21 +180,43 @@ const authOptionDisable = (opt: { label: string; value: BusiUserAuth; grade: num
 
 const onSubmitForm = async () => {
   try {
-  // @TODO: Add save logic
+    let id: number
     if (isEditMode.value) {
-      busiUserStore.updateBusiUser({
+      if (img.value) {
+        await busiUserStore.uploadBusiUser({
+          id: busiUserStore.BusiUserAdmin.id,
+          busiId: currentStore.CurrentBusiness.id,
+          file: img.value
+        })
+      }
+
+      await busiUserStore.updateBusiUser({
         ...busiUserStore.BusiUserAdmin,
         name: name.value,
         joinAt: dayjs(joinAt.value).toISOString(),
         auth: auth.value,
         description: description.value,
       })
+
+      id = busiUserStore.BusiUserAdmin.id
       //  @TODO: Add edit logic
     } else {
       //  @TODO: Add new logic (But no now)
+      id = 1
     }
+
+    showSnackbar({
+      message: i18n.t('Commons.Messages.saved'),
+      color: 'positive'
+    })
+
+    await router.push({ name: 'BusiAdminUserDetail', params: { id: id } })
   } catch (e) {
     console.error(e)
+    showSnackbar({
+      message: i18n.t('Commons.Messages.saveFailed'),
+      color: 'negative'
+    })
   }
 }
 
