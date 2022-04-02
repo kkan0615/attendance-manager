@@ -26,21 +26,21 @@ export const initBusiUserWorkHistoryDummy = () => {
         .add(13, 'hours')
         .add(i % 2 === 1 ? addHours : 0, 'hours').toISOString(),
     } as BusiUserWorkHistory
-  }).concat([ ...Array(20 * 13).keys() ].map(i => {
+  }).concat([ ...Array(20 * 14).keys() ].map(i => {
     const workOption = rand(_staticBusiUserWorkOption)
     const addHours = randNumber({ min: 1, max: 8 })
     return {
       id: (i + 14),
       busiId: 1,
-      busiUserId: parseInt((i / 15).toString()) + 2,
+      busiUserId: parseInt((i / 14).toString()) + 2,
       status: i % 2 === 0 ? 'work' : 'off',
       workOption,
       latitude: workOption !== 'qrCode' ? 37.6015565 : undefined,
       longitude: workOption !== 'qrCode' ? 126.7280587 : undefined,
-      createdAt: dayjs().startOf('week').add(parseInt((i / 2 % 13).toString()), 'day')
+      createdAt: dayjs().startOf('week').add(parseInt((i / 2 % 7).toString()), 'day')
         .add(8, 'hours')
         .add(i % 2 === 1 ? addHours : 0, 'hours').toISOString(),
-      updatedAt: dayjs().startOf('week').add(parseInt((i / 2 % 13).toString()), 'day')
+      updatedAt: dayjs().startOf('week').add(parseInt((i / 2 % 7).toString()), 'day')
         .add(8, 'hours')
         .add(i % 2 === 1 ? addHours : 0, 'hours').toISOString(),
     } as BusiUserWorkHistory

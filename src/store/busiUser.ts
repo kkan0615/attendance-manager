@@ -275,7 +275,6 @@ export const useBusiUserStore = defineStore('busiUserAdmin', {
             const second = filterDummies[i + 1]
 
             totalSeconds += dayjs(second.updatedAt).diff(dayjs(first.updatedAt), 'seconds')
-            console.log(first, second, dayjs(second.updatedAt).diff(dayjs(first.updatedAt), 'hours'))
           }
 
           this.busiUserAdminTotalWorkSeconds = totalSeconds

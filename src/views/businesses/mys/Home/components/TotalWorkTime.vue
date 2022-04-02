@@ -12,7 +12,7 @@ export default {
 </script>
 <script setup lang="ts">
 import { useCurrentStore } from '@/store/current'
-import { computed, ref } from 'vue'
+import { computed } from 'vue'
 
 const currentStore = useCurrentStore()
 
