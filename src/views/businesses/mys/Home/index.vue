@@ -5,28 +5,28 @@
     <div
       class="home-content"
     >
-      <q-card
-        class="left-card"
-      >
-        <q-card-section
-          class="tw-h-full"
-        >
-          <!-- Image -->
-          <business-home-profile />
-          <div
-            class="tw-mt-2 tw-space-y-3"
+      <div class="left-card tw-space-y-3">
+        <q-card>
+          <q-card-section
+            class="tw-h-full"
           >
-            <!-- On the job -->
-            <business-home-work-btn />
-            <!-- status -->
-            <business-home-status-select />
-          </div>
-        </q-card-section>
-      </q-card>
+            <!-- Image -->
+            <business-home-profile />
+            <div
+              class="tw-mt-2 tw-space-y-3"
+            >
+              <!-- On the job -->
+              <business-home-work-btn />
+              <!-- status -->
+              <business-home-status-select />
+            </div>
+          </q-card-section>
+        </q-card>
+        <!-- Total Work time -->
+        <business-home-total-work-time />
+      </div>
       <!-- right part -->
-      <div
-        class="right-card"
-      >
+      <div class="right-card">
         <!-- Work history -->
         <business-home-work-history />
       </div>
@@ -45,12 +45,14 @@ import BusinessHomeWorkBtn from '@/views/businesses/mys/Home/components/WorkBtn.
 import BusinessHomeStatusSelect from '@/views/businesses/mys/Home/components/StatusSelect.vue'
 import BusinessHomeProfile from '@/views/businesses/mys/Home/components/Profile.vue'
 import BusinessHomeWorkHistory from '@/views/businesses/mys/Home/components/WorkHistory.vue'
+import BusinessHomeTotalWorkTime from '@/views/businesses/mys/Home/components/TotalWorkTime.vue'
 
 const currentStore = useCurrentStore()
 
 const initData = async () => {
   try {
     await currentStore.loadCurrentBusiUserWorkHistoryList()
+    await currentStore.loadCurrentBusiUserTotalWorkSeconds()
   } catch (e) {
     console.error(e)
   }

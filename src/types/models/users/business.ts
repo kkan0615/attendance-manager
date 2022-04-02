@@ -26,13 +26,41 @@ export const userStatusSelectOption: { label: string; value: BusiUserStatus }[] 
  * Business auth
  */
 export type BusiUserAuth = 'user' | 'staff' | 'admin' | 'system' | 'superAdmin'
+export const busiUserAuthSelectOption: { label: string; value: BusiUserAuth; grade: number }[] = [
+  {
+    label: toCapitalize(i18n.global.t('Types.Models.BusiUsers.UserAuths.user')),
+    value: 'user',
+    grade: 1,
+  },
+  {
+    label: toCapitalize(i18n.global.t('Types.Models.BusiUsers.UserAuths.staff')),
+    value: 'staff',
+    grade: 2,
+  },
+  {
+    label: toCapitalize(i18n.global.t('Types.Models.BusiUsers.UserAuths.admin')),
+    value: 'admin',
+    grade: 3,
+  },
+  {
+    label: toCapitalize(i18n.global.t('Types.Models.BusiUsers.UserAuths.system')),
+    value: 'system',
+    grade: 4,
+  },
+  {
+    label: toCapitalize(i18n.global.t('Types.Models.BusiUsers.UserAuths.superAdmin')),
+    value: 'superAdmin',
+    grade: 5,
+  },
+]
 
-export type BusiUser = Pick<User, 'name' | 'nickname' | 'email' | 'img'> & DefaultAttributes & {
+export type BusiUser = Pick<User, 'name' | 'nickname' | 'email' | 'img' | 'description'> & DefaultAttributes & {
   userId: number
   busiId: number
   status: BusiUserStatus
   startWorkAt: string | null
   auth: BusiUserAuth
+  joinAt: string
 }
 
 /* Use for admin user page */

@@ -85,7 +85,7 @@ const initData = async () => {
   try {
     const { id } = route.params
     if (id) {
-      await busiUserStore.loadBusiUser(Number(id))
+      await busiUserStore.loadBusiUserAdmin(Number(id))
       if (!busiUserStore.BusiUserAdmin || !busiUserStore.BusiUserAdmin.id) {
         throw new Error('BusiUserAdmin is not found')
       }
@@ -95,6 +95,12 @@ const initData = async () => {
 
       /* Load work history */
       await busiUserStore.loadBusiUserAdminWorkHistoryList({
+        busiUserId: busiUserStore.BusiUserAdmin.id,
+        startDateAt: dayjs().startOf('week').toISOString(),
+        endDateAt: dayjs().endOf('week').toISOString(),
+      })
+      /* Load work total work seconds  */
+      await busiUserStore.loadBusiUserAdminTotalWorkSeconds({
         busiUserId: busiUserStore.BusiUserAdmin.id,
         startDateAt: dayjs().startOf('week').toISOString(),
         endDateAt: dayjs().endOf('week').toISOString(),
@@ -118,7 +124,7 @@ const onClickWorkOffBtn = () => {
         startWorkAt: null,
         status: 'off'
       })
-      await busiUserStore.loadBusiUser(busiUserStore.BusiUserAdmin.id)
+      await busiUserStore.loadBusiUserAdmin(busiUserStore.BusiUserAdmin.id)
       showSnackbar({
         message: i18n.t('Commons.Messages.saved'),
         color: 'positive'

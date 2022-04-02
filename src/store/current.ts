@@ -8,7 +8,7 @@ import {
 } from '@/types/models/users/business'
 import { LocalStorageKeyEnum } from '@/types/commons/storage'
 import { BusiUserDummy } from '@/dummies/users/busiUser'
-import { BusiUserWorkHistory, BusiUserWorkHistorySelectOption } from '@/types/models/users/busiWorkHistory'
+import { BusiUserWorkHistory } from '@/types/models/users/busiWorkHistory'
 import { BusiUserWorkHistoryDummy } from '@/dummies/users/busiUserWorkHistory'
 import dayjs from 'dayjs'
 
@@ -17,6 +17,7 @@ export interface CurrentState {
   currentBusiness: BusinessInfo
   currentBusiUser: BusiUser
   currentBusiUserWorkHistoryList: BusiUserWorkHistory[]
+  currentBusiUserTotalWorkSeconds: number
 }
 
 export const useCurrentStore = defineStore('current', {
@@ -26,6 +27,7 @@ export const useCurrentStore = defineStore('current', {
       currentBusiness: {} as BusinessInfo,
       currentBusiUser: {} as BusiUser,
       currentBusiUserWorkHistoryList: [],
+      currentBusiUserTotalWorkSeconds: 0,
     }
   },
   getters: {
@@ -56,6 +58,13 @@ export const useCurrentStore = defineStore('current', {
      */
     CurrentBusiUserWorkHistoryList (state) {
       return state.currentBusiUserWorkHistoryList
+    },
+    /**
+     * Current Business user work history list
+     * @param state
+     */
+    CurrentBusiUserTotalWorkSeconds (state) {
+      return state.currentBusiUserTotalWorkSeconds
     },
   },
   actions: {
@@ -147,7 +156,9 @@ export const useCurrentStore = defineStore('current', {
           if (this.currentBusiUserWorkHistoryList && this.currentBusiUserWorkHistoryList.length) {
             await this.resetCurrentBusiUserWorkHistoryList()
           }
-          const filterDummies = BusiUserWorkHistoryDummy.filter(dummy => dummy.busiUserId === this.currentBusiness.id)
+          const filterDummies = BusiUserWorkHistoryDummy
+            .filter(dummy => dummy.busiUserId === this.currentBusiness.id)
+            .sort((a, b) => b.id - a.id)
           this.currentBusiUserWorkHistoryList = filterDummies.filter(dummy => {
             const startDateAt = dayjs().startOf('week')
             const endDateAt = dayjs().endOf('week')
@@ -168,6 +179,55 @@ export const useCurrentStore = defineStore('current', {
     // @TODO: consider that is async await required
     async resetCurrentBusiUserWorkHistoryList () {
       this.currentBusiUserWorkHistoryList = []
+    },
+    /**
+     * Calculate(load) total work seconds
+     */
+    async loadCurrentBusiUserTotalWorkSeconds () {
+      try {
+        if (import.meta.env.VITE_IS_USE_DUMMY) {
+          // Reset the data
+          if (this.currentBusiUserTotalWorkSeconds) {
+            await this.resetCurrentBusiUserTotalWorkSeconds()
+          }
+          const filterDummies = BusiUserWorkHistoryDummy
+            .filter(dummy => dummy.busiUserId === this.currentBusiness.id)
+            .filter(dummy => {
+              const startDateAt = dayjs().startOf('week')
+              const endDateAt = dayjs().endOf('week')
+              const updatedAt = dayjs(dummy.updatedAt)
+              return updatedAt.isBetween(startDateAt, endDateAt, null, '[]')
+            }).sort((a, b) => b.id - a.id)
+          if (filterDummies[0] && filterDummies[0].status === 'work') {
+            filterDummies.shift()
+          }
+          console.log(filterDummies)
+          let totalSeconds = 0
+          // if (filterDummies[filterDummies.length - 1] && filterDummies[filterDummies.length - 1].status === 'off') {
+          // // @TODO: Add logic to get previous work status
+          // } else {
+          for (let i = 0; i < filterDummies.length; i = i + 2) {
+            const first = filterDummies[i]
+            const second = filterDummies[i + 1]
+            totalSeconds += dayjs(first.updatedAt).diff(dayjs(second.updatedAt), 'seconds')
+            console.log(dayjs(first.updatedAt).diff(dayjs(second.updatedAt), 'hours'))
+            // }
+          }
+
+          this.currentBusiUserTotalWorkSeconds = totalSeconds
+        } else {
+          this.currentBusiUserTotalWorkSeconds = 0
+        }
+      } catch (e) {
+        console.error(e)
+        throw e
+      }
+    },
+    /**
+     * Reset BusiUserAdmin list
+     */
+    resetCurrentBusiUserTotalWorkSeconds () {
+      this.currentBusiUserTotalWorkSeconds = 0
     },
     /**
      * Login

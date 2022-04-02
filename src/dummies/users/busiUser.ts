@@ -18,6 +18,9 @@ export const initBusiUserDummy = () => {
       status: 'work',
       startWorkAt: dayjs().subtract(8, 'minutes').toISOString(),
       auth: 'superAdmin',
+      joinAt: dayjs().toISOString(),
+      createdAt: dayjs().toISOString(),
+      updatedAt: dayjs().toISOString(),
     } as BusiUser
   ].concat([ ...Array(20).keys() ].map(i => {
     const status = rand(_staticBusiUserStatus)
@@ -32,6 +35,7 @@ export const initBusiUserDummy = () => {
       startWorkAt: status === 'work' || status === 'rest' ? dayjs().toISOString() : null,
       status: status,
       auth: auth,
+      joinAt: dayjs().toISOString(),
       createdAt: dayjs().toISOString(),
       updatedAt: dayjs().toISOString(),
     } as BusiUser

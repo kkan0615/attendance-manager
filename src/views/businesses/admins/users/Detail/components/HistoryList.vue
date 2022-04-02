@@ -6,6 +6,16 @@
       Work History
     </q-card-section>
     <q-separator />
+    <q-card-section
+      class="q-pt-sm q-pb-none tw-text-lg"
+    >
+      <span>
+        Total Work Time:
+      </span>
+      <span>
+        {{ hours }}:{{ minutes }}:{{ seconds }}
+      </span>
+    </q-card-section>
     <q-card-section>
       <div
         class="tw-flex tw-justify-end"
@@ -21,8 +31,7 @@
             class="tw-w-full tw-mt-0.5"
             text-input
             :enable-time-picker="false"
-            auto-appl
-            lacle="ko-kr"
+            :clearable="false"
           />
         </q-field>
         <q-btn
@@ -38,15 +47,6 @@
           </q-tooltip>
         </q-btn>
       </div>
-      <!--        <q-list-->
-      <!--          padding-->
-      <!--        >-->
-      <!--          <busi-admin-user-detail-history-list-item-->
-      <!--            v-for="workHistory in busiUserStore.BusiUserAdminWorkHistoryList"-->
-      <!--            :key="workHistory"-->
-      <!--            :work-history="workHistory"-->
-      <!--          />-->
-      <!--        </q-list>-->
       <div
         class="q-mt-sm"
       >
@@ -79,7 +79,7 @@ export default {
 import { useBusiUserStore } from '@/store/busiUser'
 import { useCurrentStore } from '@/store/current'
 import dayjs from 'dayjs'
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import { DxDataGrid } from 'devextreme-vue/data-grid'
 import { Column } from 'devextreme/ui/data_grid'
 import BusiUserStatusBadge from '@/components/commons/BusiUserStatusBadge.vue'
@@ -126,10 +126,21 @@ const columns = ref<Column[]>([
   }
 ])
 
+const hours = computed(() => parseInt((busiUserStore.BusiUserAdminTotalWorkSeconds / (60 * 60)).toString()).toString().padStart(2, '0'))
+const minutes = computed(() => parseInt(((busiUserStore.BusiUserAdminTotalWorkSeconds / 60) % 60).toString()).toString().padStart(2, '0'))
+const seconds = computed(() => parseInt((busiUserStore.BusiUserAdminTotalWorkSeconds % 60).toString()).toString().padStart(2, '0'))
+
 const onClickSearchBtn = async () => {
   try {
     /* Load work history */
     await busiUserStore.loadBusiUserAdminWorkHistoryList({
+      busiUserId: busiUserStore.BusiUserAdmin.id,
+      startDateAt: dayjs(rangeDate.value[0]).toISOString(),
+      endDateAt: dayjs(rangeDate.value[1]).toISOString(),
+    })
+
+    /* Load work total work seconds  */
+    await busiUserStore.loadBusiUserAdminTotalWorkSeconds({
       busiUserId: busiUserStore.BusiUserAdmin.id,
       startDateAt: dayjs(rangeDate.value[0]).toISOString(),
       endDateAt: dayjs(rangeDate.value[1]).toISOString(),

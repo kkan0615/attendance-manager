@@ -32,11 +32,12 @@ export interface BusiUserState {
   busiUserAdmin: BusiUserAdminInfo
   busiUserAdminWorkHistoryList: BusiUserWorkHistory[]
   busiUserAdminWorkHistoryListCount: number
+  busiUserAdminTotalWorkSeconds: number
   busiUserInviteList: BusiUserInviteListInfo[]
   busiUserInviteListCount: number
 }
 
-export const useBusiUserStore = defineStore('BusiUserAdmin', {
+export const useBusiUserStore = defineStore('busiUserAdmin', {
   state: (): BusiUserState => {
     return {
       busiUserAdminListFilter: {} as BusiUserAdminListFilter,
@@ -45,6 +46,7 @@ export const useBusiUserStore = defineStore('BusiUserAdmin', {
       busiUserAdmin: {} as BusiUserAdminInfo,
       busiUserAdminWorkHistoryList: [],
       busiUserAdminWorkHistoryListCount: 0,
+      busiUserAdminTotalWorkSeconds: 0,
       busiUserInviteList: [],
       busiUserInviteListCount: 0,
     }
@@ -91,6 +93,13 @@ export const useBusiUserStore = defineStore('BusiUserAdmin', {
      */
     BusiUserAdminWorkHistoryListCount (state) {
       return state.busiUserAdminWorkHistoryListCount
+    },
+    /**
+     * Count of BusiUserAdmin work history
+     * @param state
+     */
+    BusiUserAdminTotalWorkSeconds (state) {
+      return state.busiUserAdminTotalWorkSeconds
     },
     /**
      * List of invite
@@ -182,10 +191,10 @@ export const useBusiUserStore = defineStore('BusiUserAdmin', {
      * @param payload - id
      */
     // @TODO: change name to loadBusiUserAdmin
-    loadBusiUser (payload: number) {
+    loadBusiUserAdmin (payload: number) {
       if (import.meta.env.VITE_IS_USE_DUMMY) {
         if (this.busiUserAdmin && this.busiUserAdmin.id) {
-          this.resetBusiUser()
+          this.resetBusiUserAdmin()
         }
         const foundDummy = BusiUserDummy.find(dummy => dummy.id === payload)
         this.busiUserAdmin = foundDummy ? foundDummy : {} as BusiUserAdminInfo
@@ -196,7 +205,7 @@ export const useBusiUserStore = defineStore('BusiUserAdmin', {
     /**
      * Reset BusiUserAdmin
      */
-    resetBusiUser () {
+    resetBusiUserAdmin () {
       this.busiUserAdmin = {} as BusiUserAdminInfo
     },
     /**
@@ -210,14 +219,14 @@ export const useBusiUserStore = defineStore('BusiUserAdmin', {
           if (this.busiUserAdminWorkHistoryList && this.busiUserAdminWorkHistoryList.length) {
             await this.resetBusiUserAdminWorkHistoryList()
           }
-          const filterDummies = BusiUserWorkHistoryDummy.filter(dummy => dummy.busiUserId === payload.busiUserId)
+          const filterDummies = BusiUserWorkHistoryDummy
+            .filter(dummy => dummy.busiUserId === payload.busiUserId)
           this.busiUserAdminWorkHistoryList = filterDummies.filter(dummy => {
             const startDateAt = dayjs(payload.startDateAt)
             const endDateAt = dayjs(payload.endDateAt)
             const updatedAt = dayjs(dummy.updatedAt)
             return updatedAt.isBetween(startDateAt, endDateAt, null, '[]')
-          })
-          console.log(this.busiUserAdminWorkHistoryList)
+          }).sort((a, b) => a.id - b.id)
           this.busiUserAdminWorkHistoryListCount = filterDummies.length
         } else {
           this.busiUserAdminWorkHistoryList = []
@@ -235,6 +244,54 @@ export const useBusiUserStore = defineStore('BusiUserAdmin', {
     async resetBusiUserAdminWorkHistoryList () {
       this.busiUserAdminWorkHistoryList = []
       this.busiUserAdminWorkHistoryListCount = 0
+    },
+    /**
+     * Calculate(load) total work seconds
+     */
+    async loadBusiUserAdminTotalWorkSeconds (payload: BusiUserWorkHistorySelectOption) {
+      try {
+        if (import.meta.env.VITE_IS_USE_DUMMY) {
+          // Reset the data
+          if (this.busiUserAdminTotalWorkSeconds) {
+            await this.resetBusiUserAdminTotalWorkSeconds()
+          }
+          const filterDummies = BusiUserWorkHistoryDummy
+            .filter(dummy => dummy.busiUserId === payload.busiUserId)
+            .filter(dummy => {
+              const startDateAt = dayjs(payload.startDateAt)
+              const endDateAt = dayjs(payload.endDateAt)
+              const updatedAt = dayjs(dummy.updatedAt)
+              return updatedAt.isBetween(startDateAt, endDateAt, null, '[]')
+            })
+          if (filterDummies[filterDummies.length - 1] && filterDummies[filterDummies.length - 1].status === 'work') {
+            filterDummies.pop()
+          }
+          let totalSeconds = 0
+          // if (filterDummies[filterDummies.length - 1] && filterDummies[filterDummies.length - 1].status === 'off') {
+          // // @TODO: Add logic to get previous work status
+          // } else {
+          for (let i = 0; i < filterDummies.length; i = i + 2) {
+            const first = filterDummies[i]
+            const second = filterDummies[i + 1]
+
+            totalSeconds += dayjs(second.updatedAt).diff(dayjs(first.updatedAt), 'seconds')
+            console.log(first, second, dayjs(second.updatedAt).diff(dayjs(first.updatedAt), 'hours'))
+          }
+
+          this.busiUserAdminTotalWorkSeconds = totalSeconds
+        } else {
+          this.busiUserAdminTotalWorkSeconds = 0
+        }
+      } catch (e) {
+        console.error(e)
+        throw e
+      }
+    },
+    /**
+     * Reset BusiUserAdmin list
+     */
+    resetBusiUserAdminTotalWorkSeconds () {
+      this.busiUserAdminTotalWorkSeconds = 0
     },
     /**
      * Create BusiUserAdmin
@@ -458,7 +515,7 @@ export const useBusiUserStore = defineStore('BusiUserAdmin', {
       try {
         if (import.meta.env.VITE_IS_USE_DUMMY) {
           const newId = BusiUserWorkHistoryDummy.length + 1
-          BusiUserWorkHistoryDummy.push({
+          BusiUserWorkHistoryDummy.unshift({
             id: newId,
             busiUserId: payload.busiUserId,
             workOption: payload.workOption,
