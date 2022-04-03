@@ -23,7 +23,9 @@
           </q-card-section>
         </q-card>
         <!-- Total Work time -->
-        <business-home-total-work-time />
+        <business-home-total-work-time
+          v-if="!totalWorkTimeLoading"
+        />
       </div>
       <!-- right part -->
       <div class="right-card">
@@ -39,7 +41,7 @@ export default {
 }
 </script>
 <script setup lang="ts">
-import { onBeforeUnmount } from 'vue'
+import { onBeforeUnmount, ref } from 'vue'
 import { useCurrentStore } from '@/store/current'
 import BusinessHomeWorkBtn from '@/views/businesses/mys/Home/components/WorkBtn.vue'
 import BusinessHomeStatusSelect from '@/views/businesses/mys/Home/components/StatusSelect.vue'
@@ -49,10 +51,14 @@ import BusinessHomeTotalWorkTime from '@/views/businesses/mys/Home/components/To
 
 const currentStore = useCurrentStore()
 
+const totalWorkTimeLoading = ref(false)
+
 const initData = async () => {
   try {
+    totalWorkTimeLoading.value = true
     await currentStore.loadCurrentBusiUserWorkHistoryList()
     await currentStore.loadCurrentBusiUserTotalWorkSeconds()
+    totalWorkTimeLoading.value = false
   } catch (e) {
     console.error(e)
   }

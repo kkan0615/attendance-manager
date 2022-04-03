@@ -146,8 +146,7 @@ export const useCurrentStore = defineStore('current', {
       this.currentBusiUser = {} as BusiUser
     },
     /**
-     * Load list of invite
-     * @param payload - business user id
+     * Load list of work history
      */
     async loadCurrentBusiUserWorkHistoryList () {
       try {
@@ -201,7 +200,6 @@ export const useCurrentStore = defineStore('current', {
           if (filterDummies[0] && filterDummies[0].status === 'work') {
             filterDummies.shift()
           }
-          console.log(filterDummies)
           let totalSeconds = 0
           // if (filterDummies[filterDummies.length - 1] && filterDummies[filterDummies.length - 1].status === 'off') {
           // // @TODO: Add logic to get previous work status
@@ -210,7 +208,7 @@ export const useCurrentStore = defineStore('current', {
             const first = filterDummies[i]
             const second = filterDummies[i + 1]
             totalSeconds += dayjs(first.updatedAt).diff(dayjs(second.updatedAt), 'seconds')
-            console.log(dayjs(first.updatedAt).diff(dayjs(second.updatedAt), 'hours'))
+            console.log(first, second, dayjs(first.updatedAt).diff(dayjs(second.updatedAt), 'hours'))
             // }
           }
 
@@ -226,7 +224,7 @@ export const useCurrentStore = defineStore('current', {
     /**
      * Reset BusiUserAdmin list
      */
-    resetCurrentBusiUserTotalWorkSeconds () {
+    async resetCurrentBusiUserTotalWorkSeconds () {
       this.currentBusiUserTotalWorkSeconds = 0
     },
     /**

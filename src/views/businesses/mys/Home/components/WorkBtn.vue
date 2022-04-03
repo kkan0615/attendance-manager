@@ -197,6 +197,8 @@ const onCLickWorkBtn = async () => {
       })
       /* Reload work history */
       await currentStore.loadCurrentBusiUserWorkHistoryList()
+      /* Load total work seconds */
+      await currentStore.loadCurrentBusiUserTotalWorkSeconds()
     } catch (e) {
       console.error(e)
       showSnackbar({
@@ -227,6 +229,8 @@ const onCLickWorkBtn = async () => {
             })
             /* Reload work history */
             await currentStore.loadCurrentBusiUserWorkHistoryList()
+            /* Load total work seconds */
+            await currentStore.loadCurrentBusiUserTotalWorkSeconds()
           } catch (e) {
             console.error(e)
             showSnackbar({
@@ -273,6 +277,8 @@ const onCLickGetOffBtn = async () => {
     })
     /* Reload work history */
     await currentStore.loadCurrentBusiUserWorkHistoryList()
+    /* Load total work seconds */
+    await currentStore.loadCurrentBusiUserTotalWorkSeconds()
   } catch (e) {
     console.error(e)
     showSnackbar({

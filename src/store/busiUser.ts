@@ -546,7 +546,6 @@ export const useBusiUserStore = defineStore('busiUserAdmin', {
             longitude: payload.longitude,
             createdAt: dayjs().toISOString(),
             updatedAt: dayjs().toISOString(),
-            deletedAt: dayjs().toISOString(),
           })
         }
       } catch (e) {

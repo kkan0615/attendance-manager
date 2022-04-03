@@ -9,7 +9,7 @@ export const initBusiUserDummy = () => {
   BusiUserDummy = [
     {
       id: 1,
-      img: 'https://64.media.tumblr.com/b5d68d4fb992a1ba0013b5dc412b0eaa/0d1853ff26639c9c-0b/s400x600/7a458c9896d9fecb13dcb5381b10ec34a97075ad.png',
+      img: 'https://picsum.photos/id/1003/500/500',
       email: 'hanamaru@demo.com',
       name: 'Hanamaru',
       nickname: 'Hanamaru',
