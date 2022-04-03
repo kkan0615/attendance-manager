@@ -302,7 +302,7 @@ export const useBusiUserStore = defineStore('busiUserAdmin', {
           const newId = 1
           const foundDummy = BusiUserDummy.find(dummy => dummy.id === payload.id)
           if (foundDummy) {
-            foundDummy.img =  URL.createObjectURL(payload.file)
+            foundDummy.img = URL.createObjectURL(payload.file)
           }
 
           return newId

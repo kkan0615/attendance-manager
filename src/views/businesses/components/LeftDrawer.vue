@@ -75,6 +75,14 @@
             </q-item-section>
             <q-item-section>Schedule</q-item-section>
           </q-item>
+          <q-item
+            clickable
+          >
+            <q-item-section avatar>
+              <q-icon name="notifications" />
+            </q-item-section>
+            <q-item-section>Notification</q-item-section>
+          </q-item>
         </q-list>
         <!--    App menu list    -->
         <div
@@ -97,6 +105,8 @@
           </q-item>
           <q-item
             clickable
+            :to="{ name: 'BusiAdminBusinessLayout' }"
+            active-class="active-router"
           >
             <q-item-section avatar>
               <q-icon name="business" />

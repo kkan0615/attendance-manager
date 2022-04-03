@@ -21,6 +21,7 @@ export const enDictionary = {
       error: 'Face to error',
       startWorkFailed: 'Fail to start to work',
       offWorkFailed: 'Fail to get off the work',
+      noImg: 'No Image'
     },
   },
   Types: {

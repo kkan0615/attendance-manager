@@ -11,6 +11,7 @@ import { BusiUserDummy } from '@/dummies/users/busiUser'
 import { BusiUserWorkHistory } from '@/types/models/users/busiWorkHistory'
 import { BusiUserWorkHistoryDummy } from '@/dummies/users/busiUserWorkHistory'
 import dayjs from 'dayjs'
+import { BusinessAllowedLocationDummy, BusinessDummy } from '@/dummies/users/businesses'
 
 export interface CurrentState {
   currentUser: User
@@ -84,35 +85,21 @@ export const useCurrentStore = defineStore('current', {
     },
     /**
      * Load Current Business
+     * @param payload - id of business
      */
     loadCurrentBusiness (payload: number) {
-      this.currentBusiness = {
-        id: payload,
-        name: 'Demo Business',
-        allowedLocations: [
-          {
-            id: 1,
-            busiId: payload,
-            lat: 37.596415,
-            lon: 126.722546,
-            meter: 10,
-          },
-          {
-            id: 2,
-            busiId: payload,
-            lat: 37.601544,
-            lon: 126.728071,
-            meter: 10,
-          },
-          {
-            id: 2,
-            busiId: payload,
-            lat: 37.596312,
-            lon: 126.722515,
-            meter: 10,
-          },
-        ]
-      } as BusinessInfo // @TODO: test
+      if (import.meta.env.VITE_IS_USE_DUMMY) {
+        const foundDummy = BusinessDummy.find(dummy => dummy.id === payload)
+        if (foundDummy) {
+          const allowedLocationDummy = BusinessAllowedLocationDummy.filter(dummy => dummy.busiId === payload)
+          this.currentBusiness = {
+            ...foundDummy,
+            allowedLocations: allowedLocationDummy,
+          } as BusinessInfo // @TODO: test
+        }
+      } else {
+        this.currentBusiness = {} as BusinessInfo
+      }
     },
     /**
      * Reset Current Business

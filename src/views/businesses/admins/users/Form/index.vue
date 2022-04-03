@@ -14,12 +14,6 @@
         @submit="onSubmitForm"
       >
         <!-- Image Upload -->
-        <q-file
-          v-model="img"
-          outlined
-          dense
-          label="Image"
-        />
         <q-avatar
           class="tw-ring-4 tw-ring-q-primary"
           size="250px"
@@ -36,6 +30,13 @@
             {{ name ? name[0] : '' }}
           </span>
         </q-avatar>
+        <q-file
+          v-model="img"
+          outlined
+          dense
+          label="Image"
+          accept="image/*"
+        />
         <!-- Name -->
         <q-input
           v-model="name"
