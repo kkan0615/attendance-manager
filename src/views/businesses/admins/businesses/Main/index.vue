@@ -1,3 +1,6 @@
+<!--
+@TODO: Add
+-->
 <template>
   <q-page
     padding
@@ -13,6 +16,11 @@
         class="tw-space-y-4"
         @submit="onSubmitForm"
       >
+        <div
+          class="text-h6"
+        >
+          Information
+        </div>
         <!-- logo -->
         <div
           class="tw-flex tw-space-x-4 tw-items-end"
@@ -61,21 +69,69 @@
           dense
           label="Small Logo"
           accept="image/*"
-        />
+        >
+          <template
+            #label
+          >
+            <div
+              class="c-required-label"
+            >
+              Small logo
+            </div>
+          </template>
+        </q-file>
         <q-file
           v-model="logo"
           outlined
           dense
           label="Logo"
           accept="image/*"
-        />
+        >
+          <template
+            #label
+          >
+            <div
+              class="c-required-label"
+            >
+              Main logo
+            </div>
+          </template>
+        </q-file>
         <!-- Name -->
         <q-input
           v-model="name"
+          dense
           label="Name"
+          outlined
+        >
+          <template
+            #label
+          >
+            <div
+              class="c-required-label"
+            >
+              Name
+            </div>
+          </template>
+        </q-input>
+        <!-- Max work hour -->
+        <q-input
+          v-model="maxWorkHour"
+          label="Max work hour"
+          type="number"
           dense
           outlined
-        />
+        >
+          <template
+            #label
+          >
+            <div
+              class="c-required-label"
+            >
+              Max work hour
+            </div>
+          </template>
+        </q-input>
         <!-- Homepage -->
         <q-input
           v-model="homepage"
@@ -83,6 +139,12 @@
           dense
           outlined
         />
+        <q-separator />
+        <div
+          class="text-h6"
+        >
+          Overview
+        </div>
         <!-- User count -->
         <q-input
           :model-value="businessStore.BusinessAdmin.userCount"
@@ -150,6 +212,7 @@ const logo = ref<File | undefined>()
 const smallLogo = ref<File | undefined>()
 const name = ref('')
 const homepage = ref('')
+const maxWorkHour = ref(40)
 const createdAt = ref('')
 const updatedAt = ref('')
 
@@ -194,6 +257,7 @@ const onSubmitForm = async () => {
       id: currentStore.CurrentBusiness.id,
       name: name.value,
       homepage: homepage.value,
+      maxWorkHour: maxWorkHour.value
     })
 
     /* Reload current store */

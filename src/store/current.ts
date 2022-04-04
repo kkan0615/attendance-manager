@@ -135,7 +135,12 @@ export const useCurrentStore = defineStore('current', {
     /**
      * Load list of work history
      */
-    async loadCurrentBusiUserWorkHistoryList () {
+    async loadCurrentBusiUserWorkHistoryList (payload =
+    {
+      startDateAt: dayjs().startOf('week').toISOString(),
+      endDateAt: dayjs().endOf('week').toISOString(),
+    }
+    ) {
       try {
         if (import.meta.env.VITE_IS_USE_DUMMY) {
           // Reset the data
@@ -146,8 +151,8 @@ export const useCurrentStore = defineStore('current', {
             .filter(dummy => dummy.busiUserId === this.currentBusiness.id)
             .sort((a, b) => b.id - a.id)
           this.currentBusiUserWorkHistoryList = filterDummies.filter(dummy => {
-            const startDateAt = dayjs().startOf('week')
-            const endDateAt = dayjs().endOf('week')
+            const startDateAt = dayjs(payload.startDateAt).startOf('day')
+            const endDateAt = dayjs(payload.endDateAt).endOf('day')
             const updatedAt = dayjs(dummy.updatedAt)
             return updatedAt.isBetween(startDateAt, endDateAt, null, '[]')
           })
@@ -169,7 +174,11 @@ export const useCurrentStore = defineStore('current', {
     /**
      * Calculate(load) total work seconds
      */
-    async loadCurrentBusiUserTotalWorkSeconds () {
+    async loadCurrentBusiUserTotalWorkSeconds (payload =
+    {
+      startDateAt: dayjs().startOf('week').toISOString(),
+      endDateAt: dayjs().endOf('week').toISOString(),
+    }) {
       try {
         if (import.meta.env.VITE_IS_USE_DUMMY) {
           // Reset the data
@@ -179,8 +188,8 @@ export const useCurrentStore = defineStore('current', {
           const filterDummies = BusiUserWorkHistoryDummy
             .filter(dummy => dummy.busiUserId === this.currentBusiness.id)
             .filter(dummy => {
-              const startDateAt = dayjs().startOf('week')
-              const endDateAt = dayjs().endOf('week')
+              const startDateAt = dayjs(payload.startDateAt).startOf('day')
+              const endDateAt = dayjs(payload.endDateAt).endOf('day')
               const updatedAt = dayjs(dummy.updatedAt)
               return updatedAt.isBetween(startDateAt, endDateAt, null, '[]')
             }).sort((a, b) => b.id - a.id)

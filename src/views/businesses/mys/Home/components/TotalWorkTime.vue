@@ -10,7 +10,7 @@
         <div
           class="tw-ml-auto"
         >
-          40h
+          {{ currentStore.CurrentBusiness.maxWorkHour }}h
         </div>
       </div>
       <q-linear-progress
@@ -30,7 +30,7 @@ export default {
 </script>
 <script setup lang="ts">
 import { useCurrentStore } from '@/store/current'
-import { computed, onBeforeUnmount, ref, watch } from 'vue'
+import { computed, onBeforeUnmount, ref } from 'vue'
 import dayjs from 'dayjs'
 
 const currentStore = useCurrentStore()
@@ -42,7 +42,7 @@ const hours = computed(() => parseInt((timerSeconds.value / (60 * 60)).toString(
 const minutes = computed(() => parseInt(((timerSeconds.value / 60) % 60).toString()).toString().padStart(2, '0'))
 const seconds = computed(() => parseInt((timerSeconds.value % 60).toString()).toString().padStart(2, '0'))
 // 144000 is 40 hours to seconds
-const processValue = computed(() => timerSeconds.value / 144000)
+const processValue = computed(() => timerSeconds.value / (currentStore.CurrentBusiness.maxWorkHour * 60 * 60))
 
 currentStore.$subscribe((mutation, state) => {
   // when use console.log, key is shown

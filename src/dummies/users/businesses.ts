@@ -1,4 +1,4 @@
-import { randCompanyName, randUrl } from '@ngneat/falso'
+import { randCompanyName, randNumber, randUrl } from '@ngneat/falso'
 import dayjs from 'dayjs'
 import { Business } from '@/types/models/businesses'
 import { BusiAllowedLocation } from '@/types/models/businesses/allowedLocation'
@@ -13,6 +13,7 @@ export const initBusinessDummy = () => {
       logo: 'http://placehold.jp/ffffff/000000/300x150.png?text=Lorem%20Logo',
       homepage: randUrl(),
       name: 'Demo Business',
+      maxWorkHour: 40,
       createdAt: dayjs().toISOString(),
       updatedAt: dayjs().toISOString(),
     } as Business
@@ -23,6 +24,7 @@ export const initBusinessDummy = () => {
       logo: '',
       homepage: randUrl(),
       name: randCompanyName(),
+      maxWorkHour: randNumber({ min: 40, max: 52 }),
       createdAt: dayjs().toISOString(),
       updatedAt: dayjs().toISOString(),
     } as Business

@@ -134,6 +134,7 @@ export const useBusinessStore = defineStore('business', {
         if (foundDummy) {
           foundDummy.name = payload.name
           foundDummy.homepage = payload.homepage
+          foundDummy.maxWorkHour = payload.maxWorkHour
           foundDummy.updatedAt = dayjs().toISOString()
         }
         return 1

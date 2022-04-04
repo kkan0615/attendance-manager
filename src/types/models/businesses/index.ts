@@ -6,6 +6,7 @@ export interface Business extends DefaultAttributes {
   smallLogo?: string
   logo?: string
   homepage?: string
+  maxWorkHour: number // default is 40 hours
 }
 
 export interface BusinessInfo extends Business {

@@ -35,6 +35,8 @@ export const initBusiUserWorkHistoryDummy = () => {
 
   const found = BusiUserDummy.find(dummy => dummy.id === 1)
   if (found) {
+    BusiUserWorkHistoryDummy[BusiUserWorkHistoryDummy.length - 1].createdAt = dayjs().subtract(8, 'minute').toISOString()
+    BusiUserWorkHistoryDummy[BusiUserWorkHistoryDummy.length - 1].updatedAt = dayjs().subtract(8, 'minute').toISOString()
     found.startWorkAt = dayjs(BusiUserWorkHistoryDummy[BusiUserWorkHistoryDummy.length - 1].updatedAt).toISOString()
   }
 
