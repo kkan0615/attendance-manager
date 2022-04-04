@@ -7,25 +7,10 @@ export default {
 }
 </script>
 <script setup lang="ts">
-import { useCurrentStore } from '@/store/current'
-import { useRouter } from 'vue-router'
-import { showSnackbar } from '@/utils/libs/quasar/notify'
-import { useI18n } from 'vue-i18n'
+import { useCheckRole } from '@/plugins/useCheckRole'
 
-const router = useRouter()
-const i18n = useI18n()
-const currentStore = useCurrentStore()
+const checkRole = useCheckRole()
 
-/* Check auth user */
-if (!currentStore.CurrentBusiUser
-    || !currentStore.CurrentBusiUser.id
-    || (currentStore.CurrentBusiUser.auth === 'user'
-    || currentStore.CurrentBusiUser.auth === 'staff')
-) {
-  showSnackbar({
-    message: i18n.t('Commons.Messages.unAuthUser'),
-    color: 'negative'
-  })
-  router.push({ name: 'BusiMyLayout' })
-}
+/* Check role */
+checkRole.checkRouteRole()
 </script>

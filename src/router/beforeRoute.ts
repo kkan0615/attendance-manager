@@ -1,5 +1,6 @@
 import { router } from '@/router/index'
 import { useCurrentStore } from '@/store/current'
+import { BusiUserAuth } from '@/types/models/users/business'
 
 router.beforeEach(async (to, from, next) => {
   const currentStore = useCurrentStore()
@@ -26,6 +27,7 @@ router.beforeEach(async (to, from, next) => {
         })
       }
     }
+
     next()
   } catch (e) {
     console.error(e)

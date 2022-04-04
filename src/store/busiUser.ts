@@ -25,6 +25,10 @@ export interface BusiUserAdminListFilter {
   busiId: number
 }
 
+export interface BusiUserAppListFilter {
+  busiId: number
+}
+
 export interface BusiUserState {
   busiUserAdminListFilter: BusiUserAdminListFilter
   busiUserAdminList: BusiUserAdminListInfo[]
@@ -35,6 +39,8 @@ export interface BusiUserState {
   busiUserAdminTotalWorkSeconds: number
   busiUserInviteList: BusiUserInviteListInfo[]
   busiUserInviteListCount: number
+  busiUserAppList: BusiUserAdminListInfo[]
+  busiUserAppListCount: number
 }
 
 export const useBusiUserStore = defineStore('busiUserAdmin', {
@@ -49,6 +55,8 @@ export const useBusiUserStore = defineStore('busiUserAdmin', {
       busiUserAdminTotalWorkSeconds: 0,
       busiUserInviteList: [],
       busiUserInviteListCount: 0,
+      busiUserAppList: [],
+      busiUserAppListCount: 0,
     }
   },
   getters: {
@@ -114,6 +122,20 @@ export const useBusiUserStore = defineStore('busiUserAdmin', {
      */
     BusiUserInviteListCount (state) {
       return state.busiUserInviteListCount
+    },
+    /**
+     * List of Busi User App
+     * @param state
+     */
+    BusiUserAppList (state) {
+      return state.busiUserAppList
+    },
+    /**
+     * Count of Busi User App list
+     * @param state
+     */
+    BusiUserAppListCount (state) {
+      return state.busiUserAppListCount
     },
   },
   actions: {
@@ -291,6 +313,31 @@ export const useBusiUserStore = defineStore('busiUserAdmin', {
      */
     resetBusiUserAdminTotalWorkSeconds () {
       this.busiUserAdminTotalWorkSeconds = 0
+    },
+    /**
+     * Load list of Busi User app
+     * @param payload - List Filter
+     */
+    async loadBusiUserAppList (payload: BusiUserAppListFilter) {
+      if (import.meta.env.VITE_IS_USE_DUMMY) {
+        if (this.busiUserAdminList && this.busiUserAdminList.length) {
+          await this.resetBusiUserAppList()
+        }
+        const filterDummies = BusiUserDummy.filter(dummy => dummy.busiId === payload.busiId)
+        this.busiUserAppList = filterDummies
+        this.busiUserAppListCount = filterDummies.length
+      } else {
+        this.busiUserAppList = []
+        this.busiUserAppListCount = 0
+      }
+    },
+    /**
+     * Reset BusiUserAdmin list
+     */
+    // @TODO: consider that is async await required
+    async resetBusiUserAppList () {
+      this.busiUserAppList = []
+      this.busiUserAppListCount = 0
     },
     /**
      * Upload Business user image

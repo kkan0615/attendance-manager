@@ -27,7 +27,12 @@ export const enDictionary = {
   Types: {
     Models: {
       Users: {},
-      Businesses: {},
+      Businesses: {
+        Tittles: {
+          information: 'information',
+          overview: 'Overview'
+        }
+      },
       BusiUsers: {
         name: 'name',
         auth: 'role',

@@ -54,6 +54,9 @@ export const busiUserAuthSelectOption: { label: string; value: BusiUserAuth; gra
   },
 ]
 
+/**
+ * Business user
+ */
 export type BusiUser = Pick<User, 'name' | 'nickname' | 'email' | 'img' | 'description'> & DefaultAttributes & {
   userId: number
   busiId: number
@@ -61,12 +64,15 @@ export type BusiUser = Pick<User, 'name' | 'nickname' | 'email' | 'img' | 'descr
   startWorkAt: string | null
   auth: BusiUserAuth
   joinAt: string
+  latitude?: number // location
+  longitude?: number // location
 }
 
 /* Use for admin user page */
 export type BusiUserAdminListInfo = BusiUser
 export type BusiUserAdminInfo = BusiUser
 
+/* Forms */
 export type CurrentBusiUserForm = Pick<BusiUser, 'userId' | 'busiId'>
 export type BusiUserCreateForm = Omit<BusiUser, 'id' | 'createdAt' | 'updatedAt' | 'deletedAt'>
 export type BusiUserUploadImageForm = Pick<BusiUser, 'id' | 'busiId'> & {
@@ -81,6 +87,9 @@ export type BusiUserQRCodeUpdateForm = BusiUser & {
   readerTime: string
 }
 
+/**
+ *  Work option
+*/
 export type BusiUserWorkOption = 'simple' | 'qrCode' | 'location'
 export const busiUserWorkOptionSelectOption: { label: string; value: BusiUserWorkOption }[] = [
   {

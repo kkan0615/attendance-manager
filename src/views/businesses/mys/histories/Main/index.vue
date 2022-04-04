@@ -45,7 +45,7 @@
         Work History
       </q-card-section>
       <q-card-section
-        class="q-py-sm"
+        class="q-pb-sm q-pt-none"
       >
         <div
           class="tw-flex tw-items-center"
@@ -78,9 +78,8 @@
           </q-btn>
         </div>
       </q-card-section>
-      <q-separator />
       <q-card-section
-        class="q-pt-sm"
+        class="q-pt-none"
       >
         <dx-data-grid
           :data-source="currentStore.CurrentBusiUserWorkHistoryList"

@@ -61,6 +61,8 @@
         >
           <q-item
             clickable
+            :to="{ name: 'BusiAppUserLayout' }"
+            active-class="active-router"
           >
             <q-item-section avatar>
               <q-icon name="people" />
