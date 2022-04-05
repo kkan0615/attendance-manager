@@ -12,7 +12,7 @@ export const busiAppRoutes: RouteRecordRaw[] = [
       {
         path: 'home',
         name: 'BusiAppHome',
-        component: () => import('@/views/businesses/app/Home/index.vue'),
+        component: () => import('@/views/businesses/apps/Home/index.vue'),
         meta: { isBusi: true },
       },
       ...busiAppUserRoutes,
