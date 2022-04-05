@@ -10,6 +10,17 @@
       class="fit"
     >
       <div class="q-pa-sm">
+        <!-- Logo -->
+        <router-link
+          :to="{ name: 'BusiMyHome' }"
+        >
+          <q-img
+            v-if="currentStore.CurrentBusiness.logo"
+            class="tw-rounded q-mb-md logo"
+            fit="cover"
+            :src="currentStore.CurrentBusiness.logo"
+          />
+        </router-link>
         <!--    My menu list    -->
         <div
           class="text-subtitle2 text-grey-4"
@@ -145,7 +156,9 @@ export default {
 </script>
 <script setup lang="ts">
 import { useBusiSettingStore } from '@/store/businessSetting'
+import { useCurrentStore } from '@/store/current'
 
+const currentStore = useCurrentStore()
 const busiSettingStore = useBusiSettingStore()
 
 const onUpdateModelValue = (bool: boolean) => {

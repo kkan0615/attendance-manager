@@ -26,15 +26,15 @@
           class="tw-flex tw-space-x-4 tw-items-end"
         >
           <!-- small logo -->
-          <div
+          <q-avatar
             class="tw-border tw-flex tw-justify-center items-center"
-            style="height: 38px; width: 38px;"
+            size="38px"
           >
             <q-img
               v-if="smallLogoToUrl || businessStore.BusinessAdmin.smallLogo"
               fit="cover"
-              height="100%"
-              width="100%"
+              height="80%"
+              width="80%"
               :src="smallLogoToUrl || businessStore.BusinessAdmin.smallLogo"
             />
             <span
@@ -43,11 +43,11 @@
             >
               38px x 38px
             </span>
-          </div>
+          </q-avatar>
           <!-- medium logo -->
           <div
-            class="tw-border tw-flex tw-justify-center items-center"
-            style="height: 100px; width: 250px;"
+            class="tw-border tw-flex tw-justify-center items-center logo"
+            style="max-width: 250px;"
           >
             <q-img
               v-if="logoToUrl || businessStore.BusinessAdmin.logo"

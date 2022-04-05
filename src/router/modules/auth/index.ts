@@ -12,6 +12,11 @@ export const authRoutes: RouteRecordRaw[] = [
         name: 'AuthLogin',
         component: () => import('@/views/auths/Login/index.vue'),
       },
+      {
+        path: 'logout',
+        name: 'AuthLogout',
+        component: () => import('@/views/auths/Logout/index.vue'),
+      },
     ]
   },
 ]

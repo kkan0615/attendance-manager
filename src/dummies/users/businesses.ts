@@ -20,8 +20,8 @@ export const initBusinessDummy = () => {
   ].concat([ ...Array(10).keys() ].map(i => {
     return {
       id: i + 2,
-      smallLogo: '',
-      logo: '',
+      smallLogo: 'https://cdn-icons-png.flaticon.com/512/7188/7188223.png',
+      logo: 'http://placehold.jp/ffffff/000000/300x150.png?text=Lorem%20Logo',
       homepage: randUrl(),
       name: randCompanyName(),
       maxWorkHour: randNumber({ min: 40, max: 52 }),

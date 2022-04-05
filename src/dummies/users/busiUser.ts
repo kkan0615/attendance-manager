@@ -40,4 +40,23 @@ export const initBusiUserDummy = () => {
       updatedAt: dayjs().toISOString(),
     } as BusiUser
   }))
+    .concat([ ...Array(20).keys() ].map(i => {
+      const status = rand(_staticBusiUserStatus)
+      const auth = rand(_staticBusiUserAuth)
+      return     {
+        id: i + 22,
+        img: 'https://picsum.photos/id/1003/500/500',
+        email: 'hanamaru@demo.com',
+        name: 'Hanamaru',
+        nickname: 'Hanamaru',
+        userId: 1,
+        busiId: i + 2,
+        status: 'work',
+        startWorkAt: dayjs().subtract(8, 'minutes').toISOString(),
+        auth: 'superAdmin',
+        joinAt: dayjs().toISOString(),
+        createdAt: dayjs().toISOString(),
+        updatedAt: dayjs().toISOString(),
+      } as BusiUser
+    }))
 }

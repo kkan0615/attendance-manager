@@ -17,6 +17,7 @@ export interface BusinessAdminListInfo extends Business {
   userCount: number
   allowedLocations: BusiAllowedLocation[]
 }
+export type BusinessSimpleListInfo = Pick<Business, 'id' | 'smallLogo' | 'logo' | 'name'>
 
 export type BusinessUpdateForm = Omit<Business, 'createdAt' | 'updatedAt' | 'deletedAt'> & {
   logoFile?: File

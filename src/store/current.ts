@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { User, UserLoginForm } from '@/types/models/users'
-import { BusinessInfo } from '@/types/models/businesses'
+import { BusinessInfo, BusinessSimpleListInfo } from '@/types/models/businesses'
 import {
   BusiUser,
   BusiUserUpdateForm,
@@ -15,6 +15,7 @@ import { BusinessAllowedLocationDummy, BusinessDummy } from '@/dummies/users/bus
 
 export interface CurrentState {
   currentUser: User
+  currentUserBusiList: BusinessSimpleListInfo[]
   currentBusiness: BusinessInfo
   currentBusiUser: BusiUser
   currentBusiUserWorkHistoryList: BusiUserWorkHistory[]
@@ -25,6 +26,7 @@ export const useCurrentStore = defineStore('current', {
   state: (): CurrentState => {
     return {
       currentUser: {} as User,
+      currentUserBusiList: [],
       currentBusiness: {} as BusinessInfo,
       currentBusiUser: {} as BusiUser,
       currentBusiUserWorkHistoryList: [],
@@ -38,6 +40,13 @@ export const useCurrentStore = defineStore('current', {
      */
     CurrentUser (state) {
       return state.currentUser
+    },
+    /**
+     * Current User
+     * @param state
+     */
+    CurrentUserBusiList (state) {
+      return state.currentUserBusiList
     },
     /**
      * Current Business
@@ -82,6 +91,36 @@ export const useCurrentStore = defineStore('current', {
      */
     resetCurrentUser () {
       this.currentUser = {} as User
+    },
+    /**
+     * Load Current Business
+     * @param payload - id of business
+     */
+    loadCurrentUserBusiList () {
+      if (import.meta.env.VITE_IS_USE_DUMMY) {
+        const busiUserDummy = BusiUserDummy.filter(dummy => !dummy.deletedAt && dummy.userId === this.currentUser.id)
+        console.log(busiUserDummy)
+        const simpleBusiDummy: BusinessSimpleListInfo[] = busiUserDummy.map(dummy => {
+          const foundDummy = BusinessDummy.find(busiDummy => busiDummy.id === dummy.busiId)
+          if (foundDummy) {
+            return {
+              ...foundDummy,
+            } as BusinessSimpleListInfo
+          } else {
+            return {} as BusinessSimpleListInfo
+          }
+        })
+        console.log(simpleBusiDummy)
+        this.currentUserBusiList = simpleBusiDummy.filter(dummy => !!dummy.id)
+      } else {
+        this.currentUserBusiList = []
+      }
+    },
+    /**
+     * Reset Current Business
+     */
+    resetCurrentUserBusiList () {
+      this.currentUserBusiList = []
     },
     /**
      * Load Current Business

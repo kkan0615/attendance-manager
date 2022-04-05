@@ -13,28 +13,20 @@
         class="q-mr-sm"
         @click="onClickMenuBtn"
       />
-      <q-avatar>
-        <img src="https://cdn.quasar.dev/logo-v2/svg/logo-mono-black.svg">
-      </q-avatar>
-
-      <q-toolbar-title>Busi name</q-toolbar-title>
-      <!--   Business list dropdown   -->
-      <q-btn
-        flat
-        round
-        dense
-        icon="view_module"
+      <q-avatar
+        style="height: 38px; width: 38px;"
       >
-        <q-tooltip>
-          ##Business list
-        </q-tooltip>
-      </q-btn>
-      <q-btn
-        flat
-        round
-        dense
-        icon="whatshot"
-      />
+        <q-img
+          :src="currentStore.CurrentBusiness.smallLogo"
+          fit="cover"
+          height="80%"
+          width="80%"
+        />
+      </q-avatar>
+      <q-toolbar-title>{{ currentStore.CurrentBusiness.name }}</q-toolbar-title>
+      <!--   Business list dropdown   -->
+      <busi-layout-busi-list-menu />
+      <busi-layout-user-menu />
     </q-toolbar>
   </q-header>
 </template>
@@ -45,7 +37,11 @@ export default {
 </script>
 <script setup lang="ts">
 import { useBusiSettingStore } from '@/store/businessSetting'
+import { useCurrentStore } from '@/store/current'
+import BusiLayoutUserMenu from '@/views/businesses/components/UserMenu.vue'
+import BusiLayoutBusiListMenu from '@/views/businesses/components/BusiListMenu.vue'
 
+const currentStore = useCurrentStore()
 const busiSettingStore = useBusiSettingStore()
 
 const onClickMenuBtn = () => {
