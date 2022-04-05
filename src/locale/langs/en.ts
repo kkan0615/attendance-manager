@@ -21,7 +21,12 @@ export const enDictionary = {
       error: 'Face to error',
       startWorkFailed: 'Fail to start to work',
       offWorkFailed: 'Fail to get off the work',
-      noImg: 'No Image'
+      noImg: 'No Image',
+      Validations: {
+        required: '{field} field is required',
+        lengthMax: '{length} is maximum',
+        integer: 'Type number more than 0',
+      }
     },
   },
   Types: {

@@ -213,8 +213,35 @@ const onClickEditBtn = () => {
   }
 }
 
-const onClickDeleteBtn = () => {
-// @TODO: Add logic
+const onClickDeleteBtn = async () => {
+  if (props.user) {
+    $q.dialog({
+      title: `Delete ${props.user.name}`,
+      message: `Would you like to delete ${props.user.name}`,
+      cancel: true,
+    }).onOk(async () => {
+      if (props.user) {
+        try {
+          /* delete busi user by id */
+          await busiUserStore.deleteBusiUser(props.user.id)
+          /* Reload */
+          await busiUserStore.loadBusiUserAdminList({
+            busiId: currentStore.CurrentBusiness.id,
+          })
+          showSnackbar({
+            message: i18n.t('Commons.Messages.saved'),
+            color: 'positive'
+          })
+        } catch (e) {
+          console.error(e)
+          showSnackbar({
+            message: i18n.t('Commons.Messages.saveFailed'),
+            color: 'negative'
+          })
+        }
+      }
+    })
+  }
 }
 
 </script>

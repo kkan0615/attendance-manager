@@ -103,6 +103,8 @@
           dense
           label="Name"
           outlined
+          :rules="rules.name"
+          hide-bottom-space
         >
           <template
             #label
@@ -121,6 +123,8 @@
           type="number"
           dense
           outlined
+          :rules="rules.maxWorkHour"
+          hide-bottom-space
         >
           <template
             #label
@@ -215,7 +219,16 @@ const homepage = ref('')
 const maxWorkHour = ref(40)
 const createdAt = ref('')
 const updatedAt = ref('')
-
+const rules = ref({
+  name: [
+    (val: string) => !!val || i18n.t('Commons.Messages.Validations.required', { field:'Name' }),
+    (val: string) => val.length <= 20 || i18n.t('Commons.Messages.Validations.lengthMax', { length: 20 })
+  ],
+  maxWorkHour: [
+    (val: number) => !!val || i18n.t('Commons.Messages.Validations.required', { field:'Max Work Hour' }),
+    (val: number) => !!val || i18n.t('Commons.Messages.Validations.integer', { field:'Max Work Hour' })
+  ],
+})
 const breadcrumbs = ref<QBreadcrumbsElProps[]>([
   {
     label: 'Admin',

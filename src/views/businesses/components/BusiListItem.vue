@@ -1,22 +1,24 @@
 <template>
   <div
-    class="text-center tw-gap-2"
+    class="text-center"
   >
-    <q-avatar
-      size="48px"
-    >
-      <q-img
-        :src="business.smallLogo"
-        fit="cover"
-        height="80%"
-        width="80%"
-      />
-    </q-avatar>
-    <div
-      class="tw-truncate tw-text-xs"
-    >
-      {{ business.name }}
-    </div>
+    <router-link :to="{ name: 'BusiMyLayout', params: { busiId: business.id } }">
+      <q-avatar
+        size="48px"
+      >
+        <q-img
+          :src="business.smallLogo"
+          fit="cover"
+          height="80%"
+          width="80%"
+        />
+      </q-avatar>
+      <div
+        class="tw-truncate tw-text-xs"
+      >
+        {{ business.name }}
+      </div>
+    </router-link>
   </div>
 </template>
 <script lang="ts">
@@ -35,4 +37,5 @@ const props = defineProps({
     default: () => {}
   }
 })
+
 </script>

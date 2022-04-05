@@ -161,7 +161,7 @@ export const useBusiUserStore = defineStore('busiUserAdmin', {
         if (this.busiUserAdminList && this.busiUserAdminList.length) {
           await this.resetBusiUserAdminList()
         }
-        const filterDummies = BusiUserDummy.filter(dummy => dummy.busiId === payload.busiId)
+        const filterDummies = BusiUserDummy.filter(dummy => !dummy.deletedAt && dummy.busiId === payload.busiId)
         this.busiUserAdminList = filterDummies
         this.busiUserAdminListCount = filterDummies.length
       } else {
@@ -186,7 +186,7 @@ export const useBusiUserStore = defineStore('busiUserAdmin', {
         if (this.busiUserAdminList && this.busiUserAdminList.length) {
           await this.resetBusiUserInviteList()
         }
-        const filterDummies = BusiUserDummyInvite.filter(dummy => dummy.busiId === payload)
+        const filterDummies = BusiUserDummyInvite.filter(dummy => !dummy.deletedAt && dummy.busiId === payload)
         this.busiUserInviteList = filterDummies.map(dummy => {
           return {
             ...dummy,
@@ -323,7 +323,7 @@ export const useBusiUserStore = defineStore('busiUserAdmin', {
         if (this.busiUserAdminList && this.busiUserAdminList.length) {
           await this.resetBusiUserAppList()
         }
-        const filterDummies = BusiUserDummy.filter(dummy => dummy.busiId === payload.busiId)
+        const filterDummies = BusiUserDummy.filter(dummy => !dummy.deletedAt && dummy.busiId === payload.busiId)
         this.busiUserAppList = filterDummies
         this.busiUserAppListCount = filterDummies.length
       } else {
@@ -409,6 +409,7 @@ export const useBusiUserStore = defineStore('busiUserAdmin', {
           if (foundIndex >= 0) {
             BusiUserDummy[foundIndex].startWorkAt = payload.startWorkAt
             BusiUserDummy[foundIndex].status = payload.status
+            BusiUserDummy[foundIndex].updatedAt = dayjs().toISOString()
           }
 
           return 1
@@ -430,7 +431,17 @@ export const useBusiUserStore = defineStore('busiUserAdmin', {
      * @param payload - target id
      */
     deleteBusiUser (payload: number) {
-      return 0
+      if (import.meta.env.VITE_IS_USE_DUMMY) {
+        const foundIndex = BusiUserDummy.findIndex(dummy => dummy.id === payload)
+        if (foundIndex >= 0) {
+          BusiUserDummy[foundIndex].updatedAt = dayjs().toISOString()
+          BusiUserDummy[foundIndex].deletedAt = dayjs().toISOString()
+        }
+
+        return 1
+      } else {
+        return 1
+      }
     },
     async startWork (payload: BusiUserWorkForm) {
       try {

@@ -30,6 +30,7 @@
             outline
             color="negative"
             :label="$t('Commons.Buttons.delete')"
+            @click="onClickDeleteBtn"
           />
         </div>
       </div>
@@ -115,7 +116,7 @@ const initData = async () => {
 const onClickWorkOffBtn = () => {
   $q.dialog({
     title: `Get off the work of ${busiUserStore.BusiUserAdmin.name}`,
-    message: `Would you get off ${busiUserStore.BusiUserAdmin.name}`,
+    message: `Would you to get off ${busiUserStore.BusiUserAdmin.name}`,
     cancel: true,
   }).onOk(async () => {
     try {
@@ -148,8 +149,29 @@ const onClickEditBtn = () => {
   }
 }
 
-const onClickDeleteBtn = () => {
-// @TODO: Add logic
+const onClickDeleteBtn = async () => {
+  $q.dialog({
+    title: `Delete ${busiUserStore.BusiUserAdmin.name}`,
+    message: `Would you like to delete ${busiUserStore.BusiUserAdmin.name}`,
+    cancel: true,
+  }).onOk(async () => {
+    try {
+      /* delete busi user by id */
+      await busiUserStore.deleteBusiUser(busiUserStore.BusiUserAdmin.id)
+      /* Redirect to list */
+      await router.push({ name: 'BusiAdminUserList' })
+      showSnackbar({
+        message: i18n.t('Commons.Messages.saved'),
+        color: 'positive'
+      })
+    } catch (e) {
+      console.error(e)
+      showSnackbar({
+        message: i18n.t('Commons.Messages.saveFailed'),
+        color: 'negative'
+      })
+    }
+  })
 }
 
 initData()

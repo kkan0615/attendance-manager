@@ -43,6 +43,28 @@
           label="Name"
           dense
           outlined
+          :rules="rules.name"
+          hide-bottom-space
+        >
+          <template
+            #label
+          >
+            <div
+              class="c-required-label"
+            >
+              Name
+            </div>
+          </template>
+        </q-input>
+        <!-- Email -->
+        <q-input
+          v-if="isEditMode"
+          :model-value="busiUserStore.BusiUserAdmin.email"
+          label="Email"
+          dense
+          readonly
+          filled
+          outlined
         />
         <q-select
           v-model="auth"
@@ -53,7 +75,19 @@
           emit-value
           map-options
           :option-disable="authOptionDisable"
-        />
+          :rules="rules.auth"
+          hide-bottom-space
+        >
+          <template
+            #label
+          >
+            <div
+              class="c-required-label"
+            >
+              Auth
+            </div>
+          </template>
+        </q-select>
         <!-- Join At-->
         <q-field
           v-model="joinAt"
@@ -78,6 +112,8 @@
           type="textarea"
           dense
           outlined
+          :rules="rules.description"
+          hide-bottom-space
         />
         <q-separator />
         <div
@@ -141,6 +177,18 @@ const name = ref('')
 const auth = ref<BusiUserAuth>('user')
 const joinAt = ref<Date>(new Date())
 const description = ref('')
+const rules = ref({
+  name: [
+    (val: string) => !!val || i18n.t('Commons.Messages.Validations.required', { field:'Name' }),
+    (val: string) => val.length <= 20 || i18n.t('Commons.Messages.Validations.lengthMax', { length: 20 })
+  ],
+  auth: [
+    (val: string) => !!val || i18n.t('Commons.Messages.Validations.required', { field:'Max Work Hour' }),
+  ],
+  description: [
+    (val: string) => val.length <= 200 || i18n.t('Commons.Messages.Validations.lengthMax', { length: 200 })
+  ]
+})
 
 const currentBusiUserAuthGrade = computed(() => {
   const found = busiUserAuthSelectOption.find(option => option.value === currentStore.CurrentBusiUser.auth)
