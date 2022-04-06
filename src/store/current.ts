@@ -285,7 +285,7 @@ export const useCurrentStore = defineStore('current', {
     async login (loginForm: UserLoginForm) {
       try {
         if (import.meta.env.VITE_IS_USE_DUMMY) {
-          const foundDummy = UserDummy.find(dummy => dummy.email === loginForm.email)
+          const foundDummy = UserDummy.find(dummy => !dummy.deletedAt && dummy.email === loginForm.email)
           if (!foundDummy) {
             throw { code: 403, remark: 'No found dummy user by email' }
           }

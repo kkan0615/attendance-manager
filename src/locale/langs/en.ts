@@ -33,7 +33,9 @@ export const enDictionary = {
     Models: {
       Users: {
         name: 'name',
+        nickname: 'nickname',
         email: 'email',
+        description: 'description',
         createdAt: 'join date'
       },
       Businesses: {

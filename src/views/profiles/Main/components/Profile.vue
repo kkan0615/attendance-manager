@@ -60,6 +60,36 @@
             {{ currentStore.CurrentUser.email }}
           </div>
         </div>
+        <!-- Nickname -->
+        <div
+          class="c-display-row-end"
+        >
+          <div
+            class="c-display-row-end--label c-text-first-uppercase"
+          >
+            {{ $t('Types.Models.Users.nickname') }}
+          </div>
+          <div
+            class="c-display-row-end--content c-text-first-uppercase"
+          >
+            {{ currentStore.CurrentUser.nickname }}
+          </div>
+        </div>
+        <!-- Description -->
+        <div
+          class="c-display-row-end"
+        >
+          <div
+            class="c-display-row-end--label c-text-first-uppercase"
+          >
+            {{ $t('Types.Models.Users.description') }}
+          </div>
+          <div
+            class="c-display-row-end--content tw-whitespace-pre-wrap"
+          >
+            {{ currentStore.CurrentUser.description }}
+          </div>
+        </div>
         <!-- Created at (join date) -->
         <div
           class="c-display-row-end"
@@ -91,7 +121,7 @@ import dayjs from 'dayjs'
 
 const currentStore = useCurrentStore()
 
-const formattedCreatedAt = computed(() => dayjs(currentStore.CurrentUser.createdAt))
+const formattedCreatedAt = computed(() => dayjs(currentStore.CurrentUser.createdAt).format('ll'))
 </script>
 <style
     lang="scss"

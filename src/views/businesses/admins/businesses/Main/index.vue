@@ -197,18 +197,15 @@ export default {
 </script>
 <script setup lang="ts">
 import { computed, onBeforeUnmount, ref } from 'vue'
-import { QBreadcrumbsElProps, useQuasar } from 'quasar'
+import { QBreadcrumbsElProps } from 'quasar'
 import CLayoutMenubar from '@/components/commons/layouts/Menubar/index.vue'
 import { showSnackbar } from '@/utils/libs/quasar/notify'
-import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { useCurrentStore } from '@/store/current'
 import dayjs from 'dayjs'
 import { useBusinessStore } from '@/store/business'
 
-const router = useRouter()
 const i18n = useI18n()
-const $q = useQuasar()
 const currentStore = useCurrentStore()
 const businessStore = useBusinessStore()
 

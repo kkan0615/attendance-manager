@@ -11,3 +11,7 @@ export interface User extends DefaultAttributes {
 export type UserLoginForm = Pick<User, 'email'> & {
   password: string
 }
+export type UserUploadImageForm = Pick<User, 'id'> & {
+  file: File
+}
+export type UserUpdateForm = Omit<User, 'email' | 'createdAt' | 'updatedAt' | 'deletedAt'>
