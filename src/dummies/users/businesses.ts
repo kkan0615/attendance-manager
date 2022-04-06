@@ -14,6 +14,7 @@ export const initBusinessDummy = () => {
       homepage: randUrl(),
       name: 'Demo Business',
       maxWorkHour: 40,
+      description: 'This is demo page',
       createdAt: dayjs().toISOString(),
       updatedAt: dayjs().toISOString(),
     } as Business

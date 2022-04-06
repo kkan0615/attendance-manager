@@ -1,5 +1,20 @@
 <template>
   <q-layout>
+    <q-header
+      bordered
+      style="height: 48px;"
+    >
+      <div
+        class="tw-h-full tw-max-w-4xl tw-mx-auto tw-flex tw-items-center q-px-md"
+      >
+        <div>
+          @TODO: Logo will be here
+        </div>
+        <profile-layout-user-menu
+          class="tw-ml-auto"
+        />
+      </div>
+    </q-header>
     <q-page-container>
       <router-view />
     </q-page-container>
@@ -15,6 +30,7 @@ import { useCurrentStore } from '@/store/current'
 import { useRoute, useRouter } from 'vue-router'
 import { showSnackbar } from '@/utils/libs/quasar/notify'
 import { useI18n } from 'vue-i18n'
+import ProfileLayoutUserMenu from '@/views/profiles/components/UserMenu.vue'
 
 const route = useRoute()
 const router = useRouter()

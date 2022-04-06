@@ -7,6 +7,7 @@ export interface Business extends DefaultAttributes {
   logo?: string
   homepage?: string
   maxWorkHour: number // default is 40 hours
+  description?: string
 }
 
 export interface BusinessInfo extends Business {
@@ -17,7 +18,7 @@ export interface BusinessAdminListInfo extends Business {
   userCount: number
   allowedLocations: BusiAllowedLocation[]
 }
-export type BusinessSimpleListInfo = Pick<Business, 'id' | 'smallLogo' | 'logo' | 'name'>
+export type BusinessSimpleListInfo = Pick<Business, 'id' | 'smallLogo' | 'logo' | 'name' | 'description'>
 
 export type BusinessUpdateForm = Omit<Business, 'createdAt' | 'updatedAt' | 'deletedAt'> & {
   logoFile?: File

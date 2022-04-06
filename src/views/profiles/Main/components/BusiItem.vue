@@ -14,8 +14,14 @@
         />
       </q-avatar>
     </q-item-section>
-
-    <q-item-section>{{ business.name }}</q-item-section>
+    <q-item-section>
+      <q-item-label>
+        {{ business.name }}
+      </q-item-label>
+      <q-item-label caption>
+        {{ business.description }}
+      </q-item-label>
+    </q-item-section>
   </q-item>
 </template>
 <script lang="ts">

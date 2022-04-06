@@ -9,9 +9,14 @@ router.beforeEach(async (to, from, next) => {
         throw new Error('no business id')
       }
 
+      /* Check current user data */
+      if (!currentStore.CurrentUser || !currentStore.CurrentUser.id) {
+        await currentStore.loadCurrentUser()
+      }
+
       /* Check current business data */
       if (!currentStore.CurrentBusiness || !currentStore.CurrentBusiness.id) {
-        await currentStore.loadCurrentBusiness(1)
+        await currentStore.loadCurrentBusiness(Number(to.params.busiId))
       }
 
       if (!currentStore.CurrentBusiUser || !currentStore.CurrentBusiUser.id) {
