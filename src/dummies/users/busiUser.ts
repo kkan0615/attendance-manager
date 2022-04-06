@@ -10,9 +10,9 @@ export const initBusiUserDummy = () => {
     {
       id: 1,
       img: 'https://picsum.photos/id/1003/500/500',
-      email: 'hanamaru@demo.com',
-      name: 'Hanamaru',
-      nickname: 'Hanamaru',
+      email: 'deer@demo.com',
+      name: 'Deer',
+      nickname: 'Sasum',
       userId: 1,
       busiId: 1,
       status: 'work',
@@ -41,8 +41,6 @@ export const initBusiUserDummy = () => {
     } as BusiUser
   }))
     .concat([ ...Array(20).keys() ].map(i => {
-      const status = rand(_staticBusiUserStatus)
-      const auth = rand(_staticBusiUserAuth)
       return     {
         id: i + 22,
         img: 'https://picsum.photos/id/1003/500/500',
@@ -51,8 +49,8 @@ export const initBusiUserDummy = () => {
         nickname: 'Hanamaru',
         userId: 1,
         busiId: i + 2,
-        status: 'work',
-        startWorkAt: dayjs().subtract(8, 'minutes').toISOString(),
+        status: 'off',
+        startWorkAt: null,
         auth: 'superAdmin',
         joinAt: dayjs().toISOString(),
         createdAt: dayjs().toISOString(),

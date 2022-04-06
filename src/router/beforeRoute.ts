@@ -1,6 +1,5 @@
 import { router } from '@/router/index'
 import { useCurrentStore } from '@/store/current'
-import { BusiUserAuth } from '@/types/models/users/business'
 
 router.beforeEach(async (to, from, next) => {
   const currentStore = useCurrentStore()
@@ -8,10 +7,6 @@ router.beforeEach(async (to, from, next) => {
     if (to.meta && to.meta.isBusi) {
       if (!to.params.busiId) {
         throw new Error('no business id')
-      }
-      /* Check current user data */
-      if (!currentStore.CurrentUser || !currentStore.CurrentUser.id) {
-        await currentStore.loadCurrentUser()
       }
 
       /* Check current business data */
@@ -25,6 +20,13 @@ router.beforeEach(async (to, from, next) => {
           userId: currentStore.CurrentUser.id,
           busiId: currentStore.CurrentBusiness.id,
         })
+      }
+    }
+
+    if (to.meta && to.meta.isRequiredLogin) {
+      /* Check current user data */
+      if (!currentStore.CurrentUser || !currentStore.CurrentUser.id) {
+        await currentStore.loadCurrentUser()
       }
     }
 

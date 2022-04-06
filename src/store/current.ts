@@ -12,6 +12,7 @@ import { BusiUserWorkHistory } from '@/types/models/users/busiWorkHistory'
 import { BusiUserWorkHistoryDummy } from '@/dummies/users/busiUserWorkHistory'
 import dayjs from 'dayjs'
 import { BusinessAllowedLocationDummy, BusinessDummy } from '@/dummies/users/businesses'
+import { UserDummy } from '@/dummies/users/user'
 
 export interface CurrentState {
   currentUser: User
@@ -81,10 +82,28 @@ export const useCurrentStore = defineStore('current', {
     /**
      * Load Current User
      */
-    loadCurrentUser () {
-      this.currentUser = {
-        id: 1 // @TODO: test
-      } as User
+    async loadCurrentUser () {
+      try {
+        if (import.meta.env.VITE_IS_USE_DUMMY) {
+          /* Find id */
+          const id = Number(localStorage.getItem(LocalStorageKeyEnum['ACCESS-TOKEN']))
+          if (!id) {
+            throw new Error('No access token')
+          }
+          /* Find dummy */
+          const foundDummy = UserDummy.find(dummy => dummy.id === id)
+          if (!foundDummy) {
+            throw new Error('No dummy user by id')
+          }
+
+          this.currentUser = {
+            ...foundDummy,
+          } as User
+        }
+      } catch (e) {
+        console.error(e)
+        throw e
+      }
     },
     /**
      * Reset Current User
@@ -93,13 +112,11 @@ export const useCurrentStore = defineStore('current', {
       this.currentUser = {} as User
     },
     /**
-     * Load Current Business
-     * @param payload - id of business
+     * Load Current user Business list
      */
     loadCurrentUserBusiList () {
       if (import.meta.env.VITE_IS_USE_DUMMY) {
         const busiUserDummy = BusiUserDummy.filter(dummy => !dummy.deletedAt && dummy.userId === this.currentUser.id)
-        console.log(busiUserDummy)
         const simpleBusiDummy: BusinessSimpleListInfo[] = busiUserDummy.map(dummy => {
           const foundDummy = BusinessDummy.find(busiDummy => busiDummy.id === dummy.busiId)
           if (foundDummy) {
@@ -110,7 +127,6 @@ export const useCurrentStore = defineStore('current', {
             return {} as BusinessSimpleListInfo
           }
         })
-        console.log(simpleBusiDummy)
         this.currentUserBusiList = simpleBusiDummy.filter(dummy => !!dummy.id)
       } else {
         this.currentUserBusiList = []
@@ -266,8 +282,23 @@ export const useCurrentStore = defineStore('current', {
      * Login
      * @param loginForm - form for login
      */
-    login (loginForm: UserLoginForm) {
-      this.loadCurrentUser()
+    async login (loginForm: UserLoginForm) {
+      try {
+        if (import.meta.env.VITE_IS_USE_DUMMY) {
+          const foundDummy = UserDummy.find(dummy => dummy.email === loginForm.email)
+          if (!foundDummy) {
+            throw { code: 403, remark: 'No found dummy user by email' }
+          }
+          /* Set to localstorage */
+          localStorage.setItem(LocalStorageKeyEnum['ACCESS-TOKEN'], foundDummy.id.toString())
+          localStorage.setItem(LocalStorageKeyEnum['REFRESH-TOKEN'], foundDummy.id.toString())
+        }
+
+        await this.loadCurrentUser()
+      } catch (e) {
+        console.error(e)
+        throw e
+      }
     },
     /**
      * Logout

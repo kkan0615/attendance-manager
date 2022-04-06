@@ -14,6 +14,18 @@
         >
           Login
         </div>
+        <q-banner
+          v-if="errorMessage"
+          class="bg-negative text-white q-mb-md"
+        >
+          <template #avatar>
+            <q-icon
+              name="error"
+            />
+          </template>
+          {{ errorMessage }}
+        </q-banner>
+
         <q-form
           class="tw-space-y-2"
           @submit="onSubmitForm"
@@ -82,13 +94,16 @@ export default {
 import { ref } from 'vue'
 import { useCurrentStore } from '@/store/current'
 import { useI18n } from 'vue-i18n'
+import { useRouter } from 'vue-router'
 
+const router = useRouter()
 const i18n = useI18n()
 const currentStore = useCurrentStore()
 
 const email = ref('')
 const password = ref('')
 const isDisplayPassword = ref(false)
+const errorMessage = ref('')
 const rules = ref({
   email: [
     (val: string) => !!val || i18n.t('Commons.Messages.Validations.required', { field:'Email' })
@@ -105,9 +120,13 @@ const onSubmitForm = async () => {
       email: email.value,
       password: password.value
     })
-    //  @TODO: Add logic to redirect to user profile page
+    /* Redirect to profile page */
+    await router.push({ name: 'ProfileLayout', params: { id: currentStore.CurrentUser.id } })
   } catch (e) {
     console.error(e)
+    if ((e as  { code: number; remark?: string }).code === 403) {
+      errorMessage.value = 'Email and Password is not matched'
+    }
   }
 }
 </script>
