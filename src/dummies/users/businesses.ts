@@ -15,6 +15,7 @@ export const initBusinessDummy = () => {
       name: 'Demo Business',
       maxWorkHour: 40,
       description: 'This is demo page',
+      isAllowNickname: true,
       createdAt: dayjs().toISOString(),
       updatedAt: dayjs().toISOString(),
     } as Business
@@ -26,6 +27,7 @@ export const initBusinessDummy = () => {
       homepage: randUrl(),
       name: randCompanyName(),
       maxWorkHour: randNumber({ min: 40, max: 52 }),
+      isAllowNickname: true,
       createdAt: dayjs().toISOString(),
       updatedAt: dayjs().toISOString(),
     } as Business

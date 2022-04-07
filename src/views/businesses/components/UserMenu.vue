@@ -18,6 +18,7 @@
         <q-item
           v-close-popup
           clickable
+          :to="{ name: 'BusiMyForm' }"
         >
           <q-item-section
             avatar

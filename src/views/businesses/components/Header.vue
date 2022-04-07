@@ -24,8 +24,13 @@
         />
       </q-avatar>
       <q-toolbar-title>{{ currentStore.CurrentBusiness.name }}</q-toolbar-title>
-      <!--   Business list dropdown   -->
+      <!-- Business list dropdown -->
       <busi-layout-busi-list-menu />
+      <!-- Business list dropdown -->
+      <busi-layout-notification-menu
+        class="q-mr-sm"
+      />
+      <!-- User Menu -->
       <busi-layout-user-menu />
     </q-toolbar>
   </q-header>
@@ -40,6 +45,7 @@ import { useBusiSettingStore } from '@/store/businessSetting'
 import { useCurrentStore } from '@/store/current'
 import BusiLayoutUserMenu from '@/views/businesses/components/UserMenu.vue'
 import BusiLayoutBusiListMenu from '@/views/businesses/components/BusiListMenu.vue'
+import BusiLayoutNotificationMenu from '@/views/businesses/components/NotificationMenu.vue'
 
 const currentStore = useCurrentStore()
 const busiSettingStore = useBusiSettingStore()

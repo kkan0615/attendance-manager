@@ -48,6 +48,9 @@ export const enDictionary = {
         name: 'name',
         auth: 'role',
         email: 'email',
+        nickname: 'nickname',
+        description: 'description',
+        createdAt: 'join date',
         UserAuths: {
           user: 'user',
           staff: 'staff',

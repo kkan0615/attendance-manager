@@ -1,11 +1,7 @@
 import { defineStore } from 'pinia'
 import { User, UserLoginForm } from '@/types/models/users'
 import { BusinessInfo, BusinessSimpleListInfo } from '@/types/models/businesses'
-import {
-  BusiUser,
-  BusiUserUpdateForm,
-  CurrentBusiUserForm
-} from '@/types/models/users/business'
+import { BusiUser, BusiUserUpdateForm, CurrentBusiUserForm } from '@/types/models/users/business'
 import { LocalStorageKeyEnum } from '@/types/commons/storage'
 import { BusiUserDummy } from '@/dummies/users/busiUser'
 import { BusiUserWorkHistory } from '@/types/models/users/busiWorkHistory'
@@ -13,12 +9,16 @@ import { BusiUserWorkHistoryDummy } from '@/dummies/users/busiUserWorkHistory'
 import dayjs from 'dayjs'
 import { BusinessAllowedLocationDummy, BusinessDummy } from '@/dummies/users/businesses'
 import { UserDummy } from '@/dummies/users/user'
+import { UserNotification } from '@/types/models/users/notification'
+import { UserNotificationDummy } from '@/dummies/users/notifications'
 
 export interface CurrentState {
   currentUser: User
   currentUserBusiList: BusinessSimpleListInfo[]
+  currentUserNotificationList: UserNotification[]
   currentBusiness: BusinessInfo
   currentBusiUser: BusiUser
+  currentBusiUserNotificationList: UserNotification[]
   currentBusiUserWorkHistoryList: BusiUserWorkHistory[]
   currentBusiUserTotalWorkSeconds: number
 }
@@ -28,8 +28,10 @@ export const useCurrentStore = defineStore('current', {
     return {
       currentUser: {} as User,
       currentUserBusiList: [],
+      currentUserNotificationList: [],
       currentBusiness: {} as BusinessInfo,
       currentBusiUser: {} as BusiUser,
+      currentBusiUserNotificationList: [],
       currentBusiUserWorkHistoryList: [],
       currentBusiUserTotalWorkSeconds: 0,
     }
@@ -50,6 +52,13 @@ export const useCurrentStore = defineStore('current', {
       return state.currentUserBusiList
     },
     /**
+     * Current User notifcation list
+     * @param state
+     */
+    CurrentUserNotificationList (state) {
+      return state.currentUserNotificationList
+    },
+    /**
      * Current Business
      * @param state
      */
@@ -62,6 +71,13 @@ export const useCurrentStore = defineStore('current', {
      */
     CurrentBusiUser (state) {
       return state.currentBusiUser
+    },
+    /**
+     * Current Business user notification list
+     * @param state
+     */
+    CurrentBusiUserNotificationList (state) {
+      return state.currentBusiUserNotificationList
     },
     /**
      * Current Business user work history list
@@ -133,6 +149,33 @@ export const useCurrentStore = defineStore('current', {
       }
     },
     /**
+     * Load Current Business User
+     */
+    async loadCurrentUserNotificationList () {
+      try {
+        if (this.currentBusiUserNotificationList && this.currentBusiUserNotificationList.length) {
+          await this.resetCurrentUserNotificationList()
+        }
+        if (import.meta.env.VITE_IS_USE_DUMMY) {
+          this.currentUserNotificationList = UserNotificationDummy.filter(dummy =>
+            dummy.userId === this.currentUser.id
+            && !dummy.deletedAt
+          )
+        } else {
+          this.currentUserNotificationList = []
+        }
+      } catch (e) {
+        console.error(e)
+        throw e
+      }
+    },
+    /**
+     * Reset Current Business User
+     */
+    async resetCurrentUserNotificationList () {
+      this.currentUserNotificationList = []
+    },
+    /**
      * Reset Current Business
      */
     resetCurrentUserBusiList () {
@@ -166,26 +209,61 @@ export const useCurrentStore = defineStore('current', {
      * Load Current Business User
      */
     async loadCurrentBusiUser (payload: CurrentBusiUserForm) {
-      if (this.currentBusiUser && this.currentBusiUser.id) {
-        this.resetCurrentBusiUser()
-      }
-      if (import.meta.env.VITE_IS_USE_DUMMY) {
-        const foundDummy = BusiUserDummy.find(dummy => dummy.userId === payload.userId && dummy.busiId === payload.busiId)
-        if (!foundDummy) {
-          throw new Error('No found data')
+      try {
+        if (this.currentBusiUser && this.currentBusiUser.id) {
+          await this.resetCurrentBusiUser()
         }
-        this.currentBusiUser = foundDummy
-      } else {
-        this.currentBusiUser = {} as BusiUser // @TODO: test
-      }
+        if (import.meta.env.VITE_IS_USE_DUMMY) {
+          const foundDummy = BusiUserDummy.find(dummy => dummy.userId === payload.userId && dummy.busiId === payload.busiId)
+          if (!foundDummy) {
+            throw new Error('No found data')
+          }
+          this.currentBusiUser = foundDummy
+        } else {
+          this.currentBusiUser = {} as BusiUser // @TODO: test
+        }
 
-      return this.currentUser
+        return this.currentUser
+      } catch (e) {
+        console.error(e)
+        throw e
+      }
     },
     /**
      * Reset Current Business User
      */
-    resetCurrentBusiUser () {
+    async resetCurrentBusiUser () {
       this.currentBusiUser = {} as BusiUser
+    },
+    /**
+     * Load Current Business User
+     */
+    async loadCurrentBusiUserNotificationList () {
+      try {
+        if (this.currentBusiUserNotificationList && this.currentBusiUserNotificationList.length) {
+          await this.resetCurrentBusiUserNotificationList()
+        }
+        if (import.meta.env.VITE_IS_USE_DUMMY) {
+          this.currentBusiUserNotificationList = UserNotificationDummy.filter(dummy =>
+            dummy.userId === this.currentBusiUser.userId
+            && dummy.busiId === this.currentBusiUser.busiId
+            && !dummy.deletedAt
+          )
+        } else {
+          this.currentBusiUserNotificationList = []
+        }
+
+        return this.currentUser
+      } catch (e) {
+        console.error(e)
+        throw e
+      }
+    },
+    /**
+     * Reset Current Business User
+     */
+    async resetCurrentBusiUserNotificationList () {
+      this.currentBusiUserNotificationList = []
     },
     /**
      * Load list of work history
@@ -259,7 +337,7 @@ export const useCurrentStore = defineStore('current', {
             const first = filterDummies[i]
             const second = filterDummies[i + 1]
             totalSeconds += dayjs(first.updatedAt).diff(dayjs(second.updatedAt), 'seconds')
-            console.log(first, second, dayjs(first.updatedAt).diff(dayjs(second.updatedAt), 'hours'))
+            // console.log(first, second, dayjs(first.updatedAt).diff(dayjs(second.updatedAt), 'hours'))
             // }
           }
 
@@ -319,6 +397,26 @@ export const useCurrentStore = defineStore('current', {
       } as BusiUser
 
       return 0
+    },
+    // @TODO: Consider move it to notificaiton store after notification store is created
+    async readNotification (payload: number) {
+      try {
+        if (import.meta.env.VITE_IS_USE_DUMMY) {
+          const foundIndexDummy = UserNotificationDummy.findIndex(dummy => dummy.id === payload)
+          if (foundIndexDummy < 0) {
+            throw new Error('No found data')
+          }
+          UserNotificationDummy[foundIndexDummy].updatedAt = dayjs().toISOString()
+          UserNotificationDummy[foundIndexDummy].deletedAt = dayjs().toISOString()
+
+          return 1
+        } else {
+          return 1
+        }
+      } catch (e) {
+        console.error(e)
+        throw e
+      }
     }
   }
 })

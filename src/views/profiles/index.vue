@@ -10,9 +10,10 @@
         <div>
           @TODO: Logo will be here
         </div>
-        <profile-layout-user-menu
-          class="tw-ml-auto"
+        <profile-layout-notification-menu
+          class="tw-ml-auto q-mr-sm"
         />
+        <profile-layout-user-menu />
       </div>
     </q-header>
     <q-page-container>
@@ -31,6 +32,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { showSnackbar } from '@/utils/libs/quasar/notify'
 import { useI18n } from 'vue-i18n'
 import ProfileLayoutUserMenu from '@/views/profiles/components/UserMenu.vue'
+import ProfileLayoutNotificationMenu from '@/views/profiles/components/NotificationMenu.vue'
 
 const route = useRoute()
 const router = useRouter()

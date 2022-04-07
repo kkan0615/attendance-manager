@@ -8,6 +8,7 @@ export interface Business extends DefaultAttributes {
   homepage?: string
   maxWorkHour: number // default is 40 hours
   description?: string
+  isAllowNickname: boolean
 }
 
 export interface BusinessInfo extends Business {

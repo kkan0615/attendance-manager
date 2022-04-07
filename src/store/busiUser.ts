@@ -407,6 +407,9 @@ export const useBusiUserStore = defineStore('busiUserAdmin', {
         if (import.meta.env.VITE_IS_USE_DUMMY) {
           const foundIndex = BusiUserDummy.findIndex(dummy => dummy.id === payload.id)
           if (foundIndex >= 0) {
+            BusiUserDummy[foundIndex].name = payload.name
+            BusiUserDummy[foundIndex].nickname = payload.nickname
+            BusiUserDummy[foundIndex].description = payload.description
             BusiUserDummy[foundIndex].startWorkAt = payload.startWorkAt
             BusiUserDummy[foundIndex].status = payload.status
             BusiUserDummy[foundIndex].updatedAt = dayjs().toISOString()
@@ -430,17 +433,22 @@ export const useBusiUserStore = defineStore('busiUserAdmin', {
      * Delete BusiUserAdmin by id
      * @param payload - target id
      */
-    deleteBusiUser (payload: number) {
-      if (import.meta.env.VITE_IS_USE_DUMMY) {
-        const foundIndex = BusiUserDummy.findIndex(dummy => dummy.id === payload)
-        if (foundIndex >= 0) {
-          BusiUserDummy[foundIndex].updatedAt = dayjs().toISOString()
-          BusiUserDummy[foundIndex].deletedAt = dayjs().toISOString()
-        }
+    async deleteBusiUser (payload: number) {
+      try {
+        if (import.meta.env.VITE_IS_USE_DUMMY) {
+          const foundIndex = BusiUserDummy.findIndex(dummy => dummy.id === payload)
+          if (foundIndex >= 0) {
+            BusiUserDummy[foundIndex].updatedAt = dayjs().toISOString()
+            BusiUserDummy[foundIndex].deletedAt = dayjs().toISOString()
+          }
 
-        return 1
-      } else {
-        return 1
+          return 1
+        } else {
+          return 1
+        }
+      } catch (e) {
+        console.error(e)
+        throw e
       }
     },
     async startWork (payload: BusiUserWorkForm) {

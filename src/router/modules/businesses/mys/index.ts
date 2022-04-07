@@ -16,6 +16,12 @@ export const busiMyRoutes: RouteRecordRaw[] = [
         component: () => import('@/views/businesses/mys/Home/index.vue'),
         meta: { isBusi: true },
       },
+      {
+        path: 'form',
+        name: 'BusiMyForm',
+        component: () => import('@/views/businesses/mys/Form/index.vue'),
+        meta: { isBusi: true },
+      },
       ...busiMyScheduleRoutes,
       ...busiHistoryRoutes,
     ]

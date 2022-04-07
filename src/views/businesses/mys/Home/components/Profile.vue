@@ -22,7 +22,7 @@
         <span
           v-else
         >
-          {{ currentStore.CurrentBusiUser.name[0] }}
+          {{ currentStore.CurrentBusiUser.name ? currentStore.CurrentBusiUser.name[0] : '' }}
         </span>
       </q-avatar>
       <busi-user-status-badge
@@ -30,13 +30,19 @@
         :status="currentStore.CurrentBusiUser.status"
       />
     </div>
+    <!-- name or nickname-->
     <div
       class="tw-mt-2"
     >
       <div
         class="text-h6"
       >
-        {{ currentStore.CurrentBusiUser.nickname }}
+        {{ currentStore.CurrentBusiUser.name }}
+      </div>
+      <div
+        class="text-caption"
+      >
+        {{ $t(`Types.Models.BusiUsers.UserAuths.${currentStore.CurrentBusiUser.auth}`) }}
       </div>
     </div>
   </div>
