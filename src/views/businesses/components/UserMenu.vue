@@ -15,6 +15,26 @@
     </q-avatar>
     <q-menu>
       <q-list style="min-width: 100px">
+        <!-- User page -->
+        <q-item
+          v-close-popup
+          clickable
+          :to="{ name: 'ProfileLayout', params: { id: currentStore.CurrentBusiUser.userId } }"
+        >
+          <q-item-section
+            avatar
+            class="tw-min-w-0"
+          >
+            <q-icon
+              name="person"
+            />
+          </q-item-section>
+          <q-item-section>
+            User
+          </q-item-section>
+        </q-item>
+        <q-separator />
+        <!-- Business User page -->
         <q-item
           v-close-popup
           clickable

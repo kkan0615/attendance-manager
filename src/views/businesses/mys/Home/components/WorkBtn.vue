@@ -103,7 +103,7 @@ export default {
 }
 </script>
 <script setup lang="ts">
-import { nextTick, ref } from 'vue'
+import { computed, nextTick, ref } from 'vue'
 import { useCurrentStore } from '@/store/current'
 import dayjs from 'dayjs'
 import QRCodeStyling from 'qr-code-styling'

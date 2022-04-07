@@ -10,7 +10,7 @@
       color="red"
       floating
     >
-      {{ currentStore.CurrentUserNotificationList.length >= 100 ? 99 : currentStore.CurrentUserNotificationList.length }}
+      {{ currentStore.CurrentUserNotificationList.length >= 100 ? '99+' : currentStore.CurrentUserNotificationList.length }}
     </q-badge>
     <q-menu>
       <q-card

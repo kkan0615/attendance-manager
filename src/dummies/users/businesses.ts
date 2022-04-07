@@ -1,4 +1,4 @@
-import { randCompanyName, randNumber, randUrl } from '@ngneat/falso'
+import { randBoolean, randCompanyName, randNumber, randUrl } from '@ngneat/falso'
 import dayjs from 'dayjs'
 import { Business } from '@/types/models/businesses'
 import { BusiAllowedLocation } from '@/types/models/businesses/allowedLocation'
@@ -15,7 +15,7 @@ export const initBusinessDummy = () => {
       name: 'Demo Business',
       maxWorkHour: 40,
       description: 'This is demo page',
-      isAllowNickname: true,
+      isAllowNickname: false,
       createdAt: dayjs().toISOString(),
       updatedAt: dayjs().toISOString(),
     } as Business
@@ -27,7 +27,7 @@ export const initBusinessDummy = () => {
       homepage: randUrl(),
       name: randCompanyName(),
       maxWorkHour: randNumber({ min: 40, max: 52 }),
-      isAllowNickname: true,
+      isAllowNickname: randBoolean(),
       createdAt: dayjs().toISOString(),
       updatedAt: dayjs().toISOString(),
     } as Business

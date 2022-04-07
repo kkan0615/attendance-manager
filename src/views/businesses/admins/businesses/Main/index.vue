@@ -130,9 +130,9 @@
             #label
           >
             <div
-              class="c-required-label"
+              class="c-required-label c-text-first-uppercase"
             >
-              Max work hour
+              {{ $t('Types.Models.Businesses.maxWorkHour') }}
             </div>
           </template>
         </q-input>
@@ -142,6 +142,22 @@
           label="Homepage"
           dense
           outlined
+        />
+        <!-- Is allow to use nickname -->
+        <q-checkbox
+          v-model="isAllowNickname"
+          :label="$t('Types.Models.Businesses.Labels.isAllowNickname')"
+          dense
+        />
+        <!-- Description -->
+        <q-input
+          v-model="description"
+          label="Description"
+          type="textarea"
+          dense
+          outlined
+          :rules="rules.description"
+          hide-bottom-space
         />
         <q-separator />
         <div
@@ -214,6 +230,8 @@ const smallLogo = ref<File | undefined>()
 const name = ref('')
 const homepage = ref('')
 const maxWorkHour = ref(40)
+const isAllowNickname = ref(false)
+const description = ref('')
 const createdAt = ref('')
 const updatedAt = ref('')
 const rules = ref({
@@ -246,6 +264,8 @@ const initData = async () => {
     await businessStore.loadBusinessAdmin(currentStore.CurrentBusiness.id)
     name.value = businessStore.BusinessAdmin.name
     homepage.value = businessStore.BusinessAdmin.homepage || ''
+    isAllowNickname.value = businessStore.BusinessAdmin.isAllowNickname
+    description.value = businessStore.BusinessAdmin.description || ''
     createdAt.value = dayjs(businessStore.BusinessAdmin.createdAt).format('ll')
     updatedAt.value = dayjs(businessStore.BusinessAdmin.updatedAt).format('ll')
   } catch (e) {
@@ -267,7 +287,9 @@ const onSubmitForm = async () => {
       id: currentStore.CurrentBusiness.id,
       name: name.value,
       homepage: homepage.value,
-      maxWorkHour: maxWorkHour.value
+      maxWorkHour: maxWorkHour.value,
+      isAllowNickname: isAllowNickname.value,
+      description: description.value
     })
 
     /* Reload current store */

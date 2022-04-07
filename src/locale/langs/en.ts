@@ -39,9 +39,13 @@ export const enDictionary = {
         createdAt: 'join date'
       },
       Businesses: {
+        maxWorkHour: 'max work hour',
         Tittles: {
           information: 'information',
           overview: 'Overview'
+        },
+        Labels: {
+          isAllowNickname: 'Allow to use nickname'
         }
       },
       BusiUsers: {
@@ -62,7 +66,7 @@ export const enDictionary = {
           simple: 'simple',
           qrCode: 'qr code',
           location: 'location',
-        }
+        },
       },
     }
   }

@@ -1,10 +1,17 @@
 <template>
-  <div
-    class="text-h5"
-  >
-    <span>
-      {{ hours }}:{{ minutes }}:{{ seconds }}
-    </span>
+  <div>
+    <div
+      class="text-h5"
+    >
+      <span>
+        {{ hours }}:{{ minutes }}:{{ seconds }}
+      </span>
+    </div>
+    <div
+      class="text-caption"
+    >
+      {{ formattedStartedAt }}
+    </div>
   </div>
 </template>
 <script lang="ts">
@@ -30,6 +37,7 @@ const timer = ref<NodeJS.Timer | undefined>(undefined)
 const hours = computed(() => parseInt((timerSeconds.value / (60 * 60)).toString()).toString().padStart(2, '0'))
 const minutes = computed(() => parseInt(((timerSeconds.value / 60) % 60).toString()).toString().padStart(2, '0'))
 const seconds = computed(() => parseInt((timerSeconds.value % 60).toString()).toString().padStart(2, '0'))
+const formattedStartedAt = computed(() => props.startTime ? dayjs(props.startTime).format('LTS') : '')
 
 const initData = () => {
   if (props.startTime && props.startTime) {

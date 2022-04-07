@@ -1,7 +1,7 @@
 <template>
   <q-card>
     <div
-      class="image-container q-mt-md cursor-pointer"
+      class="image-container q-mt-md "
     >
       <q-avatar
         color="secondary"
@@ -33,7 +33,7 @@
     <q-card-section>
       <div
         class="text-center q-mb-sm"
-        style="min-height: 32px;"
+        style="min-height: 52px;"
       >
         <work-timer
           v-if="user.startWorkAt"
@@ -53,6 +53,21 @@
           class="c-display-row-end--content c-text-first-uppercase"
         >
           {{ user.name }}
+        </div>
+      </div>
+      <!-- Nickname -->
+      <div
+        class="c-display-row-end"
+      >
+        <div
+          class="c-display-row-end--label c-text-first-uppercase"
+        >
+          {{ $t('Types.Models.BusiUsers.name') }}
+        </div>
+        <div
+          class="c-display-row-end--content c-text-first-uppercase"
+        >
+          {{ user.nickname }}
         </div>
       </div>
       <!-- Email -->
@@ -94,11 +109,12 @@ export default {
 }
 </script>
 <script setup lang="ts">
-import { PropType } from 'vue'
+import { computed, PropType } from 'vue'
 import { BusiUserAdminListInfo } from '@/types/models/users/business'
 import { useI18n } from 'vue-i18n'
 import WorkTimer from '@/components/WorkTimer.vue'
 import BusiUserStatusBadge from '@/components/commons/BusiUserStatusBadge.vue'
+import dayjs from 'dayjs'
 
 const i18n = useI18n()
 

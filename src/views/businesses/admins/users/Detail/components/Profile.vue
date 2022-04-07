@@ -103,12 +103,11 @@ export default {
 </script>
 <script setup lang="ts">
 import { useBusiUserStore } from '@/store/busiUser'
-import { useCurrentStore } from '@/store/current'
 import WorkTimer from '@/components/WorkTimer.vue'
 import BusiUserStatusBadge from '@/components/commons/BusiUserStatusBadge.vue'
 
 const busiUserStore = useBusiUserStore()
-const currentStore = useCurrentStore()
+
 </script>
 <style
   lang="scss"

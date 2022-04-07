@@ -88,12 +88,8 @@ export default {
 }
 </script>
 <script setup lang="ts">
-import { useRouter } from 'vue-router'
-import { useI18n } from 'vue-i18n'
 import { useCurrentStore } from '@/store/current'
 
-const router = useRouter()
-const i18n = useI18n()
 const currentStore = useCurrentStore()
 </script>
 <style

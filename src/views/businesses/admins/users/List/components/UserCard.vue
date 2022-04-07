@@ -34,7 +34,7 @@
     <q-card-section>
       <div
         class="text-center q-mb-sm"
-        style="min-height: 32px;"
+        style="min-height: 52px;"
       >
         <work-timer
           v-if="user.startWorkAt"
@@ -144,10 +144,10 @@ import { useQuasar } from 'quasar'
 import { showSnackbar } from '@/utils/libs/quasar/notify'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
-import WorkTimer from '@/components/WorkTimer.vue'
-import BusiUserStatusBadge from '@/components/commons/BusiUserStatusBadge.vue'
 import { useBusiUserStore } from '@/store/busiUser'
 import { useCurrentStore } from '@/store/current'
+import WorkTimer from '@/components/WorkTimer.vue'
+import BusiUserStatusBadge from '@/components/commons/BusiUserStatusBadge.vue'
 
 const router = useRouter()
 const $q = useQuasar()

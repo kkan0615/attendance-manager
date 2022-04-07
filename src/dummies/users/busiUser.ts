@@ -1,5 +1,5 @@
 import { BusiUser, BusiUserAuth, BusiUserStatus } from '@/types/models/users/business'
-import { rand, randEmail, randFullName, randUserName } from '@ngneat/falso'
+import { rand, randEmail, randFirstName, randFullName, randUserName } from '@ngneat/falso'
 import dayjs from 'dayjs'
 
 const _staticBusiUserStatus: BusiUserStatus[] = ['work', 'rest', 'off']
@@ -25,13 +25,14 @@ export const initBusiUserDummy = () => {
   ].concat([ ...Array(20).keys() ].map(i => {
     const status = rand(_staticBusiUserStatus)
     const auth = rand(_staticBusiUserAuth)
+    const firstname = randFirstName({ length: 1 })
     return {
       id: i + 2,
       busiId: 1,
       userId: i + 3,
       name: randFullName(),
       nickname: randUserName(),
-      email: randEmail(),
+      email: randEmail({ firstName: firstname.join(''), lastName: '', suffix: '' }),
       startWorkAt: status === 'work' || status === 'rest' ? dayjs().toISOString() : null,
       status: status,
       auth: auth,
