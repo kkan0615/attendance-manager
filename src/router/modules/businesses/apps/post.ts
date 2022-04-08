@@ -13,6 +13,18 @@ export const busiAppPostRoutes: RouteRecordRaw[] = [
         name: 'BusiAppPostMain',
         component: () => import('@/views/businesses/apps/posts/Main/index.vue'),
         meta: { isBusi: true },
+      },
+      {
+        path: 'form/new',
+        name: 'BusiAppPostCreateForm',
+        component: () => import('@/views/businesses/apps/posts/Form/index.vue'),
+        meta: { isBusi: true },
+      },
+      {
+        path: 'form/id/:id',
+        name: 'BusiAppPostUpdateForm',
+        component: () => import('@/views/businesses/apps/posts/Form/index.vue'),
+        meta: { isBusi: true },
       }
     ]
   },

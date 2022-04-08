@@ -5,6 +5,8 @@ export interface BusiPost extends DefaultAttributes {
   busiUserId: number
   title: string
   content: string
+  isNotification: boolean
+  notificationDate: string
 }
 
 /* Post  Form */

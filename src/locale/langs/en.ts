@@ -4,6 +4,7 @@ export const enDictionary = {
       edit: 'Edit'
     },
     Buttons: {
+      create: 'create',
       save: 'save',
       cancel: 'cancel',
       edit: 'edit',
@@ -70,6 +71,16 @@ export const enDictionary = {
           location: 'location',
         },
       },
+      BusiPost: {
+        title: 'title',
+        content: 'content',
+        isNotification: 'notification post',
+        Labels: {
+          'isNotification': 'Notification post',
+          'isDisplayHome': 'Display on Home',
+          'howLongDisplay': 'How long to display'
+        }
+      }
     }
   }
 }
