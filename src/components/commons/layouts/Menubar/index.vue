@@ -5,7 +5,7 @@
     <div
       class="text-h5"
     >
-      {{ tittle }}
+      {{ title }}
     </div>
     <div
       class="q-ml-auto"
@@ -33,7 +33,7 @@ import { defineProps, PropType } from 'vue'
 import { QBreadcrumbsElProps } from 'quasar'
 
 const props = defineProps({
-  tittle: {
+  title: {
     type: String,
     required: true,
     default: '',

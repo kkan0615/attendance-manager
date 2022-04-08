@@ -3,7 +3,7 @@
     padding
   >
     <c-layout-menubar
-      tittle="User Form"
+      title="User Form"
       :breadcrumbs="breadcrumbs"
     />
     <div
@@ -223,6 +223,9 @@ const initData = async () => {
   }
 }
 
+/**
+ * Only allow to change under current user auth
+ */
 const authOptionDisable = (opt: { label: string; value: BusiUserAuth; grade: number }) => {
   return opt.grade > currentBusiUserAuthGrade.value
 }
@@ -231,6 +234,7 @@ const onSubmitForm = async () => {
   try {
     let id: number
     if (isEditMode.value) {
+      /* Upload image */
       if (img.value) {
         await busiUserStore.uploadBusiUser({
           id: busiUserStore.BusiUserAdmin.id,
@@ -239,6 +243,7 @@ const onSubmitForm = async () => {
         })
       }
 
+      /* Update busi user */
       await busiUserStore.updateBusiUser({
         ...busiUserStore.BusiUserAdmin,
         name: name.value,
@@ -247,9 +252,18 @@ const onSubmitForm = async () => {
         description: description.value,
       })
 
+      /* if it changed current busi user data */
+      if (currentStore.CurrentBusiUser.id === busiUserStore.BusiUserAdmin.id) {
+        /* Reload current busi user data */
+        await currentStore.loadCurrentBusiUser({
+          userId: currentStore.CurrentUser.id,
+          busiId: currentStore.CurrentBusiness.id,
+        })
+      }
+
       id = busiUserStore.BusiUserAdmin.id
     } else {
-      //  @TODO: Add new logic (But no now)
+      //  @TODO: Add new logic (But not now)
       id = 1
     }
 
@@ -270,7 +284,7 @@ const onSubmitForm = async () => {
 
 const onClickCancelBtn = async () => {
   $q.dialog({
-    title: i18n.t('Commons.Tittles.cancel'),
+    title: i18n.t('Commons.Titles.cancel'),
     message: i18n.t('Commons.Messages.cancelSave'),
     cancel: true,
   }).onOk(() => {

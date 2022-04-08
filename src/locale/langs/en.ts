@@ -10,8 +10,9 @@ export const enDictionary = {
       delete: 'delete',
       offWork: 'off work'
     },
-    Tittles: {
-      cancel: 'cancel'
+    Titles: {
+      cancel: 'cancel',
+      total: 'total',
     },
     Messages: {
       cancelSave: 'Would you like to cancel save?',
@@ -22,6 +23,7 @@ export const enDictionary = {
       startWorkFailed: 'Fail to start to work',
       offWorkFailed: 'Fail to get off the work',
       noImg: 'No Image',
+      notMatched: 'It is not matched',
       Validations: {
         required: '{field} field is required',
         lengthMax: '{length} is maximum',
@@ -40,7 +42,7 @@ export const enDictionary = {
       },
       Businesses: {
         maxWorkHour: 'max work hour',
-        Tittles: {
+        Titles: {
           information: 'information',
           overview: 'Overview'
         },

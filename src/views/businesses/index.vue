@@ -47,8 +47,7 @@ if (!currentStore.CurrentBusiUser
     message: i18n.t('Commons.Messages.unAuthUser'),
     color: 'negative'
   })
-  //@TODO: change to redirect to login or user page
-  router.push({ name: 'BusiMyLayout' })
+  router.push({ name: 'AuthLogin' })
 }
 
 onBeforeUnmount(() => {

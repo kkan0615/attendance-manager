@@ -146,15 +146,14 @@ export default {
 }
 </script>
 <script setup lang="ts">
-import { useCurrentStore } from '@/store/current'
 import dayjs from 'dayjs'
 import { computed, ref } from 'vue'
-import { useUserStore } from '@/store/user'
-import { useI18n } from 'vue-i18n'
-import { showSnackbar } from '@/utils/libs/quasar/notify'
 import { useRouter } from 'vue-router'
 import { useQuasar } from 'quasar'
 import { randWord } from '@ngneat/falso'
+import { useI18n } from 'vue-i18n'
+import { useCurrentStore } from '@/store/current'
+import { showSnackbar } from '@/utils/libs/quasar/notify'
 import { useBusiUserStore } from '@/store/busiUser'
 
 const router = useRouter()
@@ -224,7 +223,7 @@ const onSubmitForm = async () => {
 
 const onClickCancelBtn = () => {
   $q.dialog({
-    title: i18n.t('Commons.Tittles.cancel'),
+    title: i18n.t('Commons.Titles.cancel'),
     message: i18n.t('Commons.Messages.cancelSave'),
     cancel: true,
   }).onOk(() => {
@@ -243,11 +242,13 @@ const onClickDeleteBtn = () => {
     },
     cancel: true,
   }).onOk(async (data) => {
+    /* Check user typed same sentence */
     if (data === words) {
       try {
-        /* delete */
+        /* Delete */
         await busiUserStore.deleteBusiUser(currentStore.CurrentBusiUser.id)
-        await router.push({ name: 'AuthLogout' })
+        /* Redirect to profile page */
+        await router.push({ name: 'ProfileLayout', params: { id: currentStore.CurrentUser.id } })
         showSnackbar({
           message: i18n.t('Commons.Messages.saved'),
           color: 'positive'
@@ -261,7 +262,7 @@ const onClickDeleteBtn = () => {
       }
     } else {
       showSnackbar({
-        message: i18n.t('Commons.Messages.saveFailed'),
+        message: i18n.t('Commons.Messages.notMatched'),
         color: 'negative'
       })
     }

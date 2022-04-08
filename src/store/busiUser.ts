@@ -409,6 +409,7 @@ export const useBusiUserStore = defineStore('busiUserAdmin', {
           if (foundIndex >= 0) {
             BusiUserDummy[foundIndex].name = payload.name
             BusiUserDummy[foundIndex].nickname = payload.nickname
+            BusiUserDummy[foundIndex].auth = payload.auth
             BusiUserDummy[foundIndex].description = payload.description
             BusiUserDummy[foundIndex].startWorkAt = payload.startWorkAt
             BusiUserDummy[foundIndex].status = payload.status

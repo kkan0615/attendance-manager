@@ -1,5 +1,6 @@
 import { RouteRecordRaw } from 'vue-router'
 import { busiAppUserRoutes } from '@/router/modules/businesses/apps/user'
+import { busiAppPostRoutes } from '@/router/modules/businesses/apps/post'
 
 export const busiAppRoutes: RouteRecordRaw[] = [
   {
@@ -16,6 +17,7 @@ export const busiAppRoutes: RouteRecordRaw[] = [
         meta: { isBusi: true },
       },
       ...busiAppUserRoutes,
+      ...busiAppPostRoutes,
     ]
   },
 ]

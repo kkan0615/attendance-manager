@@ -3,7 +3,7 @@
     padding
   >
     <c-layout-menubar
-      tittle="History main"
+      title="History main"
       :breadcrumbs="breadcrumbs"
     />
     <q-card

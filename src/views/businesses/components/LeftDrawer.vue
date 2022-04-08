@@ -21,7 +21,7 @@
             :src="currentStore.CurrentBusiness.logo"
           />
         </router-link>
-        <!--    My menu list    -->
+        <!-- My menu list -->
         <div
           class="text-subtitle2 text-grey-4"
         >
@@ -48,7 +48,13 @@
             <q-item-section avatar>
               <q-icon name="schedule" />
             </q-item-section>
-            <q-item-section>Schedule</q-item-section>
+            <q-item-section>
+              <div
+                class="c-text-first-uppercase"
+              >
+                schedule
+              </div>
+            </q-item-section>
           </q-item>
           <q-item
             clickable
@@ -58,10 +64,16 @@
             <q-item-section avatar>
               <q-icon name="history" />
             </q-item-section>
-            <q-item-section>History</q-item-section>
+            <q-item-section>
+              <div
+                class="c-text-first-uppercase"
+              >
+                history
+              </div>
+            </q-item-section>
           </q-item>
         </q-list>
-        <!--    App menu list    -->
+        <!-- App menu list -->
         <div
           class="text-subtitle2 text-grey-4"
         >
@@ -78,7 +90,13 @@
             <q-item-section avatar>
               <q-icon name="people" />
             </q-item-section>
-            <q-item-section>User</q-item-section>
+            <q-item-section>
+              <div
+                class="c-text-first-uppercase"
+              >
+                user
+              </div>
+            </q-item-section>
           </q-item>
           <q-item
             clickable
@@ -86,26 +104,43 @@
             <q-item-section avatar>
               <q-icon name="schedule" />
             </q-item-section>
-            <q-item-section>Schedule</q-item-section>
+            <q-item-section>
+              <div
+                class="c-text-first-uppercase"
+              >
+                schedule
+              </div>
+            </q-item-section>
           </q-item>
           <q-item
             clickable
+            :to="{ name: 'BusiAppPostLayout' }"
+            active-class="active-router"
           >
             <q-item-section avatar>
-              <q-icon name="notifications" />
+              <q-icon name="article" />
             </q-item-section>
-            <q-item-section>Notification</q-item-section>
+            <q-item-section>
+              <div
+                class="c-text-first-uppercase"
+              >
+                post
+              </div>
+            </q-item-section>
           </q-item>
         </q-list>
-        <!--    App menu list    -->
+        <!-- App menu list -->
         <div
+          v-if="isAdmin"
           class="text-subtitle2 text-grey-4"
         >
           Admin
         </div>
         <q-list
+          v-if="isAdmin"
           padding
         >
+          <!-- QR code scanner (Camera is required) -->
           <q-item
             clickable
             :to="{ name: 'BusiAdminQRCodeLayout' }"
@@ -114,9 +149,10 @@
             <q-item-section avatar>
               <q-icon name="qr_code_scanner" />
             </q-item-section>
-            <q-item-section>QR code Scanner</q-item-section>
+            <q-item-section>QR code scanner</q-item-section>
           </q-item>
           <q-item
+            v-if="currentStore.CurrentBusiUser.auth !== 'system'"
             clickable
             :to="{ name: 'BusiAdminBusinessLayout' }"
             active-class="active-router"
@@ -124,9 +160,16 @@
             <q-item-section avatar>
               <q-icon name="business" />
             </q-item-section>
-            <q-item-section>business</q-item-section>
+            <q-item-section>
+              <div
+                class="c-text-first-uppercase"
+              >
+                business
+              </div>
+            </q-item-section>
           </q-item>
           <q-item
+            v-if="currentStore.CurrentBusiUser.auth !== 'system'"
             clickable
             :to="{ name: 'BusiAdminUserLayout' }"
             active-class="active-router"
@@ -134,7 +177,13 @@
             <q-item-section avatar>
               <q-icon name="people_alt" />
             </q-item-section>
-            <q-item-section>User</q-item-section>
+            <q-item-section>
+              <div
+                class="c-text-first-uppercase"
+              >
+                user
+              </div>
+            </q-item-section>
           </q-item>
           <q-item
             clickable
@@ -157,9 +206,16 @@ export default {
 <script setup lang="ts">
 import { useBusiSettingStore } from '@/store/businessSetting'
 import { useCurrentStore } from '@/store/current'
+import { computed } from 'vue'
 
 const currentStore = useCurrentStore()
 const busiSettingStore = useBusiSettingStore()
+
+const isAdmin = computed(() =>
+  currentStore.CurrentBusiUser.auth === 'admin'
+    || currentStore.CurrentBusiUser.auth === 'superAdmin'
+    || currentStore.CurrentBusiUser.auth === 'system'
+)
 
 const onUpdateModelValue = (bool: boolean) => {
   busiSettingStore.setLeftDrawer(bool)

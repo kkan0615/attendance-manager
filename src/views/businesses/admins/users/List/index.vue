@@ -3,16 +3,16 @@
     padding
   >
     <c-layout-menubar
-      tittle="Admin User list"
+      title="Admin User list"
       :breadcrumbs="breadcrumbs"
     />
     <div
       class="tw-flex q-mb-md"
     >
       <div
-        class="text-h6"
+        class="text-h6 c-text-first-uppercase"
       >
-        Total: {{ listCount }}
+        {{ $t('Commons.Titles.total') }}: {{ listCount }}
       </div>
       <div
         class="tw-ml-auto tw-flex tw-space-x-2"

@@ -62,7 +62,7 @@
         <div
           class="c-display-row-end--label c-text-first-uppercase"
         >
-          {{ $t('Types.Models.BusiUsers.name') }}
+          {{ $t('Types.Models.BusiUsers.nickname') }}
         </div>
         <div
           class="c-display-row-end--content c-text-first-uppercase"

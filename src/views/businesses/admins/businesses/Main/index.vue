@@ -6,7 +6,7 @@
     padding
   >
     <c-layout-menubar
-      tittle="Admin Business"
+      title="Admin Business"
       :breadcrumbs="breadcrumbs"
     />
     <div

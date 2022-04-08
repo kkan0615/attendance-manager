@@ -220,7 +220,7 @@ const onSubmitForm = async () => {
 
 const onClickCancelBtn = () => {
   $q.dialog({
-    title: i18n.t('Commons.Tittles.cancel'),
+    title: i18n.t('Commons.Titles.cancel'),
     message: i18n.t('Commons.Messages.cancelSave'),
     cancel: true,
   }).onOk(() => {

@@ -3,7 +3,7 @@
     padding
   >
     <c-layout-menubar
-      :tittle="busiUserStore.BusiUserAdmin.name"
+      :title="busiUserStore.BusiUserAdmin.name"
       :breadcrumbs="breadcrumbs"
     />
     <div
