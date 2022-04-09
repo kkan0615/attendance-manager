@@ -243,6 +243,9 @@ const rules = ref({
     (val: number) => !!val || i18n.t('Commons.Messages.Validations.required', { field:'Max Work Hour' }),
     (val: number) => !!val || i18n.t('Commons.Messages.Validations.integer', { field:'Max Work Hour' })
   ],
+  description: [
+    (val: string) => val.length <= 200 || i18n.t('Commons.Messages.Validations.lengthMax', { length: 200 })
+  ],
 })
 const breadcrumbs = ref<QBreadcrumbsElProps[]>([
   {
