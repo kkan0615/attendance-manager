@@ -5,6 +5,8 @@ import {
   BusiPostCreateForm, BusiPostListInfo,
   BusiPostUpdateForm
 } from '@/types/models/businesses/post'
+import { BusiPostDummy } from '@/dummies/businesses/posts'
+import { useCurrentStore } from '@/store/current'
 
 export interface BusiPostState {
   busiPostListFilter: any
@@ -88,9 +90,30 @@ export const useBusiPostStore = defineStore('busiPost', {
      * Load list of busiPost
      * @param payload - List Filter
      */
-    loadBusiPostList (payload: any) {
-      this.busiPostList = []
-      this.busiPostListCount = 0
+    async loadBusiPostList (payload: any) {
+      try {
+        const currentStore = useCurrentStore()
+        if (import.meta.env.VITE_IS_USE_DUMMY) {
+          const filterDummies: BusiPostListInfo[] = BusiPostDummy.filter(dummy =>
+            dummy.busiId === currentStore.CurrentBusiness.id && !dummy.isNotification
+            && !dummy.deletedAt
+          ).map(dummy => {
+            return {
+              ...dummy,
+              isAttachment: false,
+              commentCount: 0,
+            }
+          })
+          this.busiPostList = filterDummies
+          this.busiPostListCount = filterDummies.length
+        } else {
+          this.busiPostList = []
+          this.busiPostListCount = 0
+        }
+      } catch (e) {
+        console.error(e)
+        throw e
+      }
     },
     /**
      * Reset busiPost list
@@ -104,7 +127,27 @@ export const useBusiPostStore = defineStore('busiPost', {
      * @param payload - List Filter
      */
     loadBusiNotificationPostList (payload: any) {
-      this.busiNotificationPostList = []
+      try {
+        const currentStore = useCurrentStore()
+        if (import.meta.env.VITE_IS_USE_DUMMY) {
+          const filterDummies: BusiPostListInfo[] = BusiPostDummy.filter(dummy =>
+            dummy.busiId === currentStore.CurrentBusiness.id && dummy.isNotification
+            && !dummy.deletedAt
+          ).map(dummy => {
+            return {
+              ...dummy,
+              isAttachment: false,
+              commentCount: 0,
+            }
+          })
+          this.busiNotificationPostList = filterDummies
+        } else {
+          this.busiNotificationPostList = []
+        }
+      } catch (e) {
+        console.error(e)
+        throw e
+      }
     },
     /**
      * Reset busiPost list
