@@ -7,6 +7,9 @@ import {
 } from '@/types/models/businesses/post'
 import { BusiPostDummy } from '@/dummies/businesses/posts'
 import { useCurrentStore } from '@/store/current'
+import { BusiUserDummy } from '@/dummies/users/busiUser'
+import { BusiUser } from '@/types/models/users/business'
+import { randBoolean } from '@ngneat/falso'
 
 export interface BusiPostState {
   busiPostListFilter: any
@@ -100,8 +103,9 @@ export const useBusiPostStore = defineStore('busiPost', {
           ).map(dummy => {
             return {
               ...dummy,
-              isAttachment: false,
+              isAttachment: randBoolean(),
               commentCount: 0,
+              busiUser: BusiUserDummy.find(userDummy => userDummy.id === dummy.busiUserId) || {} as BusiUser,
             }
           })
           this.busiPostList = filterDummies
@@ -136,8 +140,9 @@ export const useBusiPostStore = defineStore('busiPost', {
           ).map(dummy => {
             return {
               ...dummy,
-              isAttachment: false,
+              isAttachment: randBoolean(),
               commentCount: 0,
+              busiUser: BusiUserDummy.find(userDummy => userDummy.id === dummy.busiUserId) || {} as BusiUser,
             }
           })
           this.busiNotificationPostList = filterDummies

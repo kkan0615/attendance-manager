@@ -4,3 +4,8 @@ export interface DefaultAttributes {
   updatedAt: string | Date
   deletedAt?: string | Date
 }
+
+export interface DefaultSelectListQuery {
+  limit?: number
+  page?: number
+}

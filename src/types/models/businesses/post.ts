@@ -1,4 +1,5 @@
 import { DefaultAttributes } from '@/types/models/attributes'
+import { BusiUser } from '@/types/models/users/business'
 
 export interface BusiPost extends DefaultAttributes {
   busiId: number
@@ -15,6 +16,7 @@ export type BusiPostUpdateForm = Omit<BusiPost, 'createdAt' | 'updatedAt' | 'del
 export interface BusiPostListInfo extends BusiPost {
   isAttachment: boolean
   commentCount: number
+  busiUser: BusiUser
 }
 
 /************************** Attachments **************************/

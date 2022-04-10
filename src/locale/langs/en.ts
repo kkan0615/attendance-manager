@@ -79,6 +79,9 @@ export const enDictionary = {
           'isNotification': 'Notification post',
           'isDisplayHome': 'Display on Home',
           'howLongDisplay': 'How long to display'
+        },
+        Badges: {
+          isNotification: 'notice',
         }
       }
     }
