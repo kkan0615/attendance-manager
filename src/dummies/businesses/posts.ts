@@ -10,12 +10,12 @@ export const initBusiPostDummy = () => {
       id: i + 1,
       busiId: 1,
       busiUserId: 1,
-      title: randText(),
+      title: randText({ charCount: randNumber({ min: 10, max: 50 }) }),
       isNotification: false,
       notificationDate: undefined,
       content: randSentence(),
-      createdAt: dayjs().subtract(randInterger, 'days').toISOString(),
-      updatedAt: dayjs().subtract(randInterger, 'days').toISOString(),
+      createdAt: dayjs().subtract(i / 7, 'days').toISOString(),
+      updatedAt: dayjs().subtract(i / 7, 'days').toISOString(),
     } as BusiPost
   }).concat([ ...Array(5).keys() ].map(i => {
     const randInterger = randNumber({ min: 0, max: 10 })
@@ -23,7 +23,7 @@ export const initBusiPostDummy = () => {
       id: i + 46,
       busiId: 1,
       busiUserId: 1,
-      title: randText(),
+      title: randText({ charCount: randNumber({ min: 10, max: 50 }) }),
       isNotification: true,
       notificationDate: randBoolean() ? dayjs().add(3, 'days').toISOString() : undefined,
       content: randSentence(),

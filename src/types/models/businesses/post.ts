@@ -1,4 +1,4 @@
-import { DefaultAttributes } from '@/types/models/attributes'
+import { DefaultAttributes, DefaultSelectListQuery } from '@/types/models/attributes'
 import { BusiUser } from '@/types/models/users/business'
 
 export interface BusiPost extends DefaultAttributes {
@@ -17,6 +17,10 @@ export interface BusiPostListInfo extends BusiPost {
   isAttachment: boolean
   commentCount: number
   busiUser: BusiUser
+}
+export interface BusiPostListSelectListQuery extends DefaultSelectListQuery {
+  limit: number
+  page: number
 }
 
 /************************** Attachments **************************/

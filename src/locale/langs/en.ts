@@ -75,6 +75,10 @@ export const enDictionary = {
         title: 'title',
         content: 'content',
         isNotification: 'notification post',
+        updatedAt: 'updated at',
+        Extends: {
+          user: 'author'
+        },
         Labels: {
           'isNotification': 'Notification post',
           'isDisplayHome': 'Display on Home',

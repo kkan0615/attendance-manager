@@ -19,12 +19,21 @@
         />
       </div>
       <div>
+        <div
+          class="q-mb-sm"
+        >
+          @TODO: Filter will be here
+        </div>
         <dx-data-grid
-          :data-source="listRows"
+          :data-source="gridRows"
           :columns="columns"
           :show-row-lines="true"
           :show-borders="true"
+          :on-row-prepared="onRowPrepared"
         >
+          <dx-paging
+            :page-size="gridPageSize"
+          />
           <template
             #isNotificationCellTemplate="{ data }"
           >
@@ -37,6 +46,11 @@
                 {{ $t('Types.Models.BusiPost.Badges.isNotification') }}
               </div>
             </q-badge>
+            <span
+              v-else
+            >
+              {{ data.data.id }}
+            </span>
           </template>
           <template
             #titleCellTemplate="{ data }"
@@ -45,7 +59,12 @@
               :to="{ name: 'BusiAppPostDetail', params: { id: data.data.id } }"
             >
               <div>
-                <span class="hover:tw-underline">
+                <span
+                  class="hover:tw-underline"
+                  :class="{
+                    'tw-text-red-500': data.data.isNotification,
+                  }"
+                >
                   {{ data.data.title }}
                 </span>
                 <q-icon
@@ -62,6 +81,16 @@
             </router-link>
           </template>
         </dx-data-grid>
+        <div
+          class="q-mt-md tw-flex tw-justify-center"
+        >
+          <q-pagination
+            :model-value="busiPostStore.BusiPostListFilter.page + 1"
+            :max="maxPagination"
+            :max-pages="6"
+            @update:model-value="onUpdatePage"
+          />
+        </div>
       </div>
     </div>
   </q-page>
@@ -78,8 +107,8 @@ import CLayoutMenubar from '@/components/commons/layouts/Menubar/index.vue'
 import { useBusiPostStore } from '@/store/busiPost'
 import { BusiPostListInfo } from '@/types/models/businesses/post'
 import { useRouter } from 'vue-router'
-import { DxDataGrid } from 'devextreme-vue/data-grid'
-import { Column } from 'devextreme/ui/data_grid'
+import { DxDataGrid, DxPaging } from 'devextreme-vue/data-grid'
+import { Column, RowPreparedEvent } from 'devextreme/ui/data_grid'
 import dayjs from 'dayjs'
 
 const router = useRouter()
@@ -125,17 +154,35 @@ const columns = ref<Column[]>([
   },
 ])
 
-const listRows = computed(() => ([] as BusiPostListInfo[]).concat(busiPostStore.BusiNotificationPostList).concat(busiPostStore.BusiPostList))
-// @TODO: Add notification list count + list count
-const pageCount = computed(() => 0)
+const gridRows = computed(() => ([] as BusiPostListInfo[]).concat(busiPostStore.BusiNotificationPostList).concat(busiPostStore.BusiPostList))
+/* For grid page size for one page */
+const gridPageSize = computed(() => busiPostStore.BusiPostListFilter.limit + busiPostStore.BusiNotificationPostList.length)
+const maxPagination = computed(() => parseInt((busiPostStore.BusiPostListCount / busiPostStore.BusiPostListFilter.limit).toString()))
 
 const initData = async () => {
   try {
-    await busiPostStore.loadBusiNotificationPostList({})
-    await busiPostStore.loadBusiPostList({})
+    await busiPostStore.loadBusiNotificationPostList()
+    await busiPostStore.loadBusiPostList()
   } catch (e) {
     console.error(e)
   }
+}
+
+const onRowPrepared = (row: RowPreparedEvent<BusiPostListInfo>) => {
+  if (row.data && row.data.isNotification) {
+    row.rowElement.classList.add('tw-bg-gray-100')
+  }
+}
+
+/**
+ * When q-pagination component's model value has been changed
+ * @param newPage - new page number
+ */
+const onUpdatePage = (newPage: number) => {
+  busiPostStore.setBusiPostListFilter({
+    ...busiPostStore.BusiPostListFilter,
+    page: newPage - 1
+  })
 }
 
 const onClickCreateBtn = () => {

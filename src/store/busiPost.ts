@@ -2,7 +2,7 @@ import { defineStore } from 'pinia'
 import {
   BusiPostCommentCreateForm,
   BusiPostCommentUpdateForm,
-  BusiPostCreateForm, BusiPostListInfo,
+  BusiPostCreateForm, BusiPostListInfo, BusiPostListSelectListQuery,
   BusiPostUpdateForm
 } from '@/types/models/businesses/post'
 import { BusiPostDummy } from '@/dummies/businesses/posts'
@@ -10,9 +10,10 @@ import { useCurrentStore } from '@/store/current'
 import { BusiUserDummy } from '@/dummies/users/busiUser'
 import { BusiUser } from '@/types/models/users/business'
 import { randBoolean } from '@ngneat/falso'
+import dayjs from 'dayjs'
 
 export interface BusiPostState {
-  busiPostListFilter: any
+  busiPostListFilter: BusiPostListSelectListQuery
   busiPostList: BusiPostListInfo[]
   busiNotificationPostList: any[]
   busiPostListCount: number
@@ -23,7 +24,10 @@ export interface BusiPostState {
 export const useBusiPostStore = defineStore('busiPost', {
   state: (): BusiPostState => {
     return {
-      busiPostListFilter: {},
+      busiPostListFilter: {
+        page: 0,
+        limit: 20,
+      } as BusiPostListSelectListQuery,
       busiPostList: [],
       busiNotificationPostList: [],
       busiPostListCount: 0,
@@ -80,20 +84,24 @@ export const useBusiPostStore = defineStore('busiPost', {
      * set BusiPost list filter
      * @param payload - List Filter to set
      */
-    setBusiPostListFilter (payload: any) {
+    setBusiPostListFilter (payload: BusiPostListSelectListQuery) {
       this.busiPostListFilter = payload
+      console.log(payload)
     },
     /**
      * Reset busiPost list filter
      */
     resetBusiPostListFilter () {
-      this.busiPostListFilter = {}
+      this.busiPostListFilter = {
+        page: 0,
+        limit: 20,
+      } as BusiPostListSelectListQuery
     },
     /**
      * Load list of busiPost
      * @param payload - List Filter
      */
-    async loadBusiPostList (payload: any) {
+    async loadBusiPostList () {
       try {
         const currentStore = useCurrentStore()
         if (import.meta.env.VITE_IS_USE_DUMMY) {
@@ -107,9 +115,9 @@ export const useBusiPostStore = defineStore('busiPost', {
               commentCount: 0,
               busiUser: BusiUserDummy.find(userDummy => userDummy.id === dummy.busiUserId) || {} as BusiUser,
             }
-          })
-          this.busiPostList = filterDummies
-          this.busiPostListCount = filterDummies.length
+          }).sort((a, b) => dayjs(b.updatedAt).diff(a.updatedAt, 'milliseconds'))
+          this.busiPostListCount = BusiPostDummy.length
+          this.busiPostList = filterDummies.splice(this.busiPostListFilter.page * this.busiPostListFilter.limit, this.busiPostListFilter.page + 1 * this.busiPostListFilter.limit)
         } else {
           this.busiPostList = []
           this.busiPostListCount = 0
@@ -130,7 +138,7 @@ export const useBusiPostStore = defineStore('busiPost', {
      * Load list of busiPost
      * @param payload - List Filter
      */
-    loadBusiNotificationPostList (payload: any) {
+    loadBusiNotificationPostList () {
       try {
         const currentStore = useCurrentStore()
         if (import.meta.env.VITE_IS_USE_DUMMY) {
