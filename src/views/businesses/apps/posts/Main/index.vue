@@ -178,10 +178,11 @@ const onRowPrepared = (row: RowPreparedEvent<BusiPostListInfo>) => {
  * When q-pagination component's model value has been changed
  * @param newPage - new page number
  */
-const onUpdatePage = (newPage: number) => {
+const onUpdatePage = (newPage: string) => {
+  console.log(newPage)
   busiPostStore.setBusiPostListFilter({
     ...busiPostStore.BusiPostListFilter,
-    page: newPage - 1
+    page: parseInt(newPage) - 1
   })
 }
 

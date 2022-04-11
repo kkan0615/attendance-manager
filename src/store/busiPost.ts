@@ -87,7 +87,6 @@ export const useBusiPostStore = defineStore('busiPost', {
      */
     setBusiPostListFilter (payload: BusiPostListSelectListQuery) {
       this.busiPostListFilter = payload
-      console.log(payload)
     },
     /**
      * Reset busiPost list filter
