@@ -1,11 +1,12 @@
 import { defineStore } from 'pinia'
 import {
+  BusiPostAttachmentUploadForm,
   BusiPostCommentCreateForm,
   BusiPostCommentUpdateForm,
   BusiPostCreateForm, BusiPostListInfo, BusiPostListSelectListQuery,
   BusiPostUpdateForm
 } from '@/types/models/businesses/post'
-import { BusiPostDummy } from '@/dummies/businesses/posts'
+import { BusiPostAttachmentDummy, BusiPostDummy } from '@/dummies/businesses/posts'
 import { useCurrentStore } from '@/store/current'
 import { BusiUserDummy } from '@/dummies/users/busiUser'
 import { BusiUser } from '@/types/models/users/business'
@@ -99,7 +100,6 @@ export const useBusiPostStore = defineStore('busiPost', {
     },
     /**
      * Load list of busiPost
-     * @param payload - List Filter
      */
     async loadBusiPostList () {
       try {
@@ -136,7 +136,6 @@ export const useBusiPostStore = defineStore('busiPost', {
     },
     /**
      * Load list of busiPost
-     * @param payload - List Filter
      */
     loadBusiNotificationPostList () {
       try {
@@ -172,8 +171,15 @@ export const useBusiPostStore = defineStore('busiPost', {
      * Load busiPost
      * @param payload - id
      */
-    loadBusiPost (payload: any) {
-      this.busiPost = {}
+    loadBusiPost (payload: number) {
+      if (import.meta.env.VITE_IS_USE_DUMMY) {
+        const foundDummy = BusiPostDummy.find(dummy => dummy.id === payload && !dummy.deletedAt)
+        if (foundDummy) {
+          this.busiPost = foundDummy
+        }
+      } else {
+        this.busiPost = {}
+      }
     },
     /**
      * Reset busiPost
@@ -193,6 +199,24 @@ export const useBusiPostStore = defineStore('busiPost', {
      */
     resetBusiPostCommentList () {
       this.busiPostCommentList = []
+    },
+    /**
+     * Create busiPost attachment
+     * @param payload - create form
+     */
+    uploadBusiPostAttachment (payload: BusiPostAttachmentUploadForm) {
+      if (import.meta.env.VITE_IS_USE_DUMMY) {
+        BusiPostAttachmentDummy.push({
+          id: BusiPostAttachmentDummy.length + 1,
+          busiPostId: payload.busiPostId,
+          file: payload.file,
+          createdAt: dayjs().toISOString(),
+          updatedAt: dayjs().toISOString(),
+        })
+        return 1
+      } else {
+        return 1
+      }
     },
     /**
      * Create busiPost

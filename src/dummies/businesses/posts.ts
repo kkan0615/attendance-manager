@@ -1,11 +1,11 @@
 import { randBoolean, randNumber, randSentence, randText } from '@ngneat/falso'
 import dayjs from 'dayjs'
-import { BusiPost } from '@/types/models/businesses/post'
+import { BusiPost, BusiPostAttachment } from '@/types/models/businesses/post'
 
 export let BusiPostDummy: BusiPost[] = []
+export const BusiPostAttachmentDummy: BusiPostAttachment[] = []
 export const initBusiPostDummy = () => {
   BusiPostDummy = [ ...Array(45).keys() ].map(i => {
-    const randInterger = randNumber({ min: 0, max: 10 })
     return {
       id: i + 1,
       busiId: 1,
@@ -18,7 +18,7 @@ export const initBusiPostDummy = () => {
       updatedAt: dayjs().subtract(i / 7, 'days').toISOString(),
     } as BusiPost
   }).concat([ ...Array(5).keys() ].map(i => {
-    const randInterger = randNumber({ min: 0, max: 10 })
+    const randInt = randNumber({ min: 0, max: 10 })
     return {
       id: i + 46,
       busiId: 1,
@@ -27,8 +27,16 @@ export const initBusiPostDummy = () => {
       isNotification: true,
       notificationDate: randBoolean() ? dayjs().add(3, 'days').toISOString() : undefined,
       content: randSentence(),
-      createdAt: dayjs().subtract(randInterger, 'days').toISOString(),
-      updatedAt: dayjs().subtract(randInterger, 'days').toISOString(),
+      createdAt: dayjs().subtract(randInt, 'days').toISOString(),
+      updatedAt: dayjs().subtract(randInt, 'days').toISOString(),
     } as BusiPost
   }))
+}
+
+export const initBusiPostAttachmentDummy = () => {
+  BusiPostDummy = [ ...Array(6).keys() ].map(i => {
+    return {
+    //
+    } as BusiPost
+  })
 }

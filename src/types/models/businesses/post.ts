@@ -26,11 +26,9 @@ export interface BusiPostListSelectListQuery extends DefaultSelectListQuery {
 /************************** Attachments **************************/
 export interface BusiPostAttachment extends DefaultAttributes {
   busiPostId: number
-  fileName: string
-}
-export type BusiPostAttachmentUploadForm = Omit<BusiPostAttachment, 'id' | 'fileName' | 'createdAt' | 'updatedAt' | 'deletedAt'>  & {
   file: File
 }
+export type BusiPostAttachmentUploadForm = Omit<BusiPostAttachment, 'id' | 'createdAt' | 'updatedAt' | 'deletedAt'>
 
 /************************** Comments **************************/
 export type BusiPostCommentType = 'emotion' | 'comment'

@@ -44,7 +44,8 @@
         </div>
         <q-editor
           v-model="content"
-          min-height="5rem"
+          min-height="15rem"
+          content-class="c-form-editor-content"
           :toolbar="[
             ['left','center','right','justify'],
             ['bold', 'italic', 'underline'],
@@ -52,7 +53,7 @@
               label: $q.lang.editor.formatting,
               icon: $q.iconSet.editor.formatting,
               list: 'no-icons',
-              options: ['p', 'h3', 'h4', 'h5', 'h6', 'code']
+              options: ['p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'code']
             }]
           ]"
         />
@@ -80,6 +81,25 @@
             :clearable="false"
           />
         </q-field>
+        <!-- Attachments -->
+        <q-file
+          v-model="attachments"
+          outlined
+          dense
+          multiple
+          label="Attachments"
+          use-chips
+        />
+        <div
+          class="tw-grid tw-grid-cols-5 tw-gap-4"
+        >
+          <c-file-preview
+            v-for="(attachment, i) in attachments"
+            :key="`attachment-${i}`"
+            enable-download
+            :file="attachment"
+          />
+        </div>
         <div
           class="text-right tw-space-x-2"
         >
@@ -114,6 +134,7 @@ import { useCurrentStore } from '@/store/current'
 import { showSnackbar } from '@/utils/libs/quasar/notify'
 import { useI18n } from 'vue-i18n'
 import dayjs from 'dayjs'
+import CFilePreview from '@/components/commons/FilePreview/index.vue'
 
 const router = useRouter()
 const route = useRoute()
@@ -138,6 +159,7 @@ const content = ref('')
 const isNotification = ref(false)
 const isDisplayHome = ref(false)
 const notificationDate = ref(dayjs().toDate()) // Only use when isDisplayHome variable is true
+const attachments = ref<Array<File>>([])
 const rules = ref({
   title: [
     (val: string) => !!val || i18n.t('Commons.Messages.Validations.required', { field:'Title' }),
@@ -164,6 +186,15 @@ const initData = async () => {
           color: 'negative'
         })
         throw new Error('No autherizaition')
+      }
+
+      if (isEditMode.value) {
+        title.value = busiPostStore.BusiPost.title
+        content.value = busiPostStore.BusiPost.content
+        isNotification.value = busiPostStore.BusiPost.isNotification
+        isDisplayHome.value = busiPostStore.BusiPost.isDisplayHome
+        notificationDate.value = busiPostStore.BusiPost.notificationDate
+        attachments.value = busiPostStore.BusiPost.attachments
       }
     }
   } catch (e) {
