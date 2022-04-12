@@ -127,7 +127,7 @@ const breadcrumbs = ref<QBreadcrumbsElProps[]>([
 ])
 const columns = ref<Column[]>([
   {
-    caption: '',
+    caption: '#',
     dataField: 'isNotification',
     width: '80px',
     cellTemplate: 'isNotificationCellTemplate',

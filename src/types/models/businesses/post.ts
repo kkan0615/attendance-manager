@@ -7,6 +7,7 @@ export interface BusiPost extends DefaultAttributes {
   title: string
   content: string
   isNotification: boolean
+  isDisplayHome: boolean
   notificationDate?: string
 }
 
@@ -17,6 +18,10 @@ export interface BusiPostListInfo extends BusiPost {
   isAttachment: boolean
   commentCount: number
   busiUser: BusiUser
+}
+export interface BusiPostInfo extends BusiPost {
+  busiUser: BusiUser
+  attachments: any[]
 }
 export interface BusiPostListSelectListQuery extends DefaultSelectListQuery {
   limit: number
@@ -39,7 +44,9 @@ export interface BusiPostComment extends DefaultAttributes {
   content: string
   type: BusiPostCommentType
 }
-
+export interface BusiPostCommentListInfo extends BusiPostComment {
+  busiUser: BusiUser
+}
 export type BusiPostCommentCreateForm = Omit<BusiPostComment, 'id' | 'createdAt' | 'updatedAt' | 'deletedAt'>
 export type BusiPostCommentUpdateForm = Omit<BusiPostComment, 'createdAt' | 'updatedAt' | 'deletedAt'>
 

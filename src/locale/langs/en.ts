@@ -9,6 +9,7 @@ export const enDictionary = {
       cancel: 'cancel',
       edit: 'edit',
       delete: 'delete',
+      send: 'send',
       offWork: 'off work'
     },
     Titles: {

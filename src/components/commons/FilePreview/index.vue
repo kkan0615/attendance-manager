@@ -6,11 +6,10 @@
       v-if="enableDownload"
       size="sm"
       class="tw-absolute tw-right-0 tw-z-10"
-      outline
       color="primary"
-      dense
       round
       icon="download"
+      @click="onClickDownloadBtn"
     />
     <q-avatar
       v-if="fileType === 'image'"
@@ -57,5 +56,18 @@ const props = defineProps({
 
 const fileType = computed(() => props.file ? props.file.type.split('/')[0] : '')
 const imgToUrl = computed(() => props.file ? URL.createObjectURL(props.file) : undefined)
+
+const onClickDownloadBtn = () => {
+  if (props.file) {
+    const url = window.URL.createObjectURL(props.file)
+    const a = document.createElement('a')
+    a.style.display = 'none'
+    a.href = url
+    a.download = props.file.name
+    document.body.appendChild(a)
+    a.click()
+    window.URL.revokeObjectURL(url)
+  }
+}
 
 </script>

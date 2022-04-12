@@ -175,7 +175,6 @@ const initData = async () => {
     if (isEditMode.value) {
       const { id } = route.params
       await busiPostStore.loadBusiPost(Number(id))
-
       if (
         busiPostStore.BusiPost.busiUserId !== currentStore.CurrentBusiUser.id
           && currentStore.CurrentBusiUser.auth !== 'superAdmin'
@@ -193,7 +192,7 @@ const initData = async () => {
         content.value = busiPostStore.BusiPost.content
         isNotification.value = busiPostStore.BusiPost.isNotification
         isDisplayHome.value = busiPostStore.BusiPost.isDisplayHome
-        notificationDate.value = busiPostStore.BusiPost.notificationDate
+        notificationDate.value = dayjs(busiPostStore.BusiPost.notificationDate).toDate()
         attachments.value = busiPostStore.BusiPost.attachments
       }
     }
@@ -204,10 +203,35 @@ const initData = async () => {
 
 const onSubmitForm = async () => {
   try {
+    let id = busiPostStore.BusiPost.id
+    if (isEditMode.value) {
+    //  edit
+    } else {
+      id = await busiPostStore.createBusiPost({
+        busiId: currentStore.CurrentBusiness.id,
+        busiUserId: currentStore.CurrentBusiUser.id,
+        title: title.value,
+        content: content.value,
+        isNotification: isNotification.value,
+        isDisplayHome: isDisplayHome.value,
+        notificationDate: dayjs(notificationDate.value).toISOString(),
+      })
+    }
+    if (attachments.value && attachments.value.length) {
+      for (let i = 0; i < attachments.value.length; i++) {
+        await busiPostStore.uploadBusiPostAttachment({
+          busiPostId: id,
+          file: attachments.value[i],
+        })
+      }
+    }
+
     showSnackbar({
       message: i18n.t('Commons.Messages.saved'),
       color: 'positive'
     })
+
+    await router.push({ name: 'BusiAppPostDetail', params: { id, } })
   } catch (e) {
     console.error(e)
     showSnackbar({

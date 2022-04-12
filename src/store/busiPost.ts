@@ -1,12 +1,12 @@
 import { defineStore } from 'pinia'
 import {
   BusiPostAttachmentUploadForm,
-  BusiPostCommentCreateForm,
+  BusiPostCommentCreateForm, BusiPostCommentListInfo,
   BusiPostCommentUpdateForm,
-  BusiPostCreateForm, BusiPostListInfo, BusiPostListSelectListQuery,
+  BusiPostCreateForm, BusiPostInfo, BusiPostListInfo, BusiPostListSelectListQuery,
   BusiPostUpdateForm
 } from '@/types/models/businesses/post'
-import { BusiPostAttachmentDummy, BusiPostDummy } from '@/dummies/businesses/posts'
+import { BusiPostAttachmentDummy, BusiPostCommentDummy, BusiPostDummy } from '@/dummies/businesses/posts'
 import { useCurrentStore } from '@/store/current'
 import { BusiUserDummy } from '@/dummies/users/busiUser'
 import { BusiUser } from '@/types/models/users/business'
@@ -18,8 +18,8 @@ export interface BusiPostState {
   busiPostList: BusiPostListInfo[]
   busiNotificationPostList: any[]
   busiPostListCount: number
-  busiPost: any
-  busiPostCommentList: any[]
+  busiPost: BusiPostInfo
+  busiPostCommentList: BusiPostCommentListInfo[]
 }
 
 export const useBusiPostStore = defineStore('busiPost', {
@@ -32,7 +32,7 @@ export const useBusiPostStore = defineStore('busiPost', {
       busiPostList: [],
       busiNotificationPostList: [],
       busiPostListCount: 0,
-      busiPost: {},
+      busiPost: {} as BusiPostInfo,
       busiPostCommentList: []
     }
   },
@@ -110,8 +110,8 @@ export const useBusiPostStore = defineStore('busiPost', {
           ).map(dummy => {
             return {
               ...dummy,
-              isAttachment: randBoolean(),
-              commentCount: 0,
+              isAttachment: BusiPostAttachmentDummy.filter(dummyAttachment => dummyAttachment.busiPostId === dummy.id && !dummyAttachment.deletedAt).length > 0,
+              commentCount: BusiPostCommentDummy.filter(dummyComment => dummyComment.busiPostId === dummy.id && !dummyComment.deletedAt).length,
               busiUser: BusiUserDummy.find(userDummy => userDummy.id === dummy.busiUserId) || {} as BusiUser,
             }
           }).sort((a, b) => dayjs(b.updatedAt).diff(a.updatedAt, 'milliseconds'))
@@ -146,8 +146,8 @@ export const useBusiPostStore = defineStore('busiPost', {
           ).map(dummy => {
             return {
               ...dummy,
-              isAttachment: randBoolean(),
-              commentCount: 0,
+              isAttachment: BusiPostAttachmentDummy.filter(dummyAttachment => dummyAttachment.busiPostId === dummy.id && !dummyAttachment.deletedAt).length > 0,
+              commentCount: BusiPostCommentDummy.filter(dummyComment => dummyComment.busiPostId === dummy.id && !dummyComment.deletedAt).length,
               busiUser: BusiUserDummy.find(userDummy => userDummy.id === dummy.busiUserId) || {} as BusiUser,
             }
           })
@@ -170,28 +170,56 @@ export const useBusiPostStore = defineStore('busiPost', {
      * Load busiPost
      * @param payload - id
      */
-    loadBusiPost (payload: number) {
-      if (import.meta.env.VITE_IS_USE_DUMMY) {
-        const foundDummy = BusiPostDummy.find(dummy => dummy.id === payload && !dummy.deletedAt)
-        if (foundDummy) {
-          this.busiPost = foundDummy
+    async loadBusiPost (payload: number) {
+      try {
+        if (import.meta.env.VITE_IS_USE_DUMMY) {
+          const foundDummy = BusiPostDummy.find(dummy => dummy.id === payload && !dummy.deletedAt)
+          if (foundDummy) {
+            this.busiPost = {
+              ...foundDummy,
+              busiUser: BusiUserDummy.find(dummy => dummy.id === foundDummy.id) || {} as BusiUser,
+              attachments: BusiPostAttachmentDummy.filter(dummy => dummy.busiPostId === payload && !dummy.deletedAt)
+            } as BusiPostInfo
+          } else {
+            throw new Error('no found dummy')
+          }
+        } else {
+          this.busiPost = {} as BusiPostInfo
         }
-      } else {
-        this.busiPost = {}
+      } catch (e) {
+        console.error(e)
+        throw e
       }
     },
     /**
      * Reset busiPost
      */
     resetBusiPost () {
-      this.busiPost = {}
+      this.busiPost = {} as BusiPostInfo
     },
     /**
      * Load busi post comment list
      * @param payload - post id
      */
-    loadBusiPostCommentList (payload: number) {
-      this.busiPostCommentList = []
+    async loadBusiPostCommentList (payload: number) {
+      try {
+        if (import.meta.env.VITE_IS_USE_DUMMY) {
+          const filterDummies = BusiPostCommentDummy.filter(dummy => dummy.busiPostId === payload && !dummy.deletedAt)
+          this.busiPostCommentList = filterDummies
+            .map(dummy => {
+              return {
+                ...dummy,
+                busiUser: BusiUserDummy.find(userDummy => userDummy.id === dummy.busiUserId) || {} as BusiUser
+              }
+            })
+            .sort((a, b) => dayjs(b.updatedAt).diff(a.updatedAt, 'milliseconds'))
+        } else {
+          this.busiPostCommentList = []
+        }
+      } catch (e) {
+        console.error(e)
+        throw e
+      }
     },
     /**
      * Reset busi post comment list
@@ -203,26 +231,53 @@ export const useBusiPostStore = defineStore('busiPost', {
      * Create busiPost attachment
      * @param payload - create form
      */
-    uploadBusiPostAttachment (payload: BusiPostAttachmentUploadForm) {
-      if (import.meta.env.VITE_IS_USE_DUMMY) {
-        BusiPostAttachmentDummy.push({
-          id: BusiPostAttachmentDummy.length + 1,
-          busiPostId: payload.busiPostId,
-          file: payload.file,
-          createdAt: dayjs().toISOString(),
-          updatedAt: dayjs().toISOString(),
-        })
-        return 1
-      } else {
-        return 1
+    async uploadBusiPostAttachment (payload: BusiPostAttachmentUploadForm) {
+      try {
+        if (import.meta.env.VITE_IS_USE_DUMMY) {
+          BusiPostAttachmentDummy.push({
+            id: BusiPostAttachmentDummy.length + 1,
+            busiPostId: payload.busiPostId,
+            file: payload.file,
+            createdAt: dayjs().toISOString(),
+            updatedAt: dayjs().toISOString(),
+          })
+          return 1
+        } else {
+          return 1
+        }
+      } catch (e) {
+        console.error(e)
+        throw e
       }
     },
     /**
      * Create busiPost
      * @param payload - create form
      */
-    createBusiPost (payload: BusiPostCreateForm) {
-      return 0
+    async createBusiPost (payload: BusiPostCreateForm) {
+      try {
+        if (import.meta.env.VITE_IS_USE_DUMMY) {
+          const newId = BusiPostDummy.length + 1
+          BusiPostDummy.push({
+            id: newId,
+            busiId: payload.busiId,
+            busiUserId: payload.busiUserId,
+            title: payload.title,
+            content: payload.content,
+            isNotification: payload.isNotification,
+            isDisplayHome: payload.isDisplayHome,
+            notificationDate: payload.notificationDate,
+            createdAt: dayjs().toISOString(),
+            updatedAt: dayjs().toISOString(),
+          })
+          return newId
+        } else {
+          return 1
+        }
+      } catch (e) {
+        console.error(e)
+        throw e
+      }
     },
     /**
      * Update busiPost by id
@@ -242,8 +297,28 @@ export const useBusiPostStore = defineStore('busiPost', {
      * Create business post comment
      * @param payload - create form
      */
-    createBusiPostComment (payload: BusiPostCommentCreateForm) {
-      return 0
+    async createBusiPostComment (payload: BusiPostCommentCreateForm) {
+      try {
+        if (import.meta.env.VITE_IS_USE_DUMMY) {
+          const newId = BusiPostCommentDummy.length + 1
+          BusiPostCommentDummy.push({
+            id: newId,
+            busiUserId: payload.busiUserId,
+            busiPostId: payload.busiPostId,
+            type: payload.type,
+            content: payload.content,
+            createdAt: dayjs().toISOString(),
+            updatedAt: dayjs().toISOString(),
+          })
+          return newId
+        } else {
+          return 1
+
+        }
+      } catch (e) {
+        console.error(e)
+        throw e
+      }
     },
     /**
      * Update business post comment by id
