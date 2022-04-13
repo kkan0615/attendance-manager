@@ -5,7 +5,6 @@
     <q-input
       v-model="content"
       placeholder="Comment"
-      autogrow
       type="textarea"
       dense
       outlined

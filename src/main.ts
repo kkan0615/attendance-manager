@@ -20,7 +20,9 @@ import Datepicker from '@vuepic/vue-datepicker'
 import '@vuepic/vue-datepicker/dist/main.css'
 /* Devextreme */
 import 'devextreme/dist/css/dx.material.orange.light.compact.css'
-
+/* Animate css  */
+// @ref: https://animate.style/
+import 'animate.css'
 /* Dummy */
 import { initAllDummy } from '@/dummies'
 if (import.meta.env.VITE_IS_USE_DUMMY) {

@@ -1,5 +1,7 @@
 <template>
-  <q-item>
+  <q-item
+    class="q-px-none"
+  >
     <!-- Left side -->
     <q-item-section
       top
@@ -24,12 +26,18 @@
     </q-item-section>
     <!-- Middle side -->
     <q-item-section>
-      <q-item-label>{{ comment.busiUser.name }}</q-item-label>
+      <q-item-label
+        class="tw-font-semibold"
+      >
+        {{ comment.busiUser.name }}
+      </q-item-label>
       <q-item-label
         class="tw-whitespace-pre-line"
-        caption
       >
         {{ comment.content }}
+      </q-item-label>
+      <q-item-label caption>
+        {{ formattedUpdatedAt }}
       </q-item-label>
     </q-item-section>
     <!-- Right side -->
@@ -37,9 +45,6 @@
       side
       top
     >
-      <q-item-label caption>
-        {{ formattedUpdatedAt }}
-      </q-item-label>
       <!-- Delete button -->
       <q-btn
         v-if="isCreator"
@@ -50,7 +55,13 @@
         size="sm"
         icon="delete"
         @click="onClickDeleteBtn"
-      />
+      >
+        <q-tooltip
+          class="c-text-first-uppercase"
+        >
+          {{ $t('Commons.Tooltips.delete') }}
+        </q-tooltip>
+      </q-btn>
     </q-item-section>
   </q-item>
 </template>

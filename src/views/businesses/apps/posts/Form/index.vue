@@ -38,27 +38,9 @@
           :label="$t('Types.Models.BusiPost.Labels.isNotification')"
           dense
         />
-        <!-- Content -->
-        <div>
-          {{ $t('Types.Models.BusiPost.content') }}
-        </div>
-        <q-editor
-          v-model="content"
-          min-height="15rem"
-          content-class="c-form-editor-content"
-          :toolbar="[
-            ['left','center','right','justify'],
-            ['bold', 'italic', 'underline'],
-            [{
-              label: $q.lang.editor.formatting,
-              icon: $q.iconSet.editor.formatting,
-              list: 'no-icons',
-              options: ['p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'code']
-            }]
-          ]"
-        />
         <!-- Is it notification post -->
         <q-checkbox
+          v-if="isNotification"
           v-model="isDisplayHome"
           :label="$t('Types.Models.BusiPost.Labels.isDisplayHome')"
           dense
@@ -81,6 +63,25 @@
             :clearable="false"
           />
         </q-field>
+        <!-- Content -->
+        <div>
+          {{ $t('Types.Models.BusiPost.content') }}
+        </div>
+        <q-editor
+          v-model="content"
+          min-height="15rem"
+          content-class="c-form-editor-content"
+          :toolbar="[
+            ['left','center','right','justify'],
+            ['bold', 'italic', 'underline'],
+            [{
+              label: $q.lang.editor.formatting,
+              icon: $q.iconSet.editor.formatting,
+              list: 'no-icons',
+              options: ['p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'code']
+            }]
+          ]"
+        />
         <!-- Attachments -->
         <q-file
           v-model="attachments"
@@ -163,15 +164,16 @@ const attachments = ref<Array<File>>([])
 const rules = ref({
   title: [
     (val: string) => !!val || i18n.t('Commons.Messages.Validations.required', { field:'Title' }),
-    (val: string) => val.length <= 20 || i18n.t('Commons.Messages.Validations.lengthMax', { length: 20 })
+    (val: string) => val.length <= 50 || i18n.t('Commons.Messages.Validations.lengthMax', { length: 50 })
   ],
 })
 
-const isEditMode = computed(() => route.name === 'BusiAdminUserUpdateForm')
+const isEditMode = computed(() => route.name === 'BusiAppPostUpdateForm')
 
 const initData = async () => {
   try {
     // Edit mode
+    console.log(route.name)
     if (isEditMode.value) {
       const { id } = route.params
       await busiPostStore.loadBusiPost(Number(id))
@@ -187,14 +189,12 @@ const initData = async () => {
         throw new Error('No autherizaition')
       }
 
-      if (isEditMode.value) {
-        title.value = busiPostStore.BusiPost.title
-        content.value = busiPostStore.BusiPost.content
-        isNotification.value = busiPostStore.BusiPost.isNotification
-        isDisplayHome.value = busiPostStore.BusiPost.isDisplayHome
-        notificationDate.value = dayjs(busiPostStore.BusiPost.notificationDate).toDate()
-        attachments.value = busiPostStore.BusiPost.attachments
-      }
+      title.value = busiPostStore.BusiPost.title
+      content.value = busiPostStore.BusiPost.content
+      isNotification.value = busiPostStore.BusiPost.isNotification
+      isDisplayHome.value = busiPostStore.BusiPost.isDisplayHome
+      notificationDate.value = dayjs(busiPostStore.BusiPost.notificationDate).toDate()
+      attachments.value = busiPostStore.BusiPost.attachments
     }
   } catch (e) {
     console.error(e)
@@ -205,7 +205,16 @@ const onSubmitForm = async () => {
   try {
     let id = busiPostStore.BusiPost.id
     if (isEditMode.value) {
-    //  edit
+      await busiPostStore.updateBusiPost({
+        id: busiPostStore.BusiPost.id,
+        busiId: currentStore.CurrentBusiness.id,
+        busiUserId: currentStore.CurrentBusiUser.id,
+        title: title.value,
+        content: content.value,
+        isNotification: isNotification.value,
+        isDisplayHome: isDisplayHome.value,
+        notificationDate: dayjs(notificationDate.value).toISOString(),
+      })
     } else {
       id = await busiPostStore.createBusiPost({
         busiId: currentStore.CurrentBusiness.id,

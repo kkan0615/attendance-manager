@@ -1,16 +1,20 @@
 import { defineStore } from 'pinia'
 import {
   BusiPostAttachmentUploadForm,
-  BusiPostCommentCreateForm, BusiPostCommentListInfo,
+  BusiPostCommentCreateForm,
+  BusiPostCommentListInfo,
   BusiPostCommentUpdateForm,
-  BusiPostCreateForm, BusiPostInfo, BusiPostListInfo, BusiPostListSelectListQuery,
+  BusiPostCreateForm,
+  BusiPostInfo,
+  BusiPostListInfo,
+  BusiPostListSelectListQuery,
+  BusiPostNotificationListSelectListQuery,
   BusiPostUpdateForm
 } from '@/types/models/businesses/post'
 import { BusiPostAttachmentDummy, BusiPostCommentDummy, BusiPostDummy } from '@/dummies/businesses/posts'
 import { useCurrentStore } from '@/store/current'
 import { BusiUserDummy } from '@/dummies/users/busiUser'
 import { BusiUser } from '@/types/models/users/business'
-import { randBoolean } from '@ngneat/falso'
 import dayjs from 'dayjs'
 
 export interface BusiPostState {
@@ -107,16 +111,20 @@ export const useBusiPostStore = defineStore('busiPost', {
           const filterDummies: BusiPostListInfo[] = BusiPostDummy.filter(dummy =>
             dummy.busiId === currentStore.CurrentBusiness.id && !dummy.isNotification
             && !dummy.deletedAt
-          ).map(dummy => {
+          ).filter(dummy => {
+            return this.busiPostListFilter.title ? dummy.title.toLowerCase().includes(this.busiPostListFilter.title.toLowerCase()) : true
+          }).map(dummy => {
             return {
               ...dummy,
               isAttachment: BusiPostAttachmentDummy.filter(dummyAttachment => dummyAttachment.busiPostId === dummy.id && !dummyAttachment.deletedAt).length > 0,
               commentCount: BusiPostCommentDummy.filter(dummyComment => dummyComment.busiPostId === dummy.id && !dummyComment.deletedAt).length,
               busiUser: BusiUserDummy.find(userDummy => userDummy.id === dummy.busiUserId) || {} as BusiUser,
             }
-          }).sort((a, b) => dayjs(b.updatedAt).diff(a.updatedAt, 'milliseconds'))
+          })
+            .sort((a, b) => dayjs(b.updatedAt).diff(a.updatedAt, 'milliseconds'))
           this.busiPostListCount = BusiPostDummy.length
-          this.busiPostList = filterDummies.splice(this.busiPostListFilter.page * this.busiPostListFilter.limit, this.busiPostListFilter.page + 1 * this.busiPostListFilter.limit)
+          this.busiPostList = filterDummies.slice(this.busiPostListFilter.page * this.busiPostListFilter.limit,
+            ((this.busiPostListFilter.page + 1) * this.busiPostListFilter.limit))
         } else {
           this.busiPostList = []
           this.busiPostListCount = 0
@@ -177,7 +185,7 @@ export const useBusiPostStore = defineStore('busiPost', {
           if (foundDummy) {
             this.busiPost = {
               ...foundDummy,
-              busiUser: BusiUserDummy.find(dummy => dummy.id === foundDummy.id) || {} as BusiUser,
+              busiUser: BusiUserDummy.find(dummy => dummy.id === foundDummy.busiUserId) || {} as BusiUser,
               attachments: BusiPostAttachmentDummy.filter(dummy => dummy.busiPostId === payload && !dummy.deletedAt)
             } as BusiPostInfo
           } else {
@@ -283,15 +291,49 @@ export const useBusiPostStore = defineStore('busiPost', {
      * Update busiPost by id
      * @param payload - update form
      */
-    updateBusiPost (payload: BusiPostUpdateForm) {
-      return 0
+    async updateBusiPost (payload: BusiPostUpdateForm) {
+      try {
+        if (import.meta.env.VITE_IS_USE_DUMMY) {
+          const foundDummy = BusiPostDummy.find(dummy => dummy.id === payload.id && !dummy.deletedAt)
+          if (foundDummy) {
+            foundDummy.title = payload.title
+            foundDummy.content = payload.content
+            foundDummy.isNotification = payload.isNotification
+            foundDummy.isDisplayHome = payload.isDisplayHome
+            foundDummy.notificationDate = payload.notificationDate
+            foundDummy.updatedAt = dayjs().toISOString()
+          } else {
+            throw new Error('no found dummy')
+          }
+        } else {
+          return 1
+        }
+      } catch (e) {
+        console.error(e)
+        throw e
+      }
     },
     /**
      * Delete busiPost by id
      * @param payload - target id
      */
-    deleteBusiPost (payload: number) {
-      return 0
+    async deleteBusiPost (payload: number) {
+      try {
+        if (import.meta.env.VITE_IS_USE_DUMMY) {
+          const foundDummy = BusiPostDummy.find(dummy => dummy.id === payload && !dummy.deletedAt)
+          if (foundDummy) {
+            foundDummy.updatedAt = dayjs().toISOString()
+            foundDummy.deletedAt = dayjs().toISOString()
+          } else {
+            throw new Error('no found dummy')
+          }
+        } else {
+          return 1
+        }
+      } catch (e) {
+        console.error(e)
+        throw e
+      }
     },
     /**
      * Create business post comment
@@ -331,8 +373,23 @@ export const useBusiPostStore = defineStore('busiPost', {
      * Delete business post comment by id
      * @param payload - target id
      */
-    deleteBusiPostComment (payload: number) {
-      return 0
+    async deleteBusiPostComment (payload: number) {
+      try {
+        if (import.meta.env.VITE_IS_USE_DUMMY) {
+          const foundDummy = BusiPostCommentDummy.find(dummy => dummy.id === payload && !dummy.deletedAt)
+          if (foundDummy) {
+            foundDummy.updatedAt = dayjs().toISOString()
+            foundDummy.deletedAt = dayjs().toISOString()
+          } else {
+            throw new Error('no found dummy')
+          }
+        } else {
+          return 1
+        }
+      } catch (e) {
+        console.error(e)
+        throw e
+      }
     }
   }
 })

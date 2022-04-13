@@ -19,11 +19,9 @@
         />
       </div>
       <div>
-        <div
+        <busi-app-notification-main-filter
           class="q-mb-sm"
-        >
-          @TODO: Filter will be here
-        </div>
+        />
         <dx-data-grid
           :data-source="gridRows"
           :columns="columns"
@@ -110,10 +108,13 @@ import { useRouter } from 'vue-router'
 import { DxDataGrid, DxPaging } from 'devextreme-vue/data-grid'
 import { Column, RowPreparedEvent } from 'devextreme/ui/data_grid'
 import dayjs from 'dayjs'
+import BusiAppNotificationMainFilter from '@/views/businesses/apps/posts/Main/components/Filter.vue'
+import { storeToRefs } from 'pinia'
 
 const router = useRouter()
 const busiPostStore = useBusiPostStore()
 
+const { busiPostListFilter } = storeToRefs(busiPostStore)
 const breadcrumbs = ref<QBreadcrumbsElProps[]>([
   {
     label: 'App',
@@ -157,7 +158,7 @@ const columns = ref<Column[]>([
 const gridRows = computed(() => ([] as BusiPostListInfo[]).concat(busiPostStore.BusiNotificationPostList).concat(busiPostStore.BusiPostList))
 /* For grid page size for one page */
 const gridPageSize = computed(() => busiPostStore.BusiPostListFilter.limit + busiPostStore.BusiNotificationPostList.length)
-const maxPagination = computed(() => parseInt((busiPostStore.BusiPostListCount / busiPostStore.BusiPostListFilter.limit).toString()))
+const maxPagination = computed(() => Math.ceil((busiPostStore.BusiPostListCount / busiPostStore.BusiPostListFilter.limit)))
 
 const initData = async () => {
   try {
@@ -169,6 +170,7 @@ const initData = async () => {
 }
 
 const onRowPrepared = (row: RowPreparedEvent<BusiPostListInfo>) => {
+  /* Change color of notification post row */
   if (row.data && row.data.isNotification) {
     row.rowElement.classList.add('tw-bg-gray-100')
   }
@@ -178,12 +180,16 @@ const onRowPrepared = (row: RowPreparedEvent<BusiPostListInfo>) => {
  * When q-pagination component's model value has been changed
  * @param newPage - new page number
  */
-const onUpdatePage = (newPage: string) => {
-  console.log(newPage)
-  busiPostStore.setBusiPostListFilter({
-    ...busiPostStore.BusiPostListFilter,
-    page: parseInt(newPage) - 1
-  })
+const onUpdatePage = async (newPage: string) => {
+
+  try {
+    /* Set the filter options */
+    busiPostListFilter.value.page = parseInt(newPage) - 1
+    /* Load busi post list, not load notification */
+    await busiPostStore.loadBusiPostList()
+  } catch (e) {
+    console.error(e)
+  }
 }
 
 const onClickCreateBtn = () => {
@@ -193,6 +199,7 @@ const onClickCreateBtn = () => {
 initData()
 
 onBeforeUnmount(() => {
+  busiPostStore.resetBusiNotificationPostList()
   busiPostStore.resetBusiPostList()
 })
 </script>

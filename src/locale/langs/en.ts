@@ -1,7 +1,8 @@
 export const enDictionary = {
   Commons: {
     Tooltips: {
-      edit: 'Edit'
+      edit: 'Edit',
+      delete: 'delete',
     },
     Buttons: {
       create: 'create',
@@ -9,12 +10,17 @@ export const enDictionary = {
       cancel: 'cancel',
       edit: 'edit',
       delete: 'delete',
+      search: 'search',
       send: 'send',
+      copyURL: 'copy URL',
       offWork: 'off work'
     },
     Titles: {
       cancel: 'cancel',
+      delete: 'Delete',
       total: 'total',
+      attachment: 'attachment',
+      comment: 'comment',
     },
     Messages: {
       cancelSave: 'Would you like to cancel save?',

@@ -24,8 +24,13 @@ export interface BusiPostInfo extends BusiPost {
   attachments: any[]
 }
 export interface BusiPostListSelectListQuery extends DefaultSelectListQuery {
+  title?: string
   limit: number
   page: number
+}
+export interface BusiPostNotificationListSelectListQuery extends DefaultSelectListQuery {
+  targetDate?: string
+  isDisplayHome?: boolean
 }
 
 /************************** Attachments **************************/

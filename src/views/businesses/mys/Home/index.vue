@@ -29,6 +29,7 @@
       </div>
       <!-- right part -->
       <div class="right-card">
+        <business-home-notification-post-list />
         <!-- Work history -->
         <business-home-work-history />
       </div>
@@ -48,6 +49,7 @@ import BusinessHomeStatusSelect from '@/views/businesses/mys/Home/components/Sta
 import BusinessHomeProfile from '@/views/businesses/mys/Home/components/Profile.vue'
 import BusinessHomeWorkHistory from '@/views/businesses/mys/Home/components/WorkHistory.vue'
 import BusinessHomeTotalWorkTime from '@/views/businesses/mys/Home/components/TotalWorkTime.vue'
+import BusinessHomeNotificationPostList from '@/views/businesses/mys/Home/components/NotificationPostList.vue'
 
 const currentStore = useCurrentStore()
 
@@ -65,6 +67,7 @@ const initData = async () => {
 }
 
 initData()
+
 onBeforeUnmount(async () => {
   await currentStore.resetCurrentBusiUserWorkHistoryList()
 })
@@ -84,7 +87,7 @@ $leftCardMaxWidth: 400px;
   }
 
   .right-card {
-    @apply tw-grow tw-w-full;
+    @apply tw-grow tw-w-full tw-space-y-4;
   }
 }
 </style>
