@@ -10,7 +10,7 @@
         >
           <profile-invite-busi-card
             v-for="invite in userInviteList"
-            :key="invite"
+            :key="invite.id"
             :invite="invite"
           />
         </div>
