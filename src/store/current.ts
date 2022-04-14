@@ -281,7 +281,7 @@ export const useCurrentStore = defineStore('current', {
             await this.resetCurrentBusiUserWorkHistoryList()
           }
           const filterDummies = BusiUserWorkHistoryDummy
-            .filter(dummy => dummy.busiUserId === this.currentBusiness.id)
+            .filter(dummy => dummy.busiUserId === this.currentBusiUser.id)
             .sort((a, b) => b.id - a.id)
           this.currentBusiUserWorkHistoryList = filterDummies.filter(dummy => {
             const startDateAt = dayjs(payload.startDateAt).startOf('day')
@@ -319,7 +319,7 @@ export const useCurrentStore = defineStore('current', {
             await this.resetCurrentBusiUserTotalWorkSeconds()
           }
           const filterDummies = BusiUserWorkHistoryDummy
-            .filter(dummy => dummy.busiUserId === this.currentBusiness.id)
+            .filter(dummy => dummy.busiUserId === this.currentBusiUser.id)
             .filter(dummy => {
               const startDateAt = dayjs(payload.startDateAt).startOf('day')
               const endDateAt = dayjs(payload.endDateAt).endOf('day')

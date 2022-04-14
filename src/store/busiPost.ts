@@ -8,7 +8,6 @@ import {
   BusiPostInfo,
   BusiPostListInfo,
   BusiPostListSelectListQuery,
-  BusiPostNotificationListSelectListQuery,
   BusiPostUpdateForm
 } from '@/types/models/businesses/post'
 import { BusiPostAttachmentDummy, BusiPostCommentDummy, BusiPostDummy } from '@/dummies/businesses/posts'
@@ -20,10 +19,11 @@ import dayjs from 'dayjs'
 export interface BusiPostState {
   busiPostListFilter: BusiPostListSelectListQuery
   busiPostList: BusiPostListInfo[]
-  busiNotificationPostList: any[]
+  busiNotificationPostList: BusiPostListInfo[]
   busiPostListCount: number
   busiPost: BusiPostInfo
   busiPostCommentList: BusiPostCommentListInfo[]
+  busiPostHomeList: BusiPostListInfo[]
 }
 
 export const useBusiPostStore = defineStore('busiPost', {
@@ -37,7 +37,8 @@ export const useBusiPostStore = defineStore('busiPost', {
       busiNotificationPostList: [],
       busiPostListCount: 0,
       busiPost: {} as BusiPostInfo,
-      busiPostCommentList: []
+      busiPostCommentList: [],
+      busiPostHomeList: [],
     }
   },
   getters: {
@@ -77,11 +78,18 @@ export const useBusiPostStore = defineStore('busiPost', {
       return state.busiPost
     },
     /**
-     * busiPost
+     * Busi post's comment list
      * @param state
      */
     BusiPostCommentList (state) {
       return state.busiPostCommentList
+    },
+    /**
+     * Busi post list used at Home
+     * @param state
+     */
+    BusiPostHomeList (state) {
+      return state.busiPostHomeList
     },
   },
   actions: {
@@ -175,6 +183,44 @@ export const useBusiPostStore = defineStore('busiPost', {
       this.busiNotificationPostList = []
     },
     /**
+     * Load list of busiPost used at Home
+     * @param payload - target date
+     */
+    async loadBusiPostHomeList (payload = dayjs().toISOString()) {
+      try {
+        const currentStore = useCurrentStore()
+        if (import.meta.env.VITE_IS_USE_DUMMY) {
+          const filterDummies: BusiPostListInfo[] = BusiPostDummy.filter(dummy =>
+            dummy.busiId === currentStore.CurrentBusiness.id
+            && !dummy.deletedAt
+          ).map(dummy => {
+            return {
+              ...dummy,
+              isAttachment: BusiPostAttachmentDummy.filter(dummyAttachment => dummyAttachment.busiPostId === dummy.id && !dummyAttachment.deletedAt).length > 0,
+              commentCount: BusiPostCommentDummy.filter(dummyComment => dummyComment.busiPostId === dummy.id && !dummyComment.deletedAt).length,
+              busiUser: BusiUserDummy.find(userDummy => userDummy.id === dummy.busiUserId) || {} as BusiUser,
+            }
+          })
+            .filter(dummy => dummy.isDisplayHome)
+            .filter(dummy => !dummy.notificationDate || dayjs(dummy.notificationDate).isSameOrAfter(payload))
+            .sort((a, b) => dayjs(b.updatedAt).diff(a.updatedAt, 'milliseconds'))
+          console.log(filterDummies)
+          this.busiPostHomeList = filterDummies
+        } else {
+          this.busiPostHomeList = []
+        }
+      } catch (e) {
+        console.error(e)
+        throw e
+      }
+    },
+    /**
+     * Reset list of busiPost used at Home
+     */
+    resetBusiPostHomeList () {
+      this.busiPostHomeList = []
+    },
+    /**
      * Load busiPost
      * @param payload - id
      */
@@ -236,7 +282,7 @@ export const useBusiPostStore = defineStore('busiPost', {
       this.busiPostCommentList = []
     },
     /**
-     * Create busiPost attachment
+     * Create(Upload) busiPost attachment
      * @param payload - create form
      */
     async uploadBusiPostAttachment (payload: BusiPostAttachmentUploadForm) {
@@ -249,6 +295,26 @@ export const useBusiPostStore = defineStore('busiPost', {
             createdAt: dayjs().toISOString(),
             updatedAt: dayjs().toISOString(),
           })
+          return 1
+        } else {
+          return 1
+        }
+      } catch (e) {
+        console.error(e)
+        throw e
+      }
+    },
+    /**
+     * Delete uploaded busiPost attachment
+     * @param payload - attachment id
+     */
+    async deleteUploadedBusiPostAttachment (payload: number) {
+      try {
+        if (import.meta.env.VITE_IS_USE_DUMMY) {
+          const foundDummyIndex = BusiPostAttachmentDummy.findIndex(dummy => dummy.id === payload)
+          if (foundDummyIndex >= 0) {
+            BusiPostAttachmentDummy.splice(foundDummyIndex, 1)
+          }
           return 1
         } else {
           return 1

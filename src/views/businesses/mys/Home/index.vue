@@ -29,6 +29,7 @@
       </div>
       <!-- right part -->
       <div class="right-card">
+        <!-- Notification list -->
         <business-home-notification-post-list />
         <!-- Work history -->
         <business-home-work-history />

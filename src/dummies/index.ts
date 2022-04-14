@@ -4,6 +4,7 @@ import { initBusiUserWorkHistoryDummy } from '@/dummies/users/busiUserWorkHistor
 import { initBusinessAllowedLocationDummy, initBusinessDummy } from '@/dummies/users/businesses'
 import { initUserNotificationDummy } from '@/dummies/users/notifications'
 import { initBusiPostCommentDummy, initBusiPostDummy } from '@/dummies/businesses/posts'
+import { initBusiUserInviteDummy } from '@/dummies/businesses/busiUserInvite'
 
 export const initAllDummy = () => {
   initBusinessDummy()
@@ -14,4 +15,5 @@ export const initAllDummy = () => {
   initUserNotificationDummy()
   initBusiPostDummy()
   initBusiPostCommentDummy()
+  initBusiUserInviteDummy()
 }

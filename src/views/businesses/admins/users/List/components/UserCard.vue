@@ -148,6 +148,7 @@ import { useBusiUserStore } from '@/store/busiUser'
 import { useCurrentStore } from '@/store/current'
 import WorkTimer from '@/components/WorkTimer.vue'
 import BusiUserStatusBadge from '@/components/commons/BusiUserStatusBadge.vue'
+import { toCapitalize } from '@/utils/commons/stringUtil'
 
 const router = useRouter()
 const $q = useQuasar()
@@ -216,8 +217,8 @@ const onClickEditBtn = () => {
 const onClickDeleteBtn = async () => {
   if (props.user) {
     $q.dialog({
-      title: `Delete ${props.user.name}`,
-      message: `Would you like to delete ${props.user.name}`,
+      title: `${toCapitalize(i18n.t('Commons.Titles.delete'))}`,
+      message: `${i18n.t('Commons.Messages.Questions.delete')}`,
       cancel: true,
     }).onOk(async () => {
       if (props.user) {

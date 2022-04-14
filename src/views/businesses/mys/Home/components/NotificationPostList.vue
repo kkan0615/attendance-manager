@@ -14,7 +14,7 @@
       class="q-pt-sm"
     >
       <dx-data-grid
-        :data-source="busiNotificationPostList"
+        :data-source="busiPostHomeList"
         :columns="columns"
         :show-row-lines="true"
       >
@@ -88,7 +88,7 @@ const i18n = useI18n()
 const currentStore = useCurrentStore()
 const busiPostStore = useBusiPostStore()
 
-const { busiNotificationPostList } = storeToRefs(busiPostStore)
+const { busiPostHomeList } = storeToRefs(busiPostStore)
 const columns = ref<Column[]>([
   {
     caption: '#',
@@ -120,8 +120,7 @@ const columns = ref<Column[]>([
 
 const initData = async () => {
   try {
-    // @TODO: Change to home load
-    await busiPostStore.loadBusiNotificationPostList()
+    await busiPostStore.loadBusiPostHomeList()
   } catch (e) {
     console.error(e)
   }
@@ -130,6 +129,6 @@ const initData = async () => {
 initData()
 
 onBeforeUnmount(() => {
-  busiPostStore.resetBusiNotificationPostList()
+  busiPostStore.resetBusiPostHomeList()
 })
 </script>

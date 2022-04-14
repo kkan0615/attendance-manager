@@ -7,11 +7,15 @@
       size="32px"
     >
       <q-img
+        v-if="currentStore.CurrentBusiUser.img"
         :src="currentStore.CurrentBusiUser.img"
         fit="cover"
         height="100%"
         width="100%"
       />
+      <span>
+        {{ currentStore.CurrentBusiUser.name ? currentStore.CurrentBusiUser.name[0] : '' }}
+      </span>
     </q-avatar>
     <q-menu>
       <q-list style="min-width: 100px">

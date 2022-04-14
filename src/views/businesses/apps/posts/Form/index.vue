@@ -38,31 +38,6 @@
           :label="$t('Types.Models.BusiPost.Labels.isNotification')"
           dense
         />
-        <!-- Is it notification post -->
-        <q-checkbox
-          v-if="isNotification"
-          v-model="isDisplayHome"
-          :label="$t('Types.Models.BusiPost.Labels.isDisplayHome')"
-          dense
-        />
-        <!-- Notification date-->
-        <q-field
-          v-if="isDisplayHome"
-          v-model="notificationDate"
-          :label="$t('Types.Models.BusiPost.Labels.howLongDisplay')"
-          dense
-          outlined
-        >
-          <date-picker
-            v-model="notificationDate"
-            class="tw-w-full tw-my-0.5"
-            text-input
-            input-class-name="dp__input--with-label"
-            :enable-time-picker="false"
-            auto-apply
-            :clearable="false"
-          />
-        </q-field>
         <!-- Content -->
         <div>
           {{ $t('Types.Models.BusiPost.content') }}
@@ -92,7 +67,7 @@
           use-chips
         />
         <div
-          class="tw-grid tw-grid-cols-5 tw-gap-4"
+          class="tw-grid tw-grid-cols-5 tw-gap-4 q-pb-lg"
         >
           <c-file-preview
             v-for="(attachment, i) in attachments"
@@ -100,6 +75,42 @@
             enable-download
             :file="attachment"
           />
+        </div>
+        <!-- Is it notification post -->
+        <q-checkbox
+          v-model="isDisplayHome"
+          :label="$t('Types.Models.BusiPost.Labels.isDisplayHome')"
+          dense
+        />
+        <div
+          v-if="isDisplayHome"
+          class="tw-flex"
+        >
+          <q-checkbox
+            v-model="isForever"
+            class="tw-grow tw-mr-4"
+            :label="$t('Types.Models.BusiPost.Labels.isForever')"
+            dense
+          />
+          <!-- Notification date-->
+          <q-field
+            v-if="!isForever"
+            v-model="notificationDate"
+            class="tw-grow tw-w-full"
+            :label="$t('Types.Models.BusiPost.Labels.howLongDisplay')"
+            dense
+            outlined
+          >
+            <date-picker
+              v-model="notificationDate"
+              class="tw-w-full tw-my-0.5"
+              text-input
+              input-class-name="dp__input--with-label"
+              :enable-time-picker="false"
+              auto-apply
+              :clearable="false"
+            />
+          </q-field>
         </div>
         <div
           class="text-right tw-space-x-2"
@@ -159,7 +170,8 @@ const title = ref('')
 const content = ref('')
 const isNotification = ref(false)
 const isDisplayHome = ref(false)
-const notificationDate = ref(dayjs().toDate()) // Only use when isDisplayHome variable is true
+const isForever = ref(true)
+const notificationDate = ref<Date>(dayjs().toDate()) // Only use when isDisplayHome variable is true
 const attachments = ref<Array<File>>([])
 const rules = ref({
   title: [
@@ -173,7 +185,6 @@ const isEditMode = computed(() => route.name === 'BusiAppPostUpdateForm')
 const initData = async () => {
   try {
     // Edit mode
-    console.log(route.name)
     if (isEditMode.value) {
       const { id } = route.params
       await busiPostStore.loadBusiPost(Number(id))
@@ -193,8 +204,15 @@ const initData = async () => {
       content.value = busiPostStore.BusiPost.content
       isNotification.value = busiPostStore.BusiPost.isNotification
       isDisplayHome.value = busiPostStore.BusiPost.isDisplayHome
-      notificationDate.value = dayjs(busiPostStore.BusiPost.notificationDate).toDate()
-      attachments.value = busiPostStore.BusiPost.attachments
+      /* If there is notification date data */
+      if (busiPostStore.BusiPost.notificationDate) {
+        isForever.value = false
+        notificationDate.value = dayjs(busiPostStore.BusiPost.notificationDate).toDate()
+      } else {
+        isForever.value = true
+        notificationDate.value = dayjs().toDate()
+      }
+      attachments.value = busiPostStore.BusiPost.attachments.map(attachment => attachment.file)
     }
   } catch (e) {
     console.error(e)
@@ -213,7 +231,7 @@ const onSubmitForm = async () => {
         content: content.value,
         isNotification: isNotification.value,
         isDisplayHome: isDisplayHome.value,
-        notificationDate: dayjs(notificationDate.value).toISOString(),
+        notificationDate: isDisplayHome.value && !isForever.value ? dayjs(notificationDate.value).toISOString() : undefined,
       })
     } else {
       id = await busiPostStore.createBusiPost({
@@ -223,9 +241,17 @@ const onSubmitForm = async () => {
         content: content.value,
         isNotification: isNotification.value,
         isDisplayHome: isDisplayHome.value,
-        notificationDate: dayjs(notificationDate.value).toISOString(),
+        notificationDate: isDisplayHome.value && !isForever.value ? dayjs(notificationDate.value).toISOString() : undefined,
       })
     }
+    /* Remove attachments first */
+    if (isEditMode.value && busiPostStore.BusiPost.attachments && busiPostStore.BusiPost.attachments.length) {
+      for (let i = 0; i < busiPostStore.BusiPost.attachments.length; i++) {
+        await busiPostStore.deleteUploadedBusiPostAttachment(busiPostStore.BusiPost.attachments[i].id)
+      }
+    }
+
+    /* Save attachment */
     if (attachments.value && attachments.value.length) {
       for (let i = 0; i < attachments.value.length; i++) {
         await busiPostStore.uploadBusiPostAttachment({

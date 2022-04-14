@@ -3,6 +3,8 @@ export const enDictionary = {
     Tooltips: {
       edit: 'Edit',
       delete: 'delete',
+      ok: 'ok',
+      reject: 'reject'
     },
     Buttons: {
       create: 'create',
@@ -17,7 +19,7 @@ export const enDictionary = {
     },
     Titles: {
       cancel: 'cancel',
-      delete: 'Delete',
+      delete: 'delete',
       total: 'total',
       attachment: 'attachment',
       comment: 'comment',
@@ -36,6 +38,9 @@ export const enDictionary = {
         required: '{field} field is required',
         lengthMax: '{length} is maximum',
         integer: 'Type number more than 0',
+      },
+      Questions: {
+        delete: 'Would you like to delete?'
       }
     },
   },
@@ -87,9 +92,10 @@ export const enDictionary = {
           user: 'author'
         },
         Labels: {
-          'isNotification': 'Notification post',
-          'isDisplayHome': 'Display on Home',
-          'howLongDisplay': 'How long to display'
+          isNotification: 'Notification post',
+          isDisplayHome: 'Display on Home',
+          howLongDisplay: 'How long to display',
+          isForever: 'forever',
         },
         Badges: {
           isNotification: 'notice',

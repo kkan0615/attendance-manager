@@ -8,18 +8,18 @@
     <!--  left drawer  -->
     <busi-layout-left-drawer />
     <q-page-container>
-      <!--      <transition-->
+      <transition
+        enter-active-class="animate__animated animate__fadeIn animate__faster"
+      >
+        <router-view />
+      </transition>
+      <!--      <router-view v-slot="{ Component }">-->
+      <!--        <transition-->
       <!--          enter-active-class="animate__animated animate__fadeIn animate__faster"-->
-      <!--      >-->
-      <!--        <router-view />-->
-      <!--      </transition>-->
-      <router-view v-slot="{ Component }">
-        <transition
-          enter-active-class="animate__animated animate__fadeIn animate__faster"
-        >
-          <component :is="Component" />
-        </transition>
-      </router-view>
+      <!--        >-->
+      <!--          <component :is="Component" />-->
+      <!--        </transition>-->
+      <!--      </router-view>-->
     </q-page-container>
   </q-layout>
 </template>

@@ -95,6 +95,7 @@
         class="c-form-editor-content tw-mb-16"
         v-html="busiPostStore.BusiPost.content"
       />
+      <q-separator />
       <div
         v-if="busiPostStore.BusiPost.attachments && busiPostStore.BusiPost.attachments.length"
         class="q-py-md"
@@ -115,9 +116,6 @@
           />
         </div>
       </div>
-      <q-separator
-        class="q-my-md"
-      />
       <busi-app-notification-detail-comment-form
         class="q-mt-md"
       />
@@ -168,6 +166,7 @@ import dayjs from 'dayjs'
 import { showSnackbar } from '@/utils/libs/quasar/notify'
 import { useI18n } from 'vue-i18n'
 import { storeToRefs } from 'pinia'
+import { toCapitalize } from '@/utils/commons/stringUtil'
 
 const route = useRoute()
 const router = useRouter()
@@ -196,6 +195,7 @@ const initData = async () => {
     await busiPostStore.loadBusiPostCommentList(Number(id))
   } catch (e) {
     console.error()
+    router.back()
   }
 }
 
@@ -218,8 +218,8 @@ const onClickEditBtn = () => {
 
 const onClickDeleteBtn = async () => {
   $q.dialog({
-    title: 'Delete',
-    message: 'Would you like to delete this post?',
+    title: toCapitalize(i18n.t('Commons.Titles.delete')),
+    message: i18n.t('Commons.Messages.Questions.delete'),
     cancel: true,
   }).onOk(async () => {
     try {

@@ -2,12 +2,20 @@ import { defineStore } from 'pinia'
 import dayjs from 'dayjs'
 import { UserUpdateForm, UserUploadImageForm } from '@/types/models/users'
 import { UserDummy } from '@/dummies/users/user'
+import { BusiUserInviteListInfo } from '@/types/models/users/busiInvite'
+import { BusiUserInviteDummy } from '@/dummies/businesses/busiUserInvite'
+import { useCurrentStore } from '@/store/current'
+import { BusinessDummy } from '@/dummies/users/businesses'
+import { Business } from '@/types/models/businesses'
+import { BusiUserDummy } from '@/dummies/users/busiUser'
+import { BusiUser } from '@/types/models/users/business'
 
 export interface UserState {
   userListFilter: any
   userList: any[]
   userListCount: number
   user: any
+  userInviteList: BusiUserInviteListInfo[]
 }
 
 export const useUserStore = defineStore('user', {
@@ -17,6 +25,7 @@ export const useUserStore = defineStore('user', {
       userList: [],
       userListCount: 0,
       user: {},
+      userInviteList: [],
     }
   },
   getters: {
@@ -50,6 +59,13 @@ export const useUserStore = defineStore('user', {
     User (state) {
       return state.user
     },
+    /**
+     * user
+     * @param state
+     */
+    UserInviteList (state) {
+      return state.userInviteList
+    }
   },
   actions: {
     /**
@@ -79,6 +95,38 @@ export const useUserStore = defineStore('user', {
     resetUserList () {
       this.userList = []
       this.userListCount = 0
+    },
+    /**
+     * Load list of user
+     */
+    async loadUserInviteList () {
+      try {
+        const currentStore = useCurrentStore()
+        if (import.meta.env.VITE_IS_USE_DUMMY) {
+          const filterDummies: BusiUserInviteListInfo[] = BusiUserInviteDummy
+            .filter(dummy => dummy.userId === currentStore.currentUser.id && !dummy.deletedAt)
+            .map(dummy => {
+              return {
+                ...dummy,
+                user: UserDummy.find(userDummy => userDummy.id === dummy.userId) || {} as any,
+                business: BusinessDummy.find(busiDummy => busiDummy.id === dummy.busiId) || {} as Business,
+                invitor: BusiUserDummy.find(busiUserDummy => busiUserDummy.id === dummy.invitorId) || {} as BusiUser
+              }
+            })
+          this.userInviteList = filterDummies
+        } else {
+          this.userInviteList = []
+        }
+      } catch (e) {
+        console.error(e)
+        throw e
+      }
+    },
+    /**
+     * Reset user list
+     */
+    resetUserInviteList () {
+      this.userInviteList = []
     },
     /**
      * Load user
@@ -167,6 +215,6 @@ export const useUserStore = defineStore('user', {
         console.error(e)
         throw e
       }
-    }
+    },
   }
 })

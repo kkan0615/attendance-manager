@@ -10,7 +10,7 @@ import {
 import { BusiUserDummy } from '@/dummies/users/busiUser'
 import { UserDummy } from '@/dummies/users/user'
 import { useCurrentStore } from '@/store/current'
-import { BusiUserDummyInvite } from '@/dummies/users/busiUserInvite'
+import { BusiUserInviteDummy } from '@/dummies/businesses/busiUserInvite'
 import { BusiUserInviteListInfo } from '@/types/models/users/busiInvite'
 import { Business } from '@/types/models/businesses'
 import {
@@ -20,6 +20,7 @@ import {
 } from '@/types/models/users/busiWorkHistory'
 import { BusiUserWorkHistoryDummy } from '@/dummies/users/busiUserWorkHistory'
 import dayjs from 'dayjs'
+import { User } from '@/types/models/users'
 
 export interface BusiUserAdminListFilter {
   busiId: number
@@ -186,12 +187,13 @@ export const useBusiUserStore = defineStore('busiUserAdmin', {
         if (this.busiUserAdminList && this.busiUserAdminList.length) {
           await this.resetBusiUserInviteList()
         }
-        const filterDummies = BusiUserDummyInvite.filter(dummy => !dummy.deletedAt && dummy.busiId === payload)
+        const filterDummies = BusiUserInviteDummy.filter(dummy => !dummy.deletedAt && dummy.busiId === payload)
         this.busiUserInviteList = filterDummies.map(dummy => {
           return {
             ...dummy,
             business: {} as Business,
-            user: UserDummy.find((userDummy) => userDummy.id === dummy.userId) || {} as BusiUser
+            user: UserDummy.find((userDummy) => userDummy.id === dummy.userId) || {} as User,
+            invitor: BusiUserDummy.find(busiUserDummy => busiUserDummy.id === dummy.invitorId) || {} as BusiUser
           }
         })
         this.busiUserInviteListCount = filterDummies.length
@@ -380,6 +382,7 @@ export const useBusiUserStore = defineStore('busiUserAdmin', {
             status: 'off',
             startWorkAt: null,
             auth: 'user',
+            joinAt: payload.joinAt,
             createdAt: dayjs().toISOString(),
             updatedAt: dayjs().toISOString(),
           } as BusiUser)
@@ -541,36 +544,49 @@ export const useBusiUserStore = defineStore('busiUserAdmin', {
         if (!foundUserByEmail) {
           throw new Error('no user by email')
         }
-        const foundInvite = BusiUserDummyInvite.find(dummy => dummy.userId === foundUserByEmail.id)
+        const foundInvite = BusiUserInviteDummy.find(dummy => dummy.userId === foundUserByEmail.id)
         if (foundInvite) {
           throw new Error('Already sent email')
         }
 
-        BusiUserDummyInvite.push({
-          id: BusiUserDummyInvite.length + 1,
+        BusiUserInviteDummy.push({
+          id: BusiUserInviteDummy.length + 1,
           userId: foundUserByEmail.id,
           busiId: currentStore.CurrentBusiness.id,
+          invitorId: currentStore.CurrentBusiUser.id,
           createdAt: dayjs().toISOString(),
           updatedAt: dayjs().toISOString(),
         })
       } // dummy logic ends
     },
     /**
-     *
-     * @param payload
+     * Accept invite
+     * @param payload - invite id
      */
     async acceptInvite (payload: number) {
       try {
         if (import.meta.env.VITE_IS_USE_DUMMY) {
-          const foundInvite = BusiUserDummyInvite.find(dummy => dummy.id === payload)
+          const foundInvite = BusiUserInviteDummy.find(dummy => dummy.id === payload)
           if (!foundInvite) {
-            throw new Error('no user by email')
+            throw new Error('no user invite')
+          }
+          const foundUserDummy = UserDummy.find(dummy => dummy.id === foundInvite.userId)
+          if (!foundUserDummy) {
+            throw new Error('no user')
           }
 
           await this.createBusiUser({
+            img: foundUserDummy.img,
             userId: foundInvite.userId,
             busiId: foundInvite.busiId,
-          } as BusiUserCreateForm)
+            email: foundUserDummy.email,
+            name: foundUserDummy.name,
+            nickname: foundUserDummy.nickname,
+            status: 'off',
+            startWorkAt: null,
+            auth: 'user',
+            joinAt: dayjs().toISOString(),
+          })
           await this.deleteInvite(payload)
         } // dummy logic ends
       } catch (e) {
@@ -580,16 +596,16 @@ export const useBusiUserStore = defineStore('busiUserAdmin', {
     },
     /**
      *
-     * @param payload - id of invite
+     * @param payload - invite id
      */
     async deleteInvite (payload: number) {
       try {
         if (import.meta.env.VITE_IS_USE_DUMMY) {
-          const foundInviteIndex = BusiUserDummyInvite.findIndex(dummy => dummy.id === payload)
+          const foundInviteIndex = BusiUserInviteDummy.findIndex(dummy => dummy.id === payload)
           if (foundInviteIndex < 0) {
             throw new Error('no invite by id')
           }
-          BusiUserDummyInvite.splice(foundInviteIndex, 1)
+          BusiUserInviteDummy.splice(foundInviteIndex, 1)
         }
       } catch (e) {
         console.error(e)

@@ -79,6 +79,7 @@ import { useBusiPostStore } from '@/store/busiPost'
 import { BusiPostCommentListInfo } from '@/types/models/businesses/post'
 import dayjs from 'dayjs'
 import { useQuasar } from 'quasar'
+import { toCapitalize } from '@/utils/commons/stringUtil'
 
 const i18n = useI18n()
 const $q = useQuasar()
@@ -108,8 +109,8 @@ const formattedUpdatedAt = computed(() => {
 
 const onClickDeleteBtn = async () => {
   $q.dialog({
-    title: 'Delete Comment',
-    message: 'Would you like to delete this comment?',
+    title: `${toCapitalize(i18n.t('Commons.Titles.delete'))}`,
+    message: `${i18n.t('Commons.Messages.Questions.delete')}`,
     cancel: true,
   }).onOk(async () => {
     try {

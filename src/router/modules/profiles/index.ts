@@ -19,7 +19,13 @@ export const profileRoutes: RouteRecordRaw[] = [
         name: 'ProfileUpdateForm',
         component: () => import('@/views/profiles/Form/index.vue'),
         meta: { isRequiredLogin: true },
-      }
+      },
+      {
+        path: 'invite',
+        name: 'ProfileInvite',
+        component: () => import('@/views/profiles/Invite/index.vue'),
+        meta: { isRequiredLogin: true },
+      },
     ]
   },
 ]

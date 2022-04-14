@@ -1,11 +1,12 @@
 <template>
   <q-layout>
+    <!-- @TODO: Change to component -->
     <q-header
       bordered
-      style="height: 48px;"
     >
-      <div
-        class="tw-h-full tw-max-w-4xl tw-mx-auto tw-flex tw-items-center q-px-md"
+      <q-toolbar
+        style="height: 48px;"
+        class="tw-max-w-4xl tw-mx-auto tw-flex tw-items-center q-px-md"
       >
         <div>
           @TODO: Logo will be here
@@ -14,7 +15,24 @@
           class="tw-ml-auto q-mr-sm"
         />
         <profile-layout-user-menu />
-      </div>
+      </q-toolbar>
+      <!-- Route tabs -->
+      <q-tabs
+        class="tw-max-w-4xl tw-mx-auto"
+        dense
+        align="left"
+      >
+        <q-route-tab
+          :to="{ name: 'ProfileMain' }"
+          name="Home"
+          label="Home"
+        />
+        <q-route-tab
+          :to="{ name: 'ProfileInvite' }"
+          name="invites"
+          label="invites"
+        />
+      </q-tabs>
     </q-header>
     <q-page-container>
       <router-view />

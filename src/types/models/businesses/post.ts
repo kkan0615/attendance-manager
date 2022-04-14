@@ -1,6 +1,13 @@
 import { DefaultAttributes, DefaultSelectListQuery } from '@/types/models/attributes'
 import { BusiUser } from '@/types/models/users/business'
 
+/************************** Attachments **************************/
+export interface BusiPostAttachment extends DefaultAttributes {
+  busiPostId: number
+  file: File
+}
+export type BusiPostAttachmentUploadForm = Omit<BusiPostAttachment, 'id' | 'createdAt' | 'updatedAt' | 'deletedAt'>
+
 export interface BusiPost extends DefaultAttributes {
   busiId: number
   busiUserId: number
@@ -21,7 +28,7 @@ export interface BusiPostListInfo extends BusiPost {
 }
 export interface BusiPostInfo extends BusiPost {
   busiUser: BusiUser
-  attachments: any[]
+  attachments: BusiPostAttachment[]
 }
 export interface BusiPostListSelectListQuery extends DefaultSelectListQuery {
   title?: string
@@ -32,13 +39,6 @@ export interface BusiPostNotificationListSelectListQuery extends DefaultSelectLi
   targetDate?: string
   isDisplayHome?: boolean
 }
-
-/************************** Attachments **************************/
-export interface BusiPostAttachment extends DefaultAttributes {
-  busiPostId: number
-  file: File
-}
-export type BusiPostAttachmentUploadForm = Omit<BusiPostAttachment, 'id' | 'createdAt' | 'updatedAt' | 'deletedAt'>
 
 /************************** Comments **************************/
 export type BusiPostCommentType = 'emotion' | 'comment'

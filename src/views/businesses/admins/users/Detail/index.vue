@@ -62,6 +62,7 @@ import BusiAdminUserDetailProfile from '@/views/businesses/admins/users/Detail/c
 import BusiAdminUserDetailHistoryList from '@/views/businesses/admins/users/Detail/components/HistoryList.vue'
 import BusiAdminUserDetailSchedule from '@/views/businesses/admins/users/Detail/components/Schedule.vue'
 import dayjs from 'dayjs'
+import { toCapitalize } from '@/utils/commons/stringUtil'
 
 const route = useRoute()
 const router = useRouter()
@@ -151,8 +152,8 @@ const onClickEditBtn = () => {
 
 const onClickDeleteBtn = async () => {
   $q.dialog({
-    title: `Delete ${busiUserStore.BusiUserAdmin.name}`,
-    message: `Would you like to delete ${busiUserStore.BusiUserAdmin.name}`,
+    title: `${toCapitalize(i18n.t('Commons.Titles.delete'))}`,
+    message: `${i18n.t('Commons.Messages.Questions.delete')}`,
     cancel: true,
   }).onOk(async () => {
     try {
