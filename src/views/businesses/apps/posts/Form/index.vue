@@ -34,6 +34,7 @@
         </q-input>
         <!-- Is it notification post -->
         <q-checkbox
+          v-if="currentStore.CurrentIsBusiUserAdmin"
           v-model="isNotification"
           :label="$t('Types.Models.BusiPost.Labels.isNotification')"
           dense
@@ -76,8 +77,9 @@
             :file="attachment"
           />
         </div>
-        <!-- Is it notification post -->
+        <!-- Is Display at Home -->
         <q-checkbox
+          v-if="currentStore.CurrentIsBusiUserAdmin"
           v-model="isDisplayHome"
           :label="$t('Types.Models.BusiPost.Labels.isDisplayHome')"
           dense

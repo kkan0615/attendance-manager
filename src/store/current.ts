@@ -73,6 +73,14 @@ export const useCurrentStore = defineStore('current', {
       return state.currentBusiUser
     },
     /**
+     * Current Business user
+     * @param state
+     */
+    CurrentIsBusiUserAdmin (state) {
+      return state.currentBusiUser.auth === 'admin'
+      || state.currentBusiUser.auth === 'superAdmin'
+    },
+    /**
      * Current Business user notification list
      * @param state
      */
