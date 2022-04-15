@@ -69,7 +69,7 @@
           >
             <router-link
               class="tw-text-purple-500 tw-underline"
-              to=""
+              :to="{ name: 'AuthRegister' }"
             >
               Click here to Create new account
             </router-link>

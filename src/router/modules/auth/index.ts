@@ -17,6 +17,11 @@ export const authRoutes: RouteRecordRaw[] = [
         name: 'AuthLogout',
         component: () => import('@/views/auths/Logout/index.vue'),
       },
+      {
+        path: 'register',
+        name: 'AuthRegister',
+        component: () => import('@/views/auths/Register/index.vue'),
+      },
     ]
   },
 ]

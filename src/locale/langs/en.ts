@@ -36,8 +36,12 @@ export const enDictionary = {
       notMatched: 'It is not matched',
       Validations: {
         required: '{field} field is required',
+        lengthMin: '{length} is minimum',
         lengthMax: '{length} is maximum',
         integer: 'Type number more than 0',
+        notMatched: '{field1} is not matched with {field2}',
+        passwordRule1: 'Password must include special character',
+        passwordRule2: 'Password must include at least one capital letter',
       },
       Questions: {
         delete: 'Would you like to delete?'

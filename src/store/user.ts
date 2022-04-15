@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import dayjs from 'dayjs'
-import { UserUpdateForm, UserUploadImageForm } from '@/types/models/users'
+import { UserCreateForm, UserUpdateForm, UserUploadImageForm } from '@/types/models/users'
 import { UserDummy } from '@/dummies/users/user'
 import { BusiUserInviteListInfo } from '@/types/models/users/busiInvite'
 import { BusiUserInviteDummy } from '@/dummies/businesses/busiUserInvite'
@@ -148,13 +148,12 @@ export const useUserStore = defineStore('user', {
     async uploadUser (payload: UserUploadImageForm) {
       try {
         if (import.meta.env.VITE_IS_USE_DUMMY) {
-          const newId = 1
           const foundDummy = UserDummy.find(dummy => dummy.id === payload.id)
           if (foundDummy) {
             foundDummy.img = URL.createObjectURL(payload.file)
           }
 
-          return newId
+          return 1
         } else {
           return 1
         }
@@ -167,8 +166,27 @@ export const useUserStore = defineStore('user', {
      * Create user
      * @param payload - create form
      */
-    createUser (payload: any) {
-      return 0
+    createUser (payload: UserCreateForm) {
+      try {
+        if (import.meta.env.VITE_IS_USE_DUMMY) {
+          const newId = UserDummy.length + 1
+          UserDummy.push({
+            id: newId,
+            nickname: payload.nickname,
+            name: payload.name,
+            email: payload.email,
+            description: payload.description,
+            createdAt: dayjs().toISOString(),
+            updatedAt: dayjs().toISOString(),
+          })
+          return newId
+        } else {
+          return 1
+        }
+      } catch (e) {
+        console.error(e)
+        throw e
+      }
     },
     /**
      * Update user by id
