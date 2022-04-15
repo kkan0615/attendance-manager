@@ -1,6 +1,3 @@
-<!--
-@TODO: Add
--->
 <template>
   <q-page
     padding
@@ -17,9 +14,9 @@
         @submit="onSubmitForm"
       >
         <div
-          class="text-h6"
+          class="text-h6 c-text-first-uppercase"
         >
-          Information
+          {{ $t('Commons.Titles.information') }}
         </div>
         <!-- logo -->
         <div
@@ -74,9 +71,9 @@
             #label
           >
             <div
-              class="c-required-label"
+              class="c-required-label c-text-first-uppercase"
             >
-              Small logo
+              {{ $t('Types.Models.Businesses.smallLogo') }}
             </div>
           </template>
         </q-file>
@@ -91,9 +88,9 @@
             #label
           >
             <div
-              class="c-required-label"
+              class="c-required-label c-text-first-uppercase"
             >
-              Main logo
+              {{ $t('Types.Models.Businesses.logo') }}
             </div>
           </template>
         </q-file>
@@ -110,9 +107,9 @@
             #label
           >
             <div
-              class="c-required-label"
+              class="c-required-label c-text-first-uppercase"
             >
-              Name
+              {{ $t('Types.Models.Businesses.name') }}
             </div>
           </template>
         </q-input>
@@ -214,12 +211,12 @@ export default {
 <script setup lang="ts">
 import { computed, onBeforeUnmount, ref } from 'vue'
 import { QBreadcrumbsElProps } from 'quasar'
-import CLayoutMenubar from '@/components/commons/layouts/Menubar/index.vue'
 import { showSnackbar } from '@/utils/libs/quasar/notify'
 import { useI18n } from 'vue-i18n'
 import { useCurrentStore } from '@/store/current'
 import dayjs from 'dayjs'
 import { useBusinessStore } from '@/store/business'
+import CLayoutMenubar from '@/components/commons/layouts/Menubar/index.vue'
 
 const i18n = useI18n()
 const currentStore = useCurrentStore()

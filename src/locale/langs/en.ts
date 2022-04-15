@@ -15,7 +15,8 @@ export const enDictionary = {
       search: 'search',
       send: 'send',
       copyURL: 'copy URL',
-      offWork: 'off work'
+      invite: 'invite',
+      offWork: 'off work',
     },
     Titles: {
       cancel: 'cancel',
@@ -23,6 +24,8 @@ export const enDictionary = {
       total: 'total',
       attachment: 'attachment',
       comment: 'comment',
+      information: 'information',
+      overview: 'overview',
     },
     Messages: {
       cancelSave: 'Would you like to cancel save?',
@@ -47,6 +50,9 @@ export const enDictionary = {
         delete: 'Would you like to delete?'
       }
     },
+    Placeholders: {
+      noData: 'No data',
+    }
   },
   Types: {
     Models: {
@@ -58,7 +64,12 @@ export const enDictionary = {
         createdAt: 'join date'
       },
       Businesses: {
+        name: 'name',
+        smallLogo: 'small logo',
+        logo: 'main logo',
+        homepage: 'homepage',
         maxWorkHour: 'max work hour',
+        description: 'description',
         Titles: {
           information: 'information',
           overview: 'Overview'

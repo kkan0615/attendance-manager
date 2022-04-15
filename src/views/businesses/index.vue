@@ -7,19 +7,16 @@
     <busi-layout-header />
     <!--  left drawer  -->
     <busi-layout-left-drawer />
+    <!-- Page content -->
     <q-page-container>
-      <transition
-        enter-active-class="animate__animated animate__fadeIn animate__faster"
-      >
-        <router-view />
-      </transition>
-      <!--      <router-view v-slot="{ Component }">-->
-      <!--        <transition-->
-      <!--          enter-active-class="animate__animated animate__fadeIn animate__faster"-->
-      <!--        >-->
-      <!--          <component :is="Component" />-->
-      <!--        </transition>-->
-      <!--      </router-view>-->
+      <router-view v-slot="{ Component }">
+        <transition
+          mode="out-in"
+          enter-active-class="animate__animated animate__fadeIn animate__faster"
+        >
+          <component :is="Component" />
+        </transition>
+      </router-view>
     </q-page-container>
   </q-layout>
 </template>

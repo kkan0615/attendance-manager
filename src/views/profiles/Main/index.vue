@@ -35,6 +35,7 @@
         />
       </q-card-section>
       <q-list
+        v-if="listRows.length"
         padding
         class="tw-grid lg:tw-grid-cols-3 tw-grid-cols-1 tw-gap-4"
       >
@@ -44,6 +45,12 @@
           :business="business"
         />
       </q-list>
+      <div
+        v-else
+        class="q-pa-lg text-h5 tw-h-72 tw-flex tw-justify-center tw-items-center"
+      >
+        {{ $t('Commons.Placeholders.noData') }}
+      </div>
     </q-card>
   </q-page>
 </template>
