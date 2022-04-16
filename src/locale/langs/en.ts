@@ -117,5 +117,16 @@ export const enDictionary = {
         }
       }
     }
+  },
+  Pages: {
+    Businesses: {
+      Mys: {
+        Homes: {
+          Titles: {
+            weeklyWorkHistory: 'week work history',
+          }
+        }
+      }
+    }
   }
 }

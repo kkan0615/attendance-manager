@@ -204,7 +204,6 @@ export const useBusiPostStore = defineStore('busiPost', {
             .filter(dummy => dummy.isDisplayHome)
             .filter(dummy => !dummy.notificationDate || dayjs(dummy.notificationDate).isSameOrAfter(payload))
             .sort((a, b) => dayjs(b.updatedAt).diff(a.updatedAt, 'milliseconds'))
-          console.log(filterDummies)
           this.busiPostHomeList = filterDummies
         } else {
           this.busiPostHomeList = []

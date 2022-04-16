@@ -16,9 +16,11 @@ import { Business } from '@/types/models/businesses'
 import {
   BusiUserWorkHistory,
   BusiUserWorkHistoryCreateForm,
-  BusiUserWorkHistorySelectOption
+  BusiUserWorkHistorySelectOption, TempBusiUserWorkHistory,
+  TempBusiUserWorkHistoryCreateForm,
+  TempBusiUserWorkHistoryUpdateForm
 } from '@/types/models/users/busiWorkHistory'
-import { BusiUserWorkHistoryDummy } from '@/dummies/users/busiUserWorkHistory'
+import { BusiUserWorkHistoryDummy, TempBusiUserWorkHistoryDummy } from '@/dummies/users/busiUserWorkHistory'
 import dayjs from 'dayjs'
 import { User } from '@/types/models/users'
 
@@ -35,7 +37,7 @@ export interface BusiUserState {
   busiUserAdminList: BusiUserAdminListInfo[]
   busiUserAdminListCount: number
   busiUserAdmin: BusiUserAdminInfo
-  busiUserAdminWorkHistoryList: BusiUserWorkHistory[]
+  busiUserAdminWorkHistoryList: TempBusiUserWorkHistory[]
   busiUserAdminWorkHistoryListCount: number
   busiUserAdminTotalWorkSeconds: number
   busiUserInviteList: BusiUserInviteListInfo[]
@@ -243,14 +245,16 @@ export const useBusiUserStore = defineStore('busiUserAdmin', {
           if (this.busiUserAdminWorkHistoryList && this.busiUserAdminWorkHistoryList.length) {
             await this.resetBusiUserAdminWorkHistoryList()
           }
-          const filterDummies = BusiUserWorkHistoryDummy
+
+          const filterDummies = TempBusiUserWorkHistoryDummy
             .filter(dummy => dummy.busiUserId === payload.busiUserId)
+            .sort((a, b) => b.id - a.id)
           this.busiUserAdminWorkHistoryList = filterDummies.filter(dummy => {
-            const startDateAt = dayjs(payload.startDateAt)
-            const endDateAt = dayjs(payload.endDateAt)
-            const updatedAt = dayjs(dummy.updatedAt)
-            return updatedAt.isBetween(startDateAt, endDateAt, null, '[]')
-          }).sort((a, b) => a.id - b.id)
+            const startDateAt = dayjs(payload.startDateAt).startOf('day')
+            const endDateAt = dayjs(payload.endDateAt).endOf('day')
+            const startedAt = dayjs(dummy.startedAt)
+            return startedAt.isBetween(startDateAt, endDateAt, null, '[]')
+          })
           this.busiUserAdminWorkHistoryListCount = filterDummies.length
         } else {
           this.busiUserAdminWorkHistoryList = []
@@ -416,6 +420,7 @@ export const useBusiUserStore = defineStore('busiUserAdmin', {
             BusiUserDummy[foundIndex].description = payload.description
             BusiUserDummy[foundIndex].startWorkAt = payload.startWorkAt
             BusiUserDummy[foundIndex].status = payload.status
+            BusiUserDummy[foundIndex].lastWorkHistoryId = payload.lastWorkHistoryId
             BusiUserDummy[foundIndex].updatedAt = dayjs().toISOString()
           }
 
@@ -457,19 +462,26 @@ export const useBusiUserStore = defineStore('busiUserAdmin', {
     },
     async startWork (payload: BusiUserWorkForm) {
       try {
-        this.updateBusiUser({
-          ...payload,
-          startWorkAt: dayjs().toISOString(),
-          status: 'work' // change to status to work
-        })
+        if (import.meta.env.VITE_IS_USE_DUMMY) {
+          const newId = await this.createTempBusiUserWorkHistory({
+            busiUserId: payload.id,
+            userId: payload.userId,
+            busiId: payload.busiId,
+            startedAt: dayjs().toISOString(),
+            startLatitude: payload.latitude,
+            startLongitude: payload.longitude,
+            workOption: 'simple',
+          })
 
-        return await this.createBusiUserWorkHistory({
-          workOption: 'simple',
-          busiUserId: payload.id,
-          status: 'work',
-          latitude: payload.latitude,
-          longitude: payload.longitude,
-        })
+          return await this.updateBusiUser({
+            ...payload,
+            startWorkAt: dayjs().toISOString(),
+            status: 'work', // change to status to work
+            lastWorkHistoryId: newId,
+          })
+        } else {
+          return 1
+        }
       } catch (e) {
         console.error(e)
         throw e
@@ -477,18 +489,31 @@ export const useBusiUserStore = defineStore('busiUserAdmin', {
     },
     async startWorkByQRCode (payload: BusiUserQRCodeUpdateForm) {
       try {
-        const readerTime = dayjs(payload.readerTime)
-        // @TODO: Change 17 to const variable
-        if (dayjs().diff(readerTime, 'seconds') <= 17) {
-          await this.updateBusiUser({
-            ...payload,
-            startWorkAt: dayjs().toISOString(),
-            status: 'work' // change to status to work
-          })
+        if (import.meta.env.VITE_IS_USE_DUMMY) {
+          const readerTime = dayjs(payload.readerTime)
+          // @TODO: Change 17 to const variable
+          if (dayjs().diff(readerTime, 'seconds') <= 17) {
+            const newId = await this.createTempBusiUserWorkHistory({
+              busiUserId: payload.id,
+              userId: payload.userId,
+              busiId: payload.busiId,
+              startedAt: dayjs().toISOString(),
+              startLatitude: payload.latitude,
+              startLongitude: payload.longitude,
+              workOption: 'qrCode',
+            })
 
-          return 1
+            return await this.updateBusiUser({
+              ...payload,
+              startWorkAt: dayjs().toISOString(),
+              status: 'work', // change to status to work
+              lastWorkHistoryId: newId,
+            })
+          } else {
+            throw new Error('Timeout!')
+          }
         } else {
-          throw new Error('Timeout!')
+          return 1
         }
       } catch (e) {
         console.error(e)
@@ -498,19 +523,26 @@ export const useBusiUserStore = defineStore('busiUserAdmin', {
     },
     async startWorkByLocation (payload: BusiUserWorkForm) {
       try {
-        await this.updateBusiUser({
-          ...payload,
-          startWorkAt: dayjs().toISOString(),
-          status: 'work' // change to status to work
-        })
+        if (import.meta.env.VITE_IS_USE_DUMMY) {
+          const newId = await this.createTempBusiUserWorkHistory({
+            busiUserId: payload.id,
+            userId: payload.userId,
+            busiId: payload.busiId,
+            startedAt: dayjs().toISOString(),
+            startLatitude: payload.latitude,
+            startLongitude: payload.longitude,
+            workOption: 'location',
+          })
 
-        return await this.createBusiUserWorkHistory({
-          workOption: 'location',
-          busiUserId: payload.id,
-          status: 'work',
-          latitude: payload.latitude,
-          longitude: payload.longitude
-        })
+          return await this.updateBusiUser({
+            ...payload,
+            startWorkAt: dayjs().toISOString(),
+            status: 'work', // change to status to work
+            lastWorkHistoryId: newId,
+          })
+        } else {
+          return 1
+        }
       } catch (e) {
         console.error(e)
         throw e
@@ -518,16 +550,21 @@ export const useBusiUserStore = defineStore('busiUserAdmin', {
     },
     async getOffWork (payload: BusiUserUpdateForm) {
       try {
-        await this.updateBusiUser({
-          ...payload,
-          startWorkAt: null,
-          status: 'off' // change to status to work
+        const foundWorkHistoryDummy = TempBusiUserWorkHistoryDummy.find(dummy => dummy.id === payload.lastWorkHistoryId)
+        if (!foundWorkHistoryDummy) {
+          throw new Error('no found data by id')
+        }
+
+        await this.updateBusiUserWorkHistory({
+          ...foundWorkHistoryDummy,
+          endedAt: dayjs().toISOString()
         })
 
-        return await this.createBusiUserWorkHistory({
-          workOption: undefined,
-          busiUserId: payload.id,
-          status: 'off',
+        return await this.updateBusiUser({
+          ...payload,
+          startWorkAt: null,
+          status: 'off', // change to status to work
+          lastWorkHistoryId: undefined,
         })
       } catch (e) {
         console.error(e)
@@ -630,6 +667,61 @@ export const useBusiUserStore = defineStore('busiUserAdmin', {
             createdAt: dayjs().toISOString(),
             updatedAt: dayjs().toISOString(),
           })
+        }
+      } catch (e) {
+        console.error(e)
+        throw e
+      }
+    },
+    /**
+     *
+     * @param payload
+     */
+    async createTempBusiUserWorkHistory (payload: TempBusiUserWorkHistoryCreateForm) {
+      try {
+        if (import.meta.env.VITE_IS_USE_DUMMY) {
+          const newId = TempBusiUserWorkHistoryDummy.length + 1
+          TempBusiUserWorkHistoryDummy.push({
+            id: newId,
+            busiId: payload.busiId,
+            userId: payload.userId,
+            busiUserId: payload.busiUserId,
+            workOption: payload.workOption,
+            startedAt: payload.startedAt,
+            endedAt: payload.endedAt,
+            startLatitude: payload.startLatitude,
+            startLongitude: payload.startLongitude,
+            endLatitude: payload.endLatitude,
+            endLongitude: payload.endLongitude,
+            createdAt: dayjs().toISOString(),
+            updatedAt: dayjs().toISOString(),
+          })
+
+          return newId
+        } else {
+          return 1
+        }
+      } catch (e) {
+        console.error(e)
+        throw e
+      }
+    },
+    /**
+     *
+     * @param payload
+     */
+    async updateBusiUserWorkHistory (payload: TempBusiUserWorkHistoryUpdateForm) {
+      try {
+        if (import.meta.env.VITE_IS_USE_DUMMY) {
+          const foundDummy = TempBusiUserWorkHistoryDummy.find(dummy => dummy.id === payload.id)
+          if (!foundDummy) {
+            throw new Error('no found data by id')
+          }
+
+          foundDummy.endedAt = payload.endedAt
+          foundDummy.endLatitude = payload.endLatitude
+          foundDummy.endLongitude = payload.endLongitude
+          foundDummy.updatedAt = dayjs().toISOString()
         }
       } catch (e) {
         console.error(e)

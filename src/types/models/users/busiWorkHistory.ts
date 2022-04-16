@@ -15,3 +15,19 @@ export type BusiUserWorkHistorySelectOption = Pick<BusiUserWorkHistory, 'busiUse
 }
 
 export type BusiUserWorkHistoryCreateForm = Omit<BusiUserWorkHistory, 'id' | 'createdAt' | 'updatedAt' | 'deletedAt'>
+
+export interface TempBusiUserWorkHistory extends DefaultAttributes {
+  busiId: number
+  userId: number
+  busiUserId: number
+  startedAt: string
+  endedAt?: string
+  workOption: BusiUserWorkOption
+  startLatitude?: number
+  startLongitude?: number
+  endLatitude?: number
+  endLongitude?: number
+}
+
+export type TempBusiUserWorkHistoryCreateForm = Omit<TempBusiUserWorkHistory, 'id' | 'createdAt' | 'updatedAt' | 'deletedAt'>
+export type TempBusiUserWorkHistoryUpdateForm = Omit<TempBusiUserWorkHistory, 'createdAt' | 'updatedAt' | 'deletedAt'>

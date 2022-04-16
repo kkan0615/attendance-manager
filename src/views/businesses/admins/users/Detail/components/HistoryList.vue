@@ -6,16 +6,6 @@
       Work History
     </q-card-section>
     <q-separator />
-    <q-card-section
-      class="q-pt-sm q-pb-none tw-text-lg"
-    >
-      <span>
-        Total Work Time:
-      </span>
-      <span>
-        {{ hours }}:{{ minutes }}:{{ seconds }}
-      </span>
-    </q-card-section>
     <q-card-section>
       <div
         class="tw-flex tw-justify-end"
@@ -51,21 +41,60 @@
         class="q-mt-sm"
       >
         <dx-data-grid
-          :data-source="busiUserStore.BusiUserAdminWorkHistoryList"
+          :data-source="busiUserAdminWorkHistoryList"
           :columns="columns"
           :show-row-lines="true"
           :show-borders="true"
           :row-alternation-enabled="true"
         >
-          <template
-            #statusCellTemplate="{ data }"
-          >
-            <busi-user-status-badge
-              class="tw-text-sm tw-px-1"
-              :status="data.data.status"
-            />
-          </template>
+          <dx-column-chooser
+            :enabled="busiUserAdminWorkHistoryList.length"
+            mode="select"
+          />
+          <dx-scrolling
+            column-rendering-mode="virtual"
+          />
         </dx-data-grid>
+      </div>
+    </q-card-section>
+    <q-card-section
+      class="q-pt-none tw-flex tw-items-center tw-space-x-4"
+    >
+      <div
+        class="tw-flex tw-items-center tw-space-x-2"
+      >
+        <div
+          class="c-text-first-uppercase"
+        >
+          average
+        </div>
+        <div>
+          {{ avgWorkTime }}
+        </div>
+      </div>
+      <div class="tw-flex tw-items-center tw-space-x-2">
+        <div class="c-text-first-uppercase">
+          summary
+        </div>
+        <div>
+          {{ sumWorkTime }}
+        </div>
+      </div>
+      <div class="tw-flex tw-items-center tw-space-x-2">
+        <div class="c-text-first-uppercase">
+          max
+        </div>
+        <div>
+          {{ maxWorkTime }}
+        </div>
+      </div>
+      <div class="tw-flex tw-items-center tw-space-x-2">
+        <div class="c-text-first-uppercase">
+          min
+        </div>
+        <div>
+          {{ minWorkTime }}
+        </div>
       </div>
     </q-card-section>
   </q-card>
@@ -80,48 +109,71 @@ import { useBusiUserStore } from '@/store/busiUser'
 import { useCurrentStore } from '@/store/current'
 import dayjs from 'dayjs'
 import { computed, ref } from 'vue'
-import { DxDataGrid } from 'devextreme-vue/data-grid'
+import { DxDataGrid, DxColumnChooser, DxScrolling } from 'devextreme-vue/data-grid'
 import { Column } from 'devextreme/ui/data_grid'
-import BusiUserStatusBadge from '@/components/commons/BusiUserStatusBadge.vue'
-import { BusiUserWorkHistory } from '@/types/models/users/busiWorkHistory'
+import { TempBusiUserWorkHistory } from '@/types/models/users/busiWorkHistory'
 import { useI18n } from 'vue-i18n'
-import { toCapitalize } from '@/utils/commons/stringUtil'
+import { convertSeconds } from '@/utils/commons/datetime'
+import { storeToRefs } from 'pinia'
 
-const i18n = useI18n()
 const busiUserStore = useBusiUserStore()
-const currentStore = useCurrentStore()
 
+const { busiUserAdminWorkHistoryList } = storeToRefs(busiUserStore)
 const rangeDate = ref([dayjs().startOf('week').toDate(), dayjs().endOf('week').toDate()])
 const columns = ref<Column[]>([
   {
-    caption: 'Status',
-    dataField: 'status',
-    cellTemplate: 'statusCellTemplate',
-    width: '100px',
+    caption: 'Option',
+    dataField: 'workOption',
+    width: 80,
   },
   {
-    caption: 'Last Update',
-    dataField: 'updatedAt',
-    width: '250px',
-    calculateDisplayValue: (row: BusiUserWorkHistory) => {
-      return dayjs(row.updatedAt).format('llll')
+    caption: 'Started At',
+    dataField: 'startedAt',
+    minWidth: 180,
+    calculateDisplayValue: (row: TempBusiUserWorkHistory) => {
+      return dayjs(row.startedAt).format('llll')
     },
   },
   {
-    caption: 'Work option',
-    dataField: 'workOption',
-    width: '150px',
-    calculateDisplayValue: (row: BusiUserWorkHistory) => {
-      return row.workOption ? toCapitalize(i18n.t(`Types.Models.BusiUsers.WorkOptions.${row.workOption}`)) : ''
+    caption: 'Ended at',
+    dataField: 'endedAt',
+    minWidth: 180,
+    calculateDisplayValue: (row: TempBusiUserWorkHistory) => {
+      return row.endedAt ? dayjs(row.endedAt).format('llll') : ''
+    },
+  },
+  {
+    caption: 'Time',
+    dataField: 'time',
+    minWidth: 100,
+    calculateDisplayValue: (row: TempBusiUserWorkHistory) => {
+      if (row.endedAt) {
+        const startedAt = dayjs(row.startedAt)
+        /* If there is no endedAt, set to now. */
+        // @TODO: Consider to add or not....
+        const endedAt = row.endedAt ? dayjs(row.endedAt) : dayjs()
+        const diffSeconds = endedAt.diff(startedAt, 'seconds')
+        const { hours, minutes, seconds } = convertSeconds(diffSeconds)
+
+        return `${hours}:${minutes}:${seconds}`
+      } else {
+        return ''
+      }
+    },
+  },
+  {
+    caption: 'Start (lat, long)',
+    dataField: 'startCoordination',
+    calculateDisplayValue: (row: TempBusiUserWorkHistory) => {
+      return row.startLatitude && row.startLongitude ? `${row.startLatitude}, ${row.startLongitude}` : ''
     }
   },
   {
-    caption: 'Coordination (lat, long)',
-    dataField: 'coordination',
-    width: '100%',
-    minWidth: 200,
-    calculateDisplayValue: (row: BusiUserWorkHistory) => {
-      return row.latitude && row.longitude ? `${row.latitude}, ${row.longitude}` : ''
+    caption: 'End (lat, long)',
+    dataField: 'endCoordination',
+    visible: false,
+    calculateDisplayValue: (row: TempBusiUserWorkHistory) => {
+      return row.endLatitude && row.endLongitude ? `${row.endLatitude}, ${row.endLongitude}` : ''
     }
   }
 ])
@@ -129,6 +181,60 @@ const columns = ref<Column[]>([
 const hours = computed(() => parseInt((busiUserStore.BusiUserAdminTotalWorkSeconds / (60 * 60)).toString()).toString().padStart(2, '0'))
 const minutes = computed(() => parseInt(((busiUserStore.BusiUserAdminTotalWorkSeconds / 60) % 60).toString()).toString().padStart(2, '0'))
 const seconds = computed(() => parseInt((busiUserStore.BusiUserAdminTotalWorkSeconds % 60).toString()).toString().padStart(2, '0'))
+
+const sumWorkTime = computed(() => {
+  const filteredWorkHistoryList = busiUserAdminWorkHistoryList.value
+    .filter(workHistory => workHistory.endedAt)
+  const totalSeconds = filteredWorkHistoryList
+    .map(workHistory => {
+      const startedAt = dayjs(workHistory.startedAt)
+      const endedAt = workHistory.endedAt ? dayjs(workHistory.endedAt) : dayjs()
+      return endedAt.diff(startedAt, 'seconds')
+    })
+    .reduce((a, b) => a + b, 0)
+  const { hours, minutes, seconds } = convertSeconds(totalSeconds)
+  return `${hours}:${minutes}:${seconds}`
+})
+
+const avgWorkTime = computed(() => {
+  const filteredWorkHistoryList = busiUserAdminWorkHistoryList.value
+    .filter(workHistory => workHistory.endedAt)
+  const totalSeconds = filteredWorkHistoryList
+    .map(workHistory => {
+      const startedAt = dayjs(workHistory.startedAt)
+      const endedAt = workHistory.endedAt ? dayjs(workHistory.endedAt) : dayjs()
+      return endedAt.diff(startedAt, 'seconds')
+    })
+    .reduce((a, b) => a + b, 0)
+  const { hours, minutes, seconds } = convertSeconds(totalSeconds / filteredWorkHistoryList.length)
+  return `${hours}:${minutes}:${seconds}`
+})
+
+const maxWorkTime = computed(() => {
+  const filteredWorkHistoryList = busiUserAdminWorkHistoryList.value
+    .filter(workHistory => workHistory.endedAt)
+  const max = Math.max(...filteredWorkHistoryList
+    .map(workHistory => {
+      const startedAt = dayjs(workHistory.startedAt)
+      const endedAt = workHistory.endedAt ? dayjs(workHistory.endedAt) : dayjs()
+      return endedAt.diff(startedAt, 'seconds')
+    }))
+  const { hours, minutes, seconds } = convertSeconds(max)
+  return `${hours}:${minutes}:${seconds}`
+})
+
+const minWorkTime = computed(() => {
+  const filteredWorkHistoryList = busiUserAdminWorkHistoryList.value
+    .filter(workHistory => workHistory.endedAt)
+  const min = Math.min(...filteredWorkHistoryList
+    .map(workHistory => {
+      const startedAt = dayjs(workHistory.startedAt)
+      const endedAt = workHistory.endedAt ? dayjs(workHistory.endedAt) : dayjs()
+      return endedAt.diff(startedAt, 'seconds')
+    }))
+  const { hours, minutes, seconds } = convertSeconds(min)
+  return `${hours}:${minutes}:${seconds}`
+})
 
 const onClickSearchBtn = async () => {
   try {

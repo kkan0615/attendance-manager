@@ -5,7 +5,7 @@
         class="tw-flex"
       >
         <div>
-          {{ hours }}:{{ minutes }}:{{ seconds }}
+          {{ convertedTime.hours }}:{{ convertedTime.minutes }}:{{ convertedTime.seconds }}
         </div>
         <div
           class="tw-ml-auto"
@@ -32,15 +32,16 @@ export default {
 import { useCurrentStore } from '@/store/current'
 import { computed, onBeforeUnmount, ref } from 'vue'
 import dayjs from 'dayjs'
+import { convertSeconds } from '@/utils/commons/datetime'
+import { storeToRefs } from 'pinia'
 
 const currentStore = useCurrentStore()
 
+const { currentBusiUser } = storeToRefs(currentStore)
 const timerSeconds = ref(0)
 const timer = ref<NodeJS.Timer | undefined>(undefined)
 
-const hours = computed(() => parseInt((timerSeconds.value / (60 * 60)).toString()).toString().padStart(2, '0'))
-const minutes = computed(() => parseInt(((timerSeconds.value / 60) % 60).toString()).toString().padStart(2, '0'))
-const seconds = computed(() => parseInt((timerSeconds.value % 60).toString()).toString().padStart(2, '0'))
+const convertedTime = computed(() => convertSeconds(timerSeconds.value))
 // 144000 is 40 hours to seconds
 const processValue = computed(() => timerSeconds.value / (currentStore.CurrentBusiness.maxWorkHour * 60 * 60))
 
@@ -54,8 +55,8 @@ currentStore.$subscribe((mutation, state) => {
 
 const initData = () => {
   timerSeconds.value = currentStore.CurrentBusiUserTotalWorkSeconds
-  if (currentStore.CurrentBusiUser.startWorkAt) {
-    timerSeconds.value += dayjs().diff(dayjs(currentStore.CurrentBusiUser.startWorkAt), 'seconds')
+  if (currentBusiUser.value.lastWorkHistoryId && currentBusiUser.value.lastWorkHistory) {
+    timerSeconds.value += dayjs().diff(dayjs(currentBusiUser.value.lastWorkHistory.startedAt), 'seconds')
   }
   if (currentStore.CurrentBusiUser.status === 'work'
     || currentStore.CurrentBusiUser.status === 'rest'

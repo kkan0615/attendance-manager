@@ -4,7 +4,7 @@
       class="text-h5"
     >
       <span>
-        {{ hours }}:{{ minutes }}:{{ seconds }}
+        {{ convertedTime.hours }}:{{ convertedTime.minutes }}:{{ convertedTime.seconds }}
       </span>
     </div>
     <div
@@ -22,6 +22,7 @@ export default {
 <script setup lang="ts">
 import { computed, onBeforeUnmount, ref } from 'vue'
 import dayjs from 'dayjs'
+import { convertSeconds } from '@/utils/commons/datetime'
 
 const props = defineProps({
   startTime: {
@@ -34,9 +35,7 @@ const props = defineProps({
 const timerSeconds = ref(0)
 const timer = ref<NodeJS.Timer | undefined>(undefined)
 
-const hours = computed(() => parseInt((timerSeconds.value / (60 * 60)).toString()).toString().padStart(2, '0'))
-const minutes = computed(() => parseInt(((timerSeconds.value / 60) % 60).toString()).toString().padStart(2, '0'))
-const seconds = computed(() => parseInt((timerSeconds.value % 60).toString()).toString().padStart(2, '0'))
+const convertedTime = computed(() => convertSeconds(timerSeconds.value))
 const formattedStartedAt = computed(() => props.startTime ? dayjs(props.startTime).format('LTS') : '')
 
 const initData = () => {

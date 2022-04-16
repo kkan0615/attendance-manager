@@ -2,6 +2,7 @@ import { User } from '@/types/models/users/index'
 import { DefaultAttributes } from '@/types/models/attributes'
 import { i18n } from '@/locale'
 import { toCapitalize } from '@/utils/commons/stringUtil'
+import { TempBusiUserWorkHistory } from '@/types/models/users/busiWorkHistory'
 
 /**
  * Status of business user
@@ -66,6 +67,11 @@ export type BusiUser = Pick<User, 'name' | 'nickname' | 'email' | 'img' | 'descr
   joinAt: string
   latitude?: number // location
   longitude?: number // location
+  lastWorkHistoryId?: number
+}
+
+export type BusiUserCurrentInfo = BusiUser & {
+  lastWorkHistory?: TempBusiUserWorkHistory
 }
 
 /* Use for admin user page */

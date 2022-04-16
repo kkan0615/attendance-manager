@@ -1,11 +1,11 @@
 import { defineStore } from 'pinia'
 import { User, UserLoginForm } from '@/types/models/users'
 import { BusinessInfo, BusinessSimpleListInfo } from '@/types/models/businesses'
-import { BusiUser, BusiUserUpdateForm, CurrentBusiUserForm } from '@/types/models/users/business'
+import { BusiUser, BusiUserCurrentInfo, BusiUserUpdateForm, CurrentBusiUserForm } from '@/types/models/users/business'
 import { LocalStorageKeyEnum } from '@/types/commons/storage'
 import { BusiUserDummy } from '@/dummies/users/busiUser'
-import { BusiUserWorkHistory } from '@/types/models/users/busiWorkHistory'
-import { BusiUserWorkHistoryDummy } from '@/dummies/users/busiUserWorkHistory'
+import { TempBusiUserWorkHistory } from '@/types/models/users/busiWorkHistory'
+import { TempBusiUserWorkHistoryDummy } from '@/dummies/users/busiUserWorkHistory'
 import dayjs from 'dayjs'
 import { BusinessAllowedLocationDummy, BusinessDummy } from '@/dummies/users/businesses'
 import { UserDummy } from '@/dummies/users/user'
@@ -17,9 +17,9 @@ export interface CurrentState {
   currentUserBusiList: BusinessSimpleListInfo[]
   currentUserNotificationList: UserNotification[]
   currentBusiness: BusinessInfo
-  currentBusiUser: BusiUser
+  currentBusiUser: BusiUserCurrentInfo
   currentBusiUserNotificationList: UserNotification[]
-  currentBusiUserWorkHistoryList: BusiUserWorkHistory[]
+  currentBusiUserWorkHistoryList: TempBusiUserWorkHistory[]
   currentBusiUserTotalWorkSeconds: number
 }
 
@@ -30,7 +30,7 @@ export const useCurrentStore = defineStore('current', {
       currentUserBusiList: [],
       currentUserNotificationList: [],
       currentBusiness: {} as BusinessInfo,
-      currentBusiUser: {} as BusiUser,
+      currentBusiUser: {} as BusiUserCurrentInfo,
       currentBusiUserNotificationList: [],
       currentBusiUserWorkHistoryList: [],
       currentBusiUserTotalWorkSeconds: 0,
@@ -226,7 +226,10 @@ export const useCurrentStore = defineStore('current', {
           if (!foundDummy) {
             throw new Error('No found data')
           }
-          this.currentBusiUser = foundDummy
+          this.currentBusiUser = {
+            ...foundDummy,
+            lastWorkHistory: TempBusiUserWorkHistoryDummy.find(dummy => dummy.id === foundDummy.lastWorkHistoryId)
+          }
         } else {
           this.currentBusiUser = {} as BusiUser // @TODO: test
         }
@@ -288,14 +291,14 @@ export const useCurrentStore = defineStore('current', {
           if (this.currentBusiUserWorkHistoryList && this.currentBusiUserWorkHistoryList.length) {
             await this.resetCurrentBusiUserWorkHistoryList()
           }
-          const filterDummies = BusiUserWorkHistoryDummy
+          const filterDummies = TempBusiUserWorkHistoryDummy
             .filter(dummy => dummy.busiUserId === this.currentBusiUser.id)
             .sort((a, b) => b.id - a.id)
           this.currentBusiUserWorkHistoryList = filterDummies.filter(dummy => {
             const startDateAt = dayjs(payload.startDateAt).startOf('day')
             const endDateAt = dayjs(payload.endDateAt).endOf('day')
-            const updatedAt = dayjs(dummy.updatedAt)
-            return updatedAt.isBetween(startDateAt, endDateAt, null, '[]')
+            const startedAt = dayjs(dummy.startedAt)
+            return startedAt.isBetween(startDateAt, endDateAt, null, '[]')
           })
         } else {
           this.currentBusiUserWorkHistoryList = []
@@ -326,30 +329,26 @@ export const useCurrentStore = defineStore('current', {
           if (this.currentBusiUserTotalWorkSeconds) {
             await this.resetCurrentBusiUserTotalWorkSeconds()
           }
-          const filterDummies = BusiUserWorkHistoryDummy
+          const filterDummies = TempBusiUserWorkHistoryDummy
             .filter(dummy => dummy.busiUserId === this.currentBusiUser.id)
+            .sort((a, b) => b.id - a.id)
             .filter(dummy => {
               const startDateAt = dayjs(payload.startDateAt).startOf('day')
               const endDateAt = dayjs(payload.endDateAt).endOf('day')
-              const updatedAt = dayjs(dummy.updatedAt)
-              return updatedAt.isBetween(startDateAt, endDateAt, null, '[]')
-            }).sort((a, b) => b.id - a.id)
-          if (filterDummies[0] && filterDummies[0].status === 'work') {
-            filterDummies.shift()
-          }
-          let totalSeconds = 0
-          // if (filterDummies[filterDummies.length - 1] && filterDummies[filterDummies.length - 1].status === 'off') {
-          // // @TODO: Add logic to get previous work status
-          // } else {
-          for (let i = 0; i < filterDummies.length; i = i + 2) {
-            const first = filterDummies[i]
-            const second = filterDummies[i + 1]
-            totalSeconds += dayjs(first.updatedAt).diff(dayjs(second.updatedAt), 'seconds')
-            // console.log(first, second, dayjs(first.updatedAt).diff(dayjs(second.updatedAt), 'hours'))
-            // }
-          }
+              const startedAt = dayjs(dummy.startedAt)
+              return startedAt.isBetween(startDateAt, endDateAt, null, '[]')
+            })
+          this.currentBusiUserTotalWorkSeconds = filterDummies.map(dummy => {
+            if (dummy.endedAt) {
+              const startedAt = dayjs(dummy.startedAt)
+              const endedAt = dummy.endedAt ? dayjs(dummy.endedAt) : dayjs()
 
-          this.currentBusiUserTotalWorkSeconds = totalSeconds
+              return endedAt.diff(startedAt, 'seconds')
+            } else {
+              return 0
+            }
+          }).reduce((a, b) => a + b, 0)
+          console.log(this.currentBusiUserTotalWorkSeconds)
         } else {
           this.currentBusiUserTotalWorkSeconds = 0
         }

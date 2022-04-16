@@ -4,11 +4,11 @@
   >
     <!-- timer -->
     <div
-      v-if="currentStore.CurrentBusiUser.startWorkAt"
+      v-if="currentBusiUser.lastWorkHistory"
       class="tw-text-center tw-mb-2"
     >
       <work-timer
-        :start-time="currentStore.CurrentBusiUser.startWorkAt"
+        :start-time="currentBusiUser.lastWorkHistory.startedAt"
       />
     </div>
     <!-- Work option select -->
@@ -113,6 +113,7 @@ import { useI18n } from 'vue-i18n'
 import { useBusiUserStore } from '@/store/busiUser'
 import { BusiUserWorkOption, busiUserWorkOptionSelectOption } from '@/types/models/users/business'
 import WorkTimer from '@/components/WorkTimer.vue'
+import { storeToRefs } from 'pinia'
 
 const DEFAULT_QRCODE_TIMER_MAX_SECONDS = 15
 
@@ -120,6 +121,7 @@ const i18n = useI18n()
 const currentStore = useCurrentStore()
 const busiUserStore = useBusiUserStore()
 
+const { currentBusiUser } = storeToRefs(currentStore)
 const workOption = ref<BusiUserWorkOption>('simple')
 const options = ref(busiUserWorkOptionSelectOption)
 const isQrCodeDialogOpen = ref(false)
