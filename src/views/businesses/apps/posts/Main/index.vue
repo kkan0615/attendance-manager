@@ -162,8 +162,8 @@ const maxPagination = computed(() => Math.ceil((busiPostStore.BusiPostListCount 
 
 const initData = async () => {
   try {
-    await busiPostStore.loadBusiNotificationPostList()
     await busiPostStore.loadBusiPostList()
+    await busiPostStore.loadBusiNotificationPostList()
   } catch (e) {
     console.error(e)
   }

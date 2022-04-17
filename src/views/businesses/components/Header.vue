@@ -23,7 +23,9 @@
           width="80%"
         />
       </q-avatar>
-      <q-toolbar-title>{{ currentStore.CurrentBusiness.name }}</q-toolbar-title>
+      <q-toolbar-title>
+        {{ currentStore.CurrentBusiness.name }}
+      </q-toolbar-title>
       <!-- Business list dropdown -->
       <busi-layout-busi-list-menu />
       <!-- Business list dropdown -->

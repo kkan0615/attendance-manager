@@ -58,7 +58,7 @@
       </div>
     </q-card-section>
     <q-card-section
-      class="q-pt-none tw-flex tw-items-center tw-space-x-4"
+      class="tw-grid tw-grid-cols-2 sm:tw-grid-cols-4 tw-gap-2"
     >
       <div
         class="tw-flex tw-items-center tw-space-x-2"

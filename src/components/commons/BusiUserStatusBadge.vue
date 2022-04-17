@@ -1,21 +1,27 @@
 <template>
-  <q-badge
-    class="text-subtitle2 tw-px-1.5"
-    :class="{
-      'tw-bg-status-work': status === 'work',
-      'tw-bg-status-rest': status === 'rest',
-      'tw-bg-status-off': status === 'off',
-    }"
+  <transition
+    mode="out-in"
+    enter-active-class="animate__animated animate__bounceIn"
   >
-    <q-icon
-      v-if="iconName"
-      class="q-mr-sm"
-      :name="iconName"
-    />
-    <span>
-      {{ status }}
-    </span>
-  </q-badge>
+    <q-badge
+      v-if="status"
+      class="text-subtitle2 tw-px-1.5"
+      :class="{
+        'tw-bg-status-work': status === 'work',
+        'tw-bg-status-rest': status === 'rest',
+        'tw-bg-status-off': status === 'off',
+      }"
+    >
+      <q-icon
+        v-if="iconName"
+        class="q-mr-sm"
+        :name="iconName"
+      />
+      <span>
+        {{ status }}
+      </span>
+    </q-badge>
+  </transition>
 </template>
 <script lang="ts">
 export default {

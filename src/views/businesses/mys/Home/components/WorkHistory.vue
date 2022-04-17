@@ -37,42 +37,44 @@
       </dx-data-grid>
     </q-card-section>
     <q-card-section
-      class="q-pt-none tw-flex tw-items-center tw-space-x-4"
+      class="q-pt-none"
     >
       <div
-        class="tw-flex tw-items-center tw-space-x-2"
+        class="tw-grid tw-grid-cols-2 sm:tw-grid-cols-4 tw-gap-2"
       >
-        <div
-          class="c-text-first-uppercase"
-        >
-          average
+        <div class="tw-flex tw-items-center tw-space-x-2">
+          <div
+            class="c-text-first-uppercase"
+          >
+            average
+          </div>
+          <div>
+            {{ avgWorkTime }}
+          </div>
         </div>
-        <div>
-          {{ avgWorkTime }}
+        <div class="tw-flex tw-items-center tw-space-x-2">
+          <div class="c-text-first-uppercase">
+            summary
+          </div>
+          <div>
+            {{ sumWorkTime }}
+          </div>
         </div>
-      </div>
-      <div class="tw-flex tw-items-center tw-space-x-2">
-        <div class="c-text-first-uppercase">
-          summary
+        <div class="tw-flex tw-items-center tw-space-x-2">
+          <div class="c-text-first-uppercase">
+            max
+          </div>
+          <div>
+            {{ maxWorkTime }}
+          </div>
         </div>
-        <div>
-          {{ sumWorkTime }}
-        </div>
-      </div>
-      <div class="tw-flex tw-items-center tw-space-x-2">
-        <div class="c-text-first-uppercase">
-          max
-        </div>
-        <div>
-          {{ maxWorkTime }}
-        </div>
-      </div>
-      <div class="tw-flex tw-items-center tw-space-x-2">
-        <div class="c-text-first-uppercase">
-          min
-        </div>
-        <div>
-          {{ minWorkTime }}
+        <div class="tw-flex tw-items-center tw-space-x-2">
+          <div class="c-text-first-uppercase">
+            min
+          </div>
+          <div>
+            {{ minWorkTime }}
+          </div>
         </div>
       </div>
     </q-card-section>

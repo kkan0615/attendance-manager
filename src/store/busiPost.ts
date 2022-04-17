@@ -216,7 +216,7 @@ export const useBusiPostStore = defineStore('busiPost', {
     /**
      * Reset list of busiPost used at Home
      */
-    resetBusiPostHomeList () {
+    async resetBusiPostHomeList () {
       this.busiPostHomeList = []
     },
     /**
