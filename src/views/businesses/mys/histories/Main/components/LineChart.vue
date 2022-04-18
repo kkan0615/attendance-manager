@@ -27,8 +27,6 @@ Chart.register(...registerables)
 const busiUserWorkHistoryStore = useBusiUserWorkHistoryStore()
 
 const { busiUserWorkHistoryListFilter, busiUserWorkHistoryList } = storeToRefs(busiUserWorkHistoryStore)
-const testDataValues = ref([1, 2, 3, 4, 5, 6, 7])
-const testDataLabels = ref(['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'])
 
 const dataLabels = computed(() => {
   let result: string[] = []
@@ -60,20 +58,22 @@ const dataValues = computed(() => {
     result = new Array(diffDays + 1).fill(0)
     for (let i = 0; i <= diffDays; i++) {
       const targetDateAt = rangeStartAt.add(i, 'day')
-      const startTargetDateAt = targetDateAt.startOf('day')
-      const endTargetDateAt = targetDateAt.endOf('day')
+      /* Get all work history of target date */
       const filteredWorkHistoryList = busiUserWorkHistoryList.value.filter(workHistory => {
         const startedAt = dayjs(workHistory.startedAt)
         return startedAt.format('l') === targetDateAt.format('l')
       })
+      /* If there is work history */
       if (filteredWorkHistoryList.length) {
         const sum = filteredWorkHistoryList.map(workHistory => {
           const startedAt = dayjs(workHistory.startedAt)
           let endedAt = dayjs(workHistory.endedAt)
+          /* If no ended at, */
           if (!workHistory.endedAt) {
             if (dayjs().format('l') !== targetDateAt.format('l')) {
               endedAt = targetDateAt.add(1, 'day').startOf('day')
             }
+          /* If it over date (like night work) */
           } else if (startedAt.format('l') !== endedAt.format('l')) {
             result[i + 1] += -(dayjs(workHistory.startedAt).add(1, 'day').startOf('day')
               .diff(endedAt, 'hours'))
