@@ -2,6 +2,7 @@ import { defineStore } from 'pinia'
 import { LocalStorageKeyEnum } from '@/types/commons/storage'
 import { ALLOW_LOCALE_LIST, AllowLocaleList, DEFAULT_LOCALE } from '@/types/commons/locale'
 import { i18n } from '@/locale'
+import dayjs from 'dayjs'
 
 export interface SettingState {
   locale: string
@@ -34,6 +35,7 @@ export const useSettingStore = defineStore('setting', {
       this.locale = payload
       localStorage.setItem(LocalStorageKeyEnum.LOCALE, payload)
       i18n.global.locale = payload
+      dayjs.locale(payload)
     },
     /**
      * Reset to default language

@@ -5,6 +5,8 @@ import isBetween from 'dayjs/plugin/isBetween'
 import isSameOrAfter from 'dayjs/plugin/isSameOrAfter'
 import isSameOrBefore from 'dayjs/plugin/isSameOrBefore'
 import weekday from 'dayjs/plugin/weekday'
+import 'dayjs/locale/ko'
+import 'dayjs/locale/en'
 
 export const initDayjs = () => {
   dayjs.extend(relativeTime)

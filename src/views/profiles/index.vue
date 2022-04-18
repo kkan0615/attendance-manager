@@ -60,7 +60,6 @@ const currentStore = useCurrentStore()
 // @TODO: Add check user id logic
 const checkPageValidation = async () => {
   const { id } = route.params
-  console.log(id)
   if (!currentStore.CurrentUser
       || !currentStore.CurrentUser.id
       || !currentStore.CurrentUser.id

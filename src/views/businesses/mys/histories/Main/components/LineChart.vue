@@ -14,7 +14,7 @@ export default {
 }
 </script>
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { computed } from 'vue'
 import { LineChart, useLineChart } from 'vue-chart-3'
 import { Chart, ChartData, ChartOptions, registerables } from 'chart.js'
 import { useBusiUserWorkHistoryStore } from '@/store/busiUserWorkHistory'
@@ -40,8 +40,13 @@ const dataLabels = computed(() => {
     const rangeEndAt = dayjs(busiUserWorkHistoryListFilter.value.rangeEndAt)
     const diffDays = rangeEndAt.diff(rangeStartAt, 'days')
 
+    /* If same years, year is not required to include */
+    const isIncludeYear = rangeStartAt.get('year') !== rangeEndAt.get('year')
     for (let i = 0; i <= diffDays; i++) {
-      result.push(rangeStartAt.add(i, 'day').format('L'))
+      if (isIncludeYear)
+        result.push(rangeStartAt.add(i, 'day').format('L'))
+      else
+        result.push(rangeStartAt.add(i, 'day').format('ll'))
     }
   }
 

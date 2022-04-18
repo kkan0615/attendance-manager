@@ -71,7 +71,6 @@ export const useBusiUserWorkHistoryStore = defineStore('busiUserWorkHistory', {
           if (this.busiUserWorkHistoryList && this.busiUserWorkHistoryList.length) {
             await this.resetBusiUserWorkHistoryList()
           }
-          console.log(payload, 'test')
           /* Filtering */
           const filterDummies = TempBusiUserWorkHistoryDummy
             .filter(dummy => dummy.busiUserId === payload.busiUserId)

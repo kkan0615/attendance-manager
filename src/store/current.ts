@@ -348,7 +348,6 @@ export const useCurrentStore = defineStore('current', {
               return 0
             }
           }).reduce((a, b) => a + b, 0)
-          console.log(this.currentBusiUserTotalWorkSeconds)
         } else {
           this.currentBusiUserTotalWorkSeconds = 0
         }
