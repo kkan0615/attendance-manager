@@ -1,4 +1,4 @@
-import { DefaultAttributes } from '@/types/models/attributes'
+import { DefaultAttributes, DefaultSelectListQuery } from '@/types/models/attributes'
 import { BusiUserStatus, BusiUserWorkOption } from '@/types/models/users/business'
 
 export interface BusiUserWorkHistory extends DefaultAttributes {
@@ -31,3 +31,9 @@ export interface TempBusiUserWorkHistory extends DefaultAttributes {
 
 export type TempBusiUserWorkHistoryCreateForm = Omit<TempBusiUserWorkHistory, 'id' | 'createdAt' | 'updatedAt' | 'deletedAt'>
 export type TempBusiUserWorkHistoryUpdateForm = Omit<TempBusiUserWorkHistory, 'createdAt' | 'updatedAt' | 'deletedAt'>
+export interface TempBusiUserWorkHistorySelectListQuery extends DefaultSelectListQuery {
+  busiUserId?: number
+  rangeStartAt?: string
+  rangeEndAt?: string
+}
+export type TempBusiUserWorkHistoryListInfo = TempBusiUserWorkHistory

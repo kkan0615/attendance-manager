@@ -85,6 +85,21 @@ export const initBusiUserWorkHistoryDummy = () => {
       updatedAt: startedAt.toISOString(),
     } as TempBusiUserWorkHistory
   })
+  // TempBusiUserWorkHistoryDummy.unshift({
+  //   id: 1,
+  //   busiId: 1,
+  //   busiUserId: 1,
+  //   userId: 1,
+  //   workOption: 'simple',
+  //   startedAt: dayjs().startOf('week').startOf('day').add(23, 'hours').toISOString(),
+  //   endedAt: dayjs().startOf('week').startOf('day').add(1, 'day').add(2, 'hours').toISOString(),
+  //   startLatitude: 37.6015565,
+  //   startLongitude: 126.7280587,
+  //   endLatitude: 37.6015565,
+  //   endLongitude: 126.7280587,
+  //   createdAt: dayjs().startOf('week').startOf('day').toISOString(),
+  //   updatedAt: dayjs().startOf('week').startOf('day').toISOString(),
+  // } as TempBusiUserWorkHistory)
   const found = BusiUserDummy.find(dummy => dummy.id === 1)
   if (found) {
     found.lastWorkHistoryId = TempBusiUserWorkHistoryDummy[loopDays - 1].id

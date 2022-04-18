@@ -12,6 +12,7 @@
     "@quasar/extras": "^1.13.3",
     "@vuepic/vue-datepicker": "^3.0.0",
     "animate.css": "^4.1.1",
+    "chart.js": "^3.7.1",
     "dayjs": "^1.11.0",
     "devextreme": "^21.2.6",
     "devextreme-vue": "^21.2.6",
@@ -20,6 +21,7 @@
     "qr-scanner": "^1.4.1",
     "quasar": "^2.6.1",
     "vue": "^3.2.25",
+    "vue-chart-3": "^3.1.8",
     "vue-i18n": "9",
     "vue-router": "4"
   },

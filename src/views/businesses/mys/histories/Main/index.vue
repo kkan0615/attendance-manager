@@ -6,47 +6,10 @@
       title="History main"
       :breadcrumbs="breadcrumbs"
     />
-    <q-card
-      class="q-mb-md"
+    <div
+      class="tw-space-y-4"
     >
-      <q-card-section
-        class="q-py-sm text-h6"
-      >
-        Weekly Work Time
-      </q-card-section>
-      <q-card-section
-        class="q-pt-sm"
-      >
-        <div
-          class="tw-flex"
-        >
-          <div>
-            {{ hours }}:{{ minutes }}:{{ seconds }}
-          </div>
-          <div
-            class="tw-ml-auto"
-          >
-            {{ currentStore.CurrentBusiness.maxWorkHour }}h
-          </div>
-        </div>
-        <q-linear-progress
-          rounded
-          stripe
-          size="15px"
-          :value="processValue"
-          color="primary"
-        />
-      </q-card-section>
-    </q-card>
-    <q-card>
-      <q-card-section
-        class="q-py-sm text-h6"
-      >
-        Work History
-      </q-card-section>
-      <q-card-section
-        class="q-pb-sm q-pt-none"
-      >
+      <div>
         <div
           class="tw-flex tw-items-center"
         >
@@ -77,28 +40,66 @@
             </q-tooltip>
           </q-btn>
         </div>
-      </q-card-section>
-      <q-card-section
-        class="q-pt-none"
-      >
-        <dx-data-grid
-          :data-source="currentStore.CurrentBusiUserWorkHistoryList"
-          :columns="columns"
-          :show-row-lines="true"
-          :show-borders="true"
-          :row-alternation-enabled="true"
+      </div>
+      <!-- Line chart -->
+      <busi-history-main-line-chart />
+      <q-card>
+        <q-card-section
+          class="q-py-sm text-h6"
         >
-          <template
-            #statusCellTemplate="{ data }"
+          Weekly Work Time
+        </q-card-section>
+        <q-card-section
+          class="q-pt-sm"
+        >
+          <div
+            class="tw-flex"
           >
-            <busi-user-status-badge
-              class="tw-text-xs tw-px-1"
-              :status="data.data.status"
+            <div>
+              {{ hours }}:{{ minutes }}:{{ seconds }}
+            </div>
+            <div
+              class="tw-ml-auto"
+            >
+              {{ currentStore.CurrentBusiness.maxWorkHour }}h
+            </div>
+          </div>
+          <q-linear-progress
+            rounded
+            stripe
+            size="15px"
+            :value="processValue"
+            color="primary"
+          />
+        </q-card-section>
+      </q-card>
+      <q-card>
+        <q-card-section
+          class="q-py-sm text-h6"
+        >
+          Work History
+        </q-card-section>
+        <q-card-section
+          class="q-pt-none"
+        >
+          <dx-data-grid
+            :data-source="busiUserWorkHistoryList"
+            :columns="columns"
+            :show-row-lines="true"
+            :show-borders="true"
+            :row-alternation-enabled="true"
+          >
+            <dx-column-chooser
+              :enabled="busiUserWorkHistoryList.length"
+              mode="select"
             />
-          </template>
-        </dx-data-grid>
-      </q-card-section>
-    </q-card>
+            <dx-scrolling
+              column-rendering-mode="virtual"
+            />
+          </dx-data-grid>
+        </q-card-section>
+      </q-card>
+    </div>
   </q-page>
 </template>
 <script lang="ts">
@@ -110,18 +111,25 @@ export default {
 import CLayoutMenubar from '@/components/commons/layouts/Menubar/index.vue'
 import { computed, onBeforeUnmount, ref } from 'vue'
 import { QBreadcrumbsElProps } from 'quasar'
-import { DxDataGrid } from 'devextreme-vue/data-grid'
+import { DxDataGrid, DxColumnChooser, DxScrolling } from 'devextreme-vue/data-grid'
 import { Column } from 'devextreme/ui/data_grid'
-import { BusiUserWorkHistory } from '@/types/models/users/busiWorkHistory'
+import { BusiUserWorkHistory, TempBusiUserWorkHistory } from '@/types/models/users/busiWorkHistory'
 import dayjs from 'dayjs'
 import { toCapitalize } from '@/utils/commons/stringUtil'
 import { useI18n } from 'vue-i18n'
 import { useCurrentStore } from '@/store/current'
 import BusiUserStatusBadge from '@/components/commons/BusiUserStatusBadge.vue'
+import BusiHistoryMainLineChart from '@/views/businesses/mys/histories/Main/components/LineChart.vue'
+import { useBusiUserWorkHistoryStore } from '@/store/busiUserWorkHistory'
+import { storeToRefs } from 'pinia'
+import { convertSeconds } from '@/utils/commons/datetime'
 
 const i18n = useI18n()
 const currentStore = useCurrentStore()
+const busiUserWorkHistoryStore = useBusiUserWorkHistoryStore()
 
+const { currentBusiUser } = storeToRefs(currentStore)
+const { busiUserWorkHistoryListFilter, busiUserWorkHistoryList } = storeToRefs(busiUserWorkHistoryStore)
 const breadcrumbs = ref<QBreadcrumbsElProps[]>([
   {
     label: 'My Home',
@@ -137,34 +145,58 @@ const breadcrumbs = ref<QBreadcrumbsElProps[]>([
 const rangeDate = ref([dayjs().startOf('week').toDate(), dayjs().endOf('week').toDate()])
 const columns = ref<Column[]>([
   {
-    caption: 'Status',
-    dataField: 'status',
-    cellTemplate: 'statusCellTemplate',
-    width: '100px',
+    caption: 'Option',
+    dataField: 'workOption',
+    width: 80,
   },
   {
-    caption: 'Last Update',
-    dataField: 'updatedAt',
-    width: '250px',
-    calculateDisplayValue: (row: BusiUserWorkHistory) => {
-      return dayjs(row.updatedAt).format('llll')
+    caption: 'Started At',
+    dataField: 'startedAt',
+    minWidth: 180,
+    calculateDisplayValue: (row: TempBusiUserWorkHistory) => {
+      return dayjs(row.startedAt).format('llll')
     },
   },
   {
-    caption: 'Work option',
-    dataField: 'workOption',
-    width: '150px',
-    calculateDisplayValue: (row: BusiUserWorkHistory) => {
-      return row.workOption ? toCapitalize(i18n.t(`Types.Models.BusiUsers.WorkOptions.${row.workOption}`)) : ''
+    caption: 'Ended at',
+    dataField: 'endedAt',
+    minWidth: 180,
+    calculateDisplayValue: (row: TempBusiUserWorkHistory) => {
+      return row.endedAt ? dayjs(row.endedAt).format('llll') : ''
+    },
+  },
+  {
+    caption: 'Time',
+    dataField: 'time',
+    minWidth: 100,
+    calculateDisplayValue: (row: TempBusiUserWorkHistory) => {
+      if (row.endedAt) {
+        const startedAt = dayjs(row.startedAt)
+        /* If there is no endedAt, set to now. */
+        // @TODO: Consider to add or not....
+        const endedAt = row.endedAt ? dayjs(row.endedAt) : dayjs()
+        const diffSeconds = endedAt.diff(startedAt, 'seconds')
+        const { hours, minutes, seconds } = convertSeconds(diffSeconds)
+
+        return `${hours}:${minutes}:${seconds}`
+      } else {
+        return ''
+      }
+    },
+  },
+  {
+    caption: 'Start (lat, long)',
+    dataField: 'startCoordination',
+    calculateDisplayValue: (row: TempBusiUserWorkHistory) => {
+      return row.startLatitude && row.startLongitude ? `${row.startLatitude}, ${row.startLongitude}` : ''
     }
   },
   {
-    caption: 'Coordination (lat, long)',
-    dataField: 'coordination',
-    width: '100%',
-    minWidth: 200,
-    calculateDisplayValue: (row: BusiUserWorkHistory) => {
-      return row.latitude && row.longitude ? `${row.latitude}, ${row.longitude}` : ''
+    caption: 'End (lat, long)',
+    dataField: 'endCoordination',
+    visible: false,
+    calculateDisplayValue: (row: TempBusiUserWorkHistory) => {
+      return row.endLatitude && row.endLongitude ? `${row.endLatitude}, ${row.endLongitude}` : ''
     }
   }
 ])
@@ -178,17 +210,29 @@ const seconds = computed(() => parseInt((timerSeconds.value % 60).toString()).to
 // 144000 is 40 hours to seconds
 const processValue = computed(() => timerSeconds.value / (currentStore.CurrentBusiness.maxWorkHour * 60 * 60))
 
+const initFilterData = () => {
+  /* Set the filter data */
+  busiUserWorkHistoryListFilter.value.busiUserId = currentBusiUser.value.id
+  busiUserWorkHistoryListFilter.value.rangeStartAt = dayjs(rangeDate.value[0]).toISOString()
+  busiUserWorkHistoryListFilter.value.rangeEndAt = dayjs(rangeDate.value[1]).toISOString()
+}
+
 const initData = async () => {
   try {
+    const rangeStartAt = dayjs(busiUserWorkHistoryListFilter.value.rangeStartAt).toISOString()
+    const rangeEndAt = dayjs(busiUserWorkHistoryListFilter.value.rangeEndAt).toISOString()
+
     await currentStore.loadCurrentBusiUserWorkHistoryList({
-      startDateAt: dayjs(rangeDate.value[0]).toISOString(),
-      endDateAt: dayjs(rangeDate.value[1]).toISOString(),
+      startDateAt: rangeStartAt,
+      endDateAt: rangeEndAt,
     })
 
     await currentStore.loadCurrentBusiUserTotalWorkSeconds({
-      startDateAt: dayjs(rangeDate.value[0]).toISOString(),
-      endDateAt: dayjs(rangeDate.value[1]).toISOString(),
+      startDateAt: rangeStartAt,
+      endDateAt: rangeEndAt,
     })
+    /* load list */
+    await busiUserWorkHistoryStore.loadBusiUserWorkHistoryList(busiUserWorkHistoryListFilter.value)
 
     timerSeconds.value = currentStore.CurrentBusiUserTotalWorkSeconds
     if (currentStore.CurrentBusiUser.startWorkAt) {
@@ -225,6 +269,7 @@ const clearTimer = () => {
   }
 }
 
+initFilterData()
 initData()
 
 onBeforeUnmount(() => {
