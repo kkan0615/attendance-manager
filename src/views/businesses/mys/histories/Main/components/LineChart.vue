@@ -1,10 +1,16 @@
 <template>
   <q-card>
     <q-card-section>
-      <line-chart
+      <div
         class="tw-h-72"
-        v-bind="lineChartProps"
-      />
+      >
+        <vue-apex-charts
+          height="100%"
+          type="line"
+          :options="options"
+          :series="series"
+        />
+      </div>
     </q-card-section>
   </q-card>
 </template>
@@ -15,15 +21,13 @@ export default {
 </script>
 <script setup lang="ts">
 import { computed } from 'vue'
-import { LineChart, useLineChart } from 'vue-chart-3'
-import { Chart, ChartData, ChartOptions, registerables } from 'chart.js'
 import { useBusiUserWorkHistoryStore } from '@/store/busiUserWorkHistory'
 import { storeToRefs } from 'pinia'
 import dayjs from 'dayjs'
 import { getCssVar, useQuasar } from 'quasar'
+import VueApexCharts from 'vue3-apexcharts'
 
 /* To use chart */
-Chart.register(...registerables)
 
 const $q = useQuasar()
 const busiUserWorkHistoryStore = useBusiUserWorkHistoryStore()
@@ -46,7 +50,7 @@ const dataLabels = computed(() => {
       if (isIncludeYear)
         result.push(rangeStartAt.add(i, 'day').format('L'))
       else
-        result.push(rangeStartAt.add(i, 'day').format('ll'))
+        result.push(rangeStartAt.add(i, 'day').format('MM-DD'))
     }
   }
 
@@ -98,22 +102,20 @@ const dataValues = computed(() => {
   }
   return result
 })
-const chartData = computed<ChartData<'line'>>(() => ({
-  labels: dataLabels.value,
-  datasets: [
-    {
-      label: 'Work Hours',
-      data: dataValues.value,
-      backgroundColor: getCssVar('primary') || '',
-    },
-  ],
-}))
-const options = computed<ChartOptions<'line'>>(() => ({
-  responsive: true,
+const series = computed(() => [
+  {
+    name: 'Work Hours',
+    data: dataValues.value,
+  }
+])
+const options = computed(() => ({
+  chart: {
+    type: 'line'
+  },
+  colors: [getCssVar('primary') || ''],
+  xaxis: {
+    categories: dataLabels.value
+  }
 }))
 
-const { lineChartProps } = useLineChart({
-  chartData,
-  options,
-})
 </script>

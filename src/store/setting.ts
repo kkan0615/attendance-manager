@@ -35,7 +35,6 @@ export const useSettingStore = defineStore('setting', {
       this.locale = payload
       localStorage.setItem(LocalStorageKeyEnum.LOCALE, payload)
       i18n.global.locale = payload
-      dayjs.locale(payload)
     },
     /**
      * Reset to default language
