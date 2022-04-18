@@ -54,7 +54,7 @@ export default {
 </script>
 <script setup lang="ts">
 import { useCurrentStore } from '@/store/current'
-import BusiUserStatusBadge from '@/components/commons/BusiUserStatusBadge.vue'
+import BusiUserStatusBadge from '@/components/BusiUserStatusBadge.vue'
 
 const currentStore = useCurrentStore()
 

@@ -20,10 +20,12 @@ import { Chart, ChartData, ChartOptions, registerables } from 'chart.js'
 import { useBusiUserWorkHistoryStore } from '@/store/busiUserWorkHistory'
 import { storeToRefs } from 'pinia'
 import dayjs from 'dayjs'
+import { getCssVar, useQuasar } from 'quasar'
 
 /* To use chart */
 Chart.register(...registerables)
 
+const $q = useQuasar()
 const busiUserWorkHistoryStore = useBusiUserWorkHistoryStore()
 
 const { busiUserWorkHistoryListFilter, busiUserWorkHistoryList } = storeToRefs(busiUserWorkHistoryStore)
@@ -91,14 +93,13 @@ const dataValues = computed(() => {
   }
   return result
 })
-const testData = computed<ChartData<'line'>>(() => ({
+const chartData = computed<ChartData<'line'>>(() => ({
   labels: dataLabels.value,
-
   datasets: [
     {
       label: 'Work Hours',
       data: dataValues.value,
-      backgroundColor: '#77CEFF',
+      backgroundColor: getCssVar('primary') || '',
     },
   ],
 }))
@@ -107,7 +108,7 @@ const options = computed<ChartOptions<'line'>>(() => ({
 }))
 
 const { lineChartProps } = useLineChart({
-  chartData: testData,
+  chartData,
   options,
 })
 </script>

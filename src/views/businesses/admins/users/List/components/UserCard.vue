@@ -147,7 +147,7 @@ import { useRouter } from 'vue-router'
 import { useBusiUserStore } from '@/store/busiUser'
 import { useCurrentStore } from '@/store/current'
 import WorkTimer from '@/components/WorkTimer.vue'
-import BusiUserStatusBadge from '@/components/commons/BusiUserStatusBadge.vue'
+import BusiUserStatusBadge from '@/components/BusiUserStatusBadge.vue'
 import { toCapitalize } from '@/utils/commons/stringUtil'
 
 const router = useRouter()

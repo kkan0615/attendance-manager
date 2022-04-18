@@ -63,6 +63,7 @@ import BusiAdminUserDetailHistoryList from '@/views/businesses/admins/users/Deta
 import BusiAdminUserDetailSchedule from '@/views/businesses/admins/users/Detail/components/Schedule.vue'
 import dayjs from 'dayjs'
 import { toCapitalize } from '@/utils/commons/stringUtil'
+import { useBusiUserWorkHistoryStore } from '@/store/busiUserWorkHistory'
 
 const route = useRoute()
 const router = useRouter()
@@ -70,6 +71,7 @@ const $q = useQuasar()
 const i18n = useI18n()
 const busiUserStore = useBusiUserStore()
 const currentStore = useCurrentStore()
+const busiUserWorkHistoryStore = useBusiUserWorkHistoryStore()
 
 const breadcrumbs = ref<QBreadcrumbsElProps[]>([
   {
@@ -96,11 +98,12 @@ const initData = async () => {
       }
 
       /* Load work history */
-      await busiUserStore.loadBusiUserAdminWorkHistoryList({
+      await busiUserWorkHistoryStore.loadBusiUserWorkHistoryList({
         busiUserId: busiUserStore.BusiUserAdmin.id,
-        startDateAt: dayjs().startOf('week').toISOString(),
-        endDateAt: dayjs().endOf('week').toISOString(),
+        rangeStartAt: dayjs().startOf('week').toISOString(),
+        rangeEndAt: dayjs().endOf('week').toISOString(),
       })
+
       /* Load work total work seconds  */
       await busiUserStore.loadBusiUserAdminTotalWorkSeconds({
         busiUserId: busiUserStore.BusiUserAdmin.id,

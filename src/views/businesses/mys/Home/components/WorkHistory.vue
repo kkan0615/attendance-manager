@@ -1,4 +1,5 @@
 <template>
+  <!-- List -->
   <q-card>
     <q-card-section
       class="q-py-sm"
@@ -15,8 +16,18 @@
       </div>
     </q-card-section>
     <q-separator />
+    <!-- Overviews -->
     <q-card-section
-      class="q-pt-sm tw-w-full"
+      class="q-pb-none"
+    >
+      <work-history-overviews
+        flat
+        :work-history-list="currentBusiUserWorkHistoryList"
+      />
+    </q-card-section>
+    <q-separator />
+    <q-card-section
+      class="tw-w-full"
     >
       <dx-data-grid
         class="tw-w-full"
@@ -28,55 +39,13 @@
         :column-auto-width="true"
       >
         <dx-column-chooser
-          :enabled="currentBusiUserWorkHistoryList.length"
+          :enabled="!!currentBusiUserWorkHistoryList.length"
           mode="select"
         />
         <dx-scrolling
           column-rendering-mode="virtual"
         />
       </dx-data-grid>
-    </q-card-section>
-    <q-card-section
-      class="q-pt-none"
-    >
-      <div
-        class="tw-grid tw-grid-cols-2 sm:tw-grid-cols-4 tw-gap-2"
-      >
-        <div class="tw-flex tw-items-center tw-space-x-2">
-          <div
-            class="c-text-first-uppercase"
-          >
-            average
-          </div>
-          <div>
-            {{ avgWorkTime }}
-          </div>
-        </div>
-        <div class="tw-flex tw-items-center tw-space-x-2">
-          <div class="c-text-first-uppercase">
-            summary
-          </div>
-          <div>
-            {{ sumWorkTime }}
-          </div>
-        </div>
-        <div class="tw-flex tw-items-center tw-space-x-2">
-          <div class="c-text-first-uppercase">
-            max
-          </div>
-          <div>
-            {{ maxWorkTime }}
-          </div>
-        </div>
-        <div class="tw-flex tw-items-center tw-space-x-2">
-          <div class="c-text-first-uppercase">
-            min
-          </div>
-          <div>
-            {{ minWorkTime }}
-          </div>
-        </div>
-      </div>
     </q-card-section>
   </q-card>
 </template>
@@ -95,6 +64,7 @@ import { useCurrentStore } from '@/store/current'
 import { useI18n } from 'vue-i18n'
 import { storeToRefs } from 'pinia'
 import { convertSeconds } from '@/utils/commons/datetime'
+import WorkHistoryOverviews from '@/components/WorkHistoryOverviews..vue'
 
 const i18n = useI18n()
 const currentStore = useCurrentStore()
@@ -159,58 +129,4 @@ const columns = ref<Column[]>([
 ])
 const formattedStartDateAt = ref(dayjs().startOf('week').format('ll'))
 const formattedEndDateAt = ref(dayjs().endOf('week').format('ll'))
-
-const sumWorkTime = computed(() => {
-  const filteredWorkHistoryList = currentBusiUserWorkHistoryList.value
-    .filter(workHistory => workHistory.endedAt)
-  const totalSeconds = filteredWorkHistoryList
-    .map(workHistory => {
-      const startedAt = dayjs(workHistory.startedAt)
-      const endedAt = workHistory.endedAt ? dayjs(workHistory.endedAt) : dayjs()
-      return endedAt.diff(startedAt, 'seconds')
-    })
-    .reduce((a, b) => a + b, 0)
-  const { hours, minutes, seconds } = convertSeconds(totalSeconds)
-  return `${hours}:${minutes}:${seconds}`
-})
-
-const avgWorkTime = computed(() => {
-  const filteredWorkHistoryList = currentBusiUserWorkHistoryList.value
-    .filter(workHistory => workHistory.endedAt)
-  const totalSeconds = filteredWorkHistoryList
-    .map(workHistory => {
-      const startedAt = dayjs(workHistory.startedAt)
-      const endedAt = workHistory.endedAt ? dayjs(workHistory.endedAt) : dayjs()
-      return endedAt.diff(startedAt, 'seconds')
-    })
-    .reduce((a, b) => a + b, 0)
-  const { hours, minutes, seconds } = convertSeconds(totalSeconds / filteredWorkHistoryList.length)
-  return `${hours}:${minutes}:${seconds}`
-})
-
-const maxWorkTime = computed(() => {
-  const filteredWorkHistoryList = currentBusiUserWorkHistoryList.value
-    .filter(workHistory => workHistory.endedAt)
-  const max = Math.max(...filteredWorkHistoryList
-    .map(workHistory => {
-      const startedAt = dayjs(workHistory.startedAt)
-      const endedAt = workHistory.endedAt ? dayjs(workHistory.endedAt) : dayjs()
-      return endedAt.diff(startedAt, 'seconds')
-    }))
-  const { hours, minutes, seconds } = convertSeconds(max)
-  return `${hours}:${minutes}:${seconds}`
-})
-
-const minWorkTime = computed(() => {
-  const filteredWorkHistoryList = currentBusiUserWorkHistoryList.value
-    .filter(workHistory => workHistory.endedAt)
-  const min = Math.min(...filteredWorkHistoryList
-    .map(workHistory => {
-      const startedAt = dayjs(workHistory.startedAt)
-      const endedAt = workHistory.endedAt ? dayjs(workHistory.endedAt) : dayjs()
-      return endedAt.diff(startedAt, 'seconds')
-    }))
-  const { hours, minutes, seconds } = convertSeconds(min)
-  return `${hours}:${minutes}:${seconds}`
-})
 </script>

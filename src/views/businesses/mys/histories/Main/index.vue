@@ -23,6 +23,7 @@
               range
               class="tw-w-full tw-mt-0.5"
               text-input
+              week-start="0"
               :enable-time-picker="false"
               :clearable="false"
             />
@@ -41,38 +42,12 @@
           </q-btn>
         </div>
       </div>
+      <!-- Overviews -->
+      <work-history-overviews
+        :work-history-list="busiUserWorkHistoryList"
+      />
       <!-- Line chart -->
       <busi-history-main-line-chart />
-      <q-card>
-        <q-card-section
-          class="q-py-sm text-h6"
-        >
-          Weekly Work Time
-        </q-card-section>
-        <q-card-section
-          class="q-pt-sm"
-        >
-          <div
-            class="tw-flex"
-          >
-            <div>
-              {{ hours }}:{{ minutes }}:{{ seconds }}
-            </div>
-            <div
-              class="tw-ml-auto"
-            >
-              {{ currentStore.CurrentBusiness.maxWorkHour }}h
-            </div>
-          </div>
-          <q-linear-progress
-            rounded
-            stripe
-            size="15px"
-            :value="processValue"
-            color="primary"
-          />
-        </q-card-section>
-      </q-card>
       <q-card>
         <q-card-section
           class="q-py-sm text-h6"
@@ -90,7 +65,7 @@
             :row-alternation-enabled="true"
           >
             <dx-column-chooser
-              :enabled="busiUserWorkHistoryList.length"
+              :enabled="!!busiUserWorkHistoryList.length"
               mode="select"
             />
             <dx-scrolling
@@ -108,21 +83,20 @@ export default {
 }
 </script>
 <script setup lang="ts">
-import CLayoutMenubar from '@/components/commons/layouts/Menubar/index.vue'
-import { computed, onBeforeUnmount, ref } from 'vue'
+import { onBeforeUnmount, ref } from 'vue'
 import { QBreadcrumbsElProps } from 'quasar'
 import { DxDataGrid, DxColumnChooser, DxScrolling } from 'devextreme-vue/data-grid'
 import { Column } from 'devextreme/ui/data_grid'
-import { BusiUserWorkHistory, TempBusiUserWorkHistory } from '@/types/models/users/busiWorkHistory'
+import { TempBusiUserWorkHistory } from '@/types/models/users/busiWorkHistory'
 import dayjs from 'dayjs'
-import { toCapitalize } from '@/utils/commons/stringUtil'
 import { useI18n } from 'vue-i18n'
 import { useCurrentStore } from '@/store/current'
-import BusiUserStatusBadge from '@/components/commons/BusiUserStatusBadge.vue'
-import BusiHistoryMainLineChart from '@/views/businesses/mys/histories/Main/components/LineChart.vue'
 import { useBusiUserWorkHistoryStore } from '@/store/busiUserWorkHistory'
 import { storeToRefs } from 'pinia'
 import { convertSeconds } from '@/utils/commons/datetime'
+import CLayoutMenubar from '@/components/commons/layouts/Menubar/index.vue'
+import BusiHistoryMainLineChart from '@/views/businesses/mys/histories/Main/components/LineChart.vue'
+import WorkHistoryOverviews from '@/components/WorkHistoryOverviews..vue'
 
 const i18n = useI18n()
 const currentStore = useCurrentStore()
@@ -201,15 +175,6 @@ const columns = ref<Column[]>([
   }
 ])
 
-const timerSeconds = ref(0)
-const timer = ref<NodeJS.Timer | undefined>(undefined)
-
-const hours = computed(() => parseInt((timerSeconds.value / (60 * 60)).toString()).toString().padStart(2, '0'))
-const minutes = computed(() => parseInt(((timerSeconds.value / 60) % 60).toString()).toString().padStart(2, '0'))
-const seconds = computed(() => parseInt((timerSeconds.value % 60).toString()).toString().padStart(2, '0'))
-// 144000 is 40 hours to seconds
-const processValue = computed(() => timerSeconds.value / (currentStore.CurrentBusiness.maxWorkHour * 60 * 60))
-
 const initFilterData = () => {
   /* Set the filter data */
   busiUserWorkHistoryListFilter.value.busiUserId = currentBusiUser.value.id
@@ -219,30 +184,8 @@ const initFilterData = () => {
 
 const initData = async () => {
   try {
-    const rangeStartAt = dayjs(busiUserWorkHistoryListFilter.value.rangeStartAt).toISOString()
-    const rangeEndAt = dayjs(busiUserWorkHistoryListFilter.value.rangeEndAt).toISOString()
-
-    await currentStore.loadCurrentBusiUserWorkHistoryList({
-      startDateAt: rangeStartAt,
-      endDateAt: rangeEndAt,
-    })
-
-    await currentStore.loadCurrentBusiUserTotalWorkSeconds({
-      startDateAt: rangeStartAt,
-      endDateAt: rangeEndAt,
-    })
     /* load list */
     await busiUserWorkHistoryStore.loadBusiUserWorkHistoryList(busiUserWorkHistoryListFilter.value)
-
-    timerSeconds.value = currentStore.CurrentBusiUserTotalWorkSeconds
-    if (currentStore.CurrentBusiUser.startWorkAt) {
-      timerSeconds.value += dayjs().diff(dayjs(currentStore.CurrentBusiUser.startWorkAt), 'seconds')
-    }
-    if (currentStore.CurrentBusiUser.status === 'work'
-        || currentStore.CurrentBusiUser.status === 'rest'
-    ) {
-      initTimer()
-    }
   } catch (e) {
     console.error(e)
   }
@@ -250,22 +193,10 @@ const initData = async () => {
 
 const onClickSearchBtn = async () => {
   try {
+    initFilterData()
     await initData()
   } catch (e) {
     console.error(e)
-  }
-}
-
-const initTimer = () => {
-  timer.value = setInterval(() => {
-    timerSeconds.value += 1
-  }, 1000)
-}
-
-const clearTimer = () => {
-  if (timer.value) {
-    clearInterval(timer.value)
-    timer.value = undefined
   }
 }
 
@@ -274,6 +205,5 @@ initData()
 
 onBeforeUnmount(() => {
   currentStore.resetCurrentBusiUserWorkHistoryList()
-  clearTimer()
 })
 </script>

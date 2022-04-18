@@ -109,12 +109,11 @@ export default {
 }
 </script>
 <script setup lang="ts">
-import { computed, PropType } from 'vue'
+import { PropType } from 'vue'
 import { BusiUserAdminListInfo } from '@/types/models/users/business'
 import { useI18n } from 'vue-i18n'
 import WorkTimer from '@/components/WorkTimer.vue'
-import BusiUserStatusBadge from '@/components/commons/BusiUserStatusBadge.vue'
-import dayjs from 'dayjs'
+import BusiUserStatusBadge from '@/components/BusiUserStatusBadge.vue'
 
 const i18n = useI18n()
 

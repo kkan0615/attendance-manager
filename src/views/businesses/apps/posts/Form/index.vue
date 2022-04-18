@@ -109,6 +109,7 @@
               text-input
               input-class-name="dp__input--with-label"
               :enable-time-picker="false"
+              week-start="0"
               auto-apply
               :clearable="false"
             />

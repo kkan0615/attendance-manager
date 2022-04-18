@@ -104,7 +104,7 @@ export default {
 <script setup lang="ts">
 import { useBusiUserStore } from '@/store/busiUser'
 import WorkTimer from '@/components/WorkTimer.vue'
-import BusiUserStatusBadge from '@/components/commons/BusiUserStatusBadge.vue'
+import BusiUserStatusBadge from '@/components/BusiUserStatusBadge.vue'
 
 const busiUserStore = useBusiUserStore()
 
