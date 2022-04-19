@@ -1,11 +1,16 @@
 <template>
+  <q-header>
+    <q-toolbar
+      style="height: 48px;"
+      class="tw-max-w-4xl tw-mx-auto tw-flex tw-items-center q-px-md"
+    >
+      <comp-logo />
+    </q-toolbar>
+  </q-header>
   <q-page
     padding
     class="tw-max-w-4xl tw-mx-auto"
   >
-    <div>
-      @TODO: Logo will be here
-    </div>
     <div
       class="q-mt-md"
     >
@@ -197,6 +202,7 @@ import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { useCurrentStore } from '@/store/current'
 import { useUserStore } from '@/store/user'
+import CompLogo from '@/components/Logo.vue'
 
 const router = useRouter()
 const i18n = useI18n()

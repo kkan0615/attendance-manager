@@ -1,10 +1,10 @@
 <template>
   <q-page
     padding
+    class="tw-max-w-4xl tw-mx-auto tw-space-y-4"
   >
     <c-layout-menubar
-      title="History main"
-      :breadcrumbs="breadcrumbs"
+      :title="$t('Pages.Profiles.Analysis.title')"
     />
     <div
       class="tw-space-y-4"
@@ -46,8 +46,8 @@
       <work-history-overviews
         :work-history-list="busiUserWorkHistoryList"
       />
-      <!-- Line chart -->
-      <busi-history-main-line-chart />
+      <!-- Line charts -->
+      <profile-analysis-line-chart />
       <q-card>
         <q-card-section
           class="q-py-sm text-h6"
@@ -79,45 +79,38 @@
 </template>
 <script lang="ts">
 export default {
-  name: 'BusiHistoryMain',
+  name: 'ProfileAnalysis',
 }
 </script>
 <script setup lang="ts">
-import { onBeforeUnmount, ref } from 'vue'
-import { QBreadcrumbsElProps } from 'quasar'
-import { DxDataGrid, DxColumnChooser, DxScrolling } from 'devextreme-vue/data-grid'
-import { Column } from 'devextreme/ui/data_grid'
-import { TempBusiUserWorkHistory } from '@/types/models/users/busiWorkHistory'
-import dayjs from 'dayjs'
 import { useI18n } from 'vue-i18n'
 import { useCurrentStore } from '@/store/current'
 import { useBusiUserWorkHistoryStore } from '@/store/busiUserWorkHistory'
 import { storeToRefs } from 'pinia'
+import dayjs from 'dayjs'
+import { onBeforeUnmount, ref } from 'vue'
+import { DxDataGrid, DxColumnChooser, DxScrolling } from 'devextreme-vue/data-grid'
+import { Column } from 'devextreme/ui/data_grid'
+import { TempBusiUserWorkHistory } from '@/types/models/users/busiWorkHistory'
 import { convertSeconds } from '@/utils/commons/datetime'
-import CLayoutMenubar from '@/components/commons/layouts/Menubar/index.vue'
-import BusiHistoryMainLineChart from '@/views/businesses/mys/histories/Main/components/LineChart.vue'
+import ProfileAnalysisLineChart from '@/views/profiles/Analysis/components/index.vue'
 import WorkHistoryOverviews from '@/components/WorkHistoryOverviews..vue'
+import { QBreadcrumbsElProps } from 'quasar'
+import CLayoutMenubar from '@/components/commons/layouts/Menubar/index.vue'
 
 const i18n = useI18n()
 const currentStore = useCurrentStore()
 const busiUserWorkHistoryStore = useBusiUserWorkHistoryStore()
 
-const { currentBusiUser } = storeToRefs(currentStore)
+
+const { currentUser } = storeToRefs(currentStore)
 const { busiUserWorkHistoryListFilter, busiUserWorkHistoryList } = storeToRefs(busiUserWorkHistoryStore)
-const breadcrumbs = ref<QBreadcrumbsElProps[]>([
-  {
-    label: 'My Home',
-    to: { name: 'BusiMyHome' }
-  },
-  {
-    label: 'History',
-  },
-  {
-    label: 'main'
-  }
-])
 const rangeDate = ref([dayjs().startOf('week').toDate(), dayjs().endOf('week').toDate()])
 const columns = ref<Column[]>([
+  {
+    caption: 'Business',
+    dataField: 'business.name',
+  },
   {
     caption: 'Option',
     dataField: 'workOption',
@@ -126,7 +119,7 @@ const columns = ref<Column[]>([
   {
     caption: 'Started At',
     dataField: 'startedAt',
-    minWidth: 180,
+    minWidth: 200,
     calculateDisplayValue: (row: TempBusiUserWorkHistory) => {
       return dayjs(row.startedAt).format('llll')
     },
@@ -134,7 +127,7 @@ const columns = ref<Column[]>([
   {
     caption: 'Ended at',
     dataField: 'endedAt',
-    minWidth: 180,
+    minWidth: 200,
     calculateDisplayValue: (row: TempBusiUserWorkHistory) => {
       return row.endedAt ? dayjs(row.endedAt).format('llll') : ''
     },
@@ -177,7 +170,7 @@ const columns = ref<Column[]>([
 
 const initFilterData = () => {
   /* Set the filter data */
-  busiUserWorkHistoryListFilter.value.busiUserId = currentBusiUser.value.id
+  busiUserWorkHistoryListFilter.value.userId = currentUser.value.id
   busiUserWorkHistoryListFilter.value.rangeStartAt = dayjs(rangeDate.value[0]).toISOString()
   busiUserWorkHistoryListFilter.value.rangeEndAt = dayjs(rangeDate.value[1]).toISOString()
 }
@@ -204,7 +197,7 @@ initFilterData()
 initData()
 
 onBeforeUnmount(() => {
-  busiUserWorkHistoryStore.resetBusiUserWorkHistoryList()
-  busiUserWorkHistoryStore.resetBusiUserWorkHistoryListFilter()
+  currentStore.resetCurrentBusiUserWorkHistoryList()
 })
+
 </script>

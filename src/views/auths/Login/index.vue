@@ -5,8 +5,10 @@
     <q-card
       class="tw-w-full tw-max-w-xl"
     >
-      <q-card-section>
-        @TODO: Logo will be here
+      <q-card-section
+        class="tw-flex tw-justify-center"
+      >
+        <comp-logo />
       </q-card-section>
       <q-card-section>
         <div
@@ -95,6 +97,7 @@ import { ref } from 'vue'
 import { useCurrentStore } from '@/store/current'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
+import CompLogo from '@/components/Logo.vue'
 
 const router = useRouter()
 const i18n = useI18n()

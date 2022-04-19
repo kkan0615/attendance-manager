@@ -3,6 +3,9 @@
     padding
     class="tw-max-w-4xl tw-mx-auto tw-space-y-4"
   >
+    <c-layout-menubar
+      :title="$t('Pages.Profiles.Invites.title')"
+    />
     <div
       v-if="userInviteList.length"
       class="tw-grid lg:tw-grid-cols-3 tw-grid-cols-1 tw-gap-4"
@@ -34,6 +37,7 @@ import { useUserStore } from '@/store/user'
 import { computed, onBeforeUnmount, ref } from 'vue'
 import { storeToRefs } from 'pinia'
 import ProfileInviteBusiCard from '@/views/profiles/Invite/components/BusiCard.vue'
+import CLayoutMenubar from '@/components/commons/layouts/Menubar/index.vue'
 
 const userStore = useUserStore()
 

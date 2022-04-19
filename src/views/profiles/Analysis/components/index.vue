@@ -16,7 +16,7 @@
 </template>
 <script lang="ts">
 export default {
-  name: 'BusiHistoryMainLineChart',
+  name: 'ProfileAnalysisLineChart',
 }
 </script>
 <script setup lang="ts">
@@ -83,7 +83,7 @@ const dataValues = computed(() => {
             if (dayjs().format('l') !== targetDateAt.format('l')) {
               endedAt = targetDateAt.add(1, 'day').startOf('day')
             }
-          /* If it over date (like night work) */
+            /* If it over date (like night work) */
           } else if (startedAt.format('l') !== endedAt.format('l')) {
             result[i + 1] += -(dayjs(workHistory.startedAt).add(1, 'day').startOf('day')
               .diff(endedAt, 'hours'))

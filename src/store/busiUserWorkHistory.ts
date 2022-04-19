@@ -4,8 +4,9 @@ import {
   TempBusiUserWorkHistorySelectListQuery
 } from '@/types/models/users/busiWorkHistory'
 import { TempBusiUserWorkHistoryDummy } from '@/dummies/users/busiUserWorkHistory'
-import { useCurrentStore } from '@/store/current'
 import dayjs from 'dayjs'
+import { BusinessDummy } from '@/dummies/users/businesses'
+import { Business } from '@/types/models/businesses'
 
 export interface BusiUserWorkHistoryState {
   busiUserWorkHistoryListFilter: TempBusiUserWorkHistorySelectListQuery
@@ -72,15 +73,26 @@ export const useBusiUserWorkHistoryStore = defineStore('busiUserWorkHistory', {
             await this.resetBusiUserWorkHistoryList()
           }
           /* Filtering */
-          const filterDummies = TempBusiUserWorkHistoryDummy
-            .filter(dummy => dummy.busiUserId === payload.busiUserId)
+          let filterDummies = TempBusiUserWorkHistoryDummy
+          if (payload.busiUserId) {
+            filterDummies = TempBusiUserWorkHistoryDummy.filter(dummy => dummy.busiUserId === payload.busiUserId)
+          }
+          if (payload.busiUserId) {
+            filterDummies = TempBusiUserWorkHistoryDummy.filter(dummy => dummy.userId === payload.userId)
+          }
+          this.busiUserWorkHistoryList = filterDummies
             .sort((a, b) => b.id - a.id)
-          this.busiUserWorkHistoryList = filterDummies.filter(dummy => {
-            const startDateAt = dayjs(payload.rangeStartAt).startOf('day')
-            const endDateAt = dayjs(payload.rangeEndAt).endOf('day')
-            const startedAt = dayjs(dummy.startedAt)
-            return startedAt.isBetween(startDateAt, endDateAt, null, '[]')
-          })
+            .filter(dummy => {
+              const startDateAt = dayjs(payload.rangeStartAt).startOf('day')
+              const endDateAt = dayjs(payload.rangeEndAt).endOf('day')
+              const startedAt = dayjs(dummy.startedAt)
+              return startedAt.isBetween(startDateAt, endDateAt, null, '[]')
+            }).map(dummy => {
+              return {
+                ...dummy,
+                business: BusinessDummy.find(busiDummy => busiDummy.id === dummy.busiId) || {} as Business
+              }
+            })
           this.busiUserWorkHistoryListCount = this.busiUserWorkHistoryList.length
         } else {
           this.busiUserWorkHistoryList = []

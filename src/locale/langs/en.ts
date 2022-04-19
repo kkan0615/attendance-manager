@@ -127,6 +127,17 @@ export const enDictionary = {
           }
         }
       }
+    },
+    Profiles: {
+      Homes: {
+        title: 'home'
+      },
+      Invites: {
+        title: 'invite'
+      },
+      Analysis: {
+        title: 'analysis'
+      }
     }
   }
 }

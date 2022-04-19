@@ -3,7 +3,7 @@
     class="row q-mb-md items-center"
   >
     <div
-      class="text-h5"
+      class="text-h5 text-capitalize"
     >
       {{ title }}
     </div>

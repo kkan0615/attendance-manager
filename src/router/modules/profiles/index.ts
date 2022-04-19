@@ -26,6 +26,12 @@ export const profileRoutes: RouteRecordRaw[] = [
         component: () => import('@/views/profiles/Invite/index.vue'),
         meta: { isRequiredLogin: true },
       },
+      {
+        path: 'analysis',
+        name: 'ProfileAnalysis',
+        component: () => import('@/views/profiles/Analysis/index.vue'),
+        meta: { isRequiredLogin: true },
+      },
     ]
   },
 ]
