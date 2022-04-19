@@ -77,8 +77,11 @@ export const useBusiUserWorkHistoryStore = defineStore('busiUserWorkHistory', {
           if (payload.busiUserId) {
             filterDummies = TempBusiUserWorkHistoryDummy.filter(dummy => dummy.busiUserId === payload.busiUserId)
           }
-          if (payload.busiUserId) {
+          if (payload.userId) {
             filterDummies = TempBusiUserWorkHistoryDummy.filter(dummy => dummy.userId === payload.userId)
+          }
+          if (payload.busiId) {
+            filterDummies = TempBusiUserWorkHistoryDummy.filter(dummy => dummy.busiId === payload.busiId)
           }
           this.busiUserWorkHistoryList = filterDummies
             .sort((a, b) => b.id - a.id)

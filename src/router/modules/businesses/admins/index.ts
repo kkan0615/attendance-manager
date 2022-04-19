@@ -2,6 +2,7 @@ import { RouteRecordRaw } from 'vue-router'
 import { busiAdminQRCodeRoutes } from '@/router/modules/businesses/admins/qrcodes'
 import { busiAdminUserRoutes } from '@/router/modules/businesses/admins/users'
 import { busiAdminBusinessRoutes } from '@/router/modules/businesses/admins/businesses'
+import { busiAdminAnalysisRoutes } from '@/router/modules/businesses/admins/analysis'
 
 export const busiAdminRoutes: RouteRecordRaw[] = [
   {
@@ -14,6 +15,7 @@ export const busiAdminRoutes: RouteRecordRaw[] = [
       ...busiAdminQRCodeRoutes,
       ...busiAdminUserRoutes,
       ...busiAdminBusinessRoutes,
+      ...busiAdminAnalysisRoutes,
     ]
   },
 ]

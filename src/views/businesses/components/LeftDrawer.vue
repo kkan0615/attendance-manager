@@ -40,22 +40,23 @@
             </q-item-section>
             <q-item-section>Home</q-item-section>
           </q-item>
-          <q-item
-            clickable
-            :to="{ name: 'BusiMyScheduleLayout' }"
-            active-class="active-router"
-          >
-            <q-item-section avatar>
-              <q-icon name="schedule" />
-            </q-item-section>
-            <q-item-section>
-              <div
-                class="c-text-first-uppercase"
-              >
-                schedule
-              </div>
-            </q-item-section>
-          </q-item>
+          <!-- Not use yet -->
+          <!--          <q-item-->
+          <!--            clickable-->
+          <!--            :to="{ name: 'BusiMyScheduleLayout' }"-->
+          <!--            active-class="active-router"-->
+          <!--          >-->
+          <!--            <q-item-section avatar>-->
+          <!--              <q-icon name="schedule" />-->
+          <!--            </q-item-section>-->
+          <!--            <q-item-section>-->
+          <!--              <div-->
+          <!--                class="c-text-first-uppercase"-->
+          <!--              >-->
+          <!--                schedule-->
+          <!--              </div>-->
+          <!--            </q-item-section>-->
+          <!--          </q-item>-->
           <q-item
             clickable
             :to="{ name: 'BusiMyHistoryLayout' }"
@@ -98,20 +99,21 @@
               </div>
             </q-item-section>
           </q-item>
-          <q-item
-            clickable
-          >
-            <q-item-section avatar>
-              <q-icon name="schedule" />
-            </q-item-section>
-            <q-item-section>
-              <div
-                class="c-text-first-uppercase"
-              >
-                schedule
-              </div>
-            </q-item-section>
-          </q-item>
+          <!-- Not use yet -->
+          <!--          <q-item-->
+          <!--            clickable-->
+          <!--          >-->
+          <!--            <q-item-section avatar>-->
+          <!--              <q-icon name="schedule" />-->
+          <!--            </q-item-section>-->
+          <!--            <q-item-section>-->
+          <!--              <div-->
+          <!--                class="c-text-first-uppercase"-->
+          <!--              >-->
+          <!--                schedule-->
+          <!--              </div>-->
+          <!--            </q-item-section>-->
+          <!--          </q-item>-->
           <q-item
             clickable
             :to="{ name: 'BusiAppPostLayout' }"
@@ -186,13 +188,31 @@
             </q-item-section>
           </q-item>
           <q-item
+            v-if="currentStore.CurrentBusiUser.auth !== 'system'"
             clickable
+            :to="{ name: 'BusiAdminAnalysisLayout' }"
+            active-class="active-router"
           >
             <q-item-section avatar>
-              <q-icon name="settings" />
+              <q-icon name="analytics" />
             </q-item-section>
-            <q-item-section>Settings</q-item-section>
+            <q-item-section>
+              <div
+                class="c-text-first-uppercase"
+              >
+                analysis
+              </div>
+            </q-item-section>
           </q-item>
+          <!-- Not use yet -->
+          <!--          <q-item-->
+          <!--            clickable-->
+          <!--          >-->
+          <!--            <q-item-section avatar>-->
+          <!--              <q-icon name="settings" />-->
+          <!--            </q-item-section>-->
+          <!--            <q-item-section>Settings</q-item-section>-->
+          <!--          </q-item>-->
         </q-list>
       </div>
     </q-scroll-area>

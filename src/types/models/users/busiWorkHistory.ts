@@ -33,6 +33,7 @@ export interface TempBusiUserWorkHistory extends DefaultAttributes {
 export type TempBusiUserWorkHistoryCreateForm = Omit<TempBusiUserWorkHistory, 'id' | 'createdAt' | 'updatedAt' | 'deletedAt'>
 export type TempBusiUserWorkHistoryUpdateForm = Omit<TempBusiUserWorkHistory, 'createdAt' | 'updatedAt' | 'deletedAt'>
 export interface TempBusiUserWorkHistorySelectListQuery extends DefaultSelectListQuery {
+  busiId?: number
   userId?: number
   busiUserId?: number
   rangeStartAt?: string

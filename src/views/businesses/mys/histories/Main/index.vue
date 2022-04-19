@@ -9,38 +9,36 @@
     <div
       class="tw-space-y-4"
     >
-      <div>
-        <div
-          class="tw-flex tw-items-center"
+      <div
+        class="tw-flex tw-items-center"
+      >
+        <q-field
+          class="tw-grow tw-max-w-sm tw-ml-auto"
+          dense
+          outlined
         >
-          <q-field
-            class="tw-grow tw-max-w-sm tw-ml-auto"
-            dense
-            outlined
-          >
-            <date-picker
-              v-model="rangeDate"
-              range
-              class="tw-w-full tw-mt-0.5"
-              text-input
-              week-start="0"
-              :enable-time-picker="false"
-              :clearable="false"
-            />
-          </q-field>
-          <q-btn
-            color="primary"
-            flat
-            rounded
-            dense
-            icon="search"
-            @click="onClickSearchBtn"
-          >
-            <q-tooltip>
-              Search
-            </q-tooltip>
-          </q-btn>
-        </div>
+          <date-picker
+            v-model="rangeDate"
+            range
+            class="tw-w-full tw-mt-0.5"
+            text-input
+            week-start="0"
+            :enable-time-picker="false"
+            :clearable="false"
+          />
+        </q-field>
+        <q-btn
+          color="primary"
+          flat
+          rounded
+          dense
+          icon="search"
+          @click="onClickSearchBtn"
+        >
+          <q-tooltip>
+            Search
+          </q-tooltip>
+        </q-btn>
       </div>
       <!-- Overviews -->
       <work-history-overviews
