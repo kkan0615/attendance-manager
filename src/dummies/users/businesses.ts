@@ -2,9 +2,11 @@ import { randBoolean, randCompanyName, randNumber, randUrl } from '@ngneat/falso
 import dayjs from 'dayjs'
 import { Business } from '@/types/models/businesses'
 import { BusiAllowedLocation } from '@/types/models/businesses/allowedLocation'
+import { BusiConfig } from '@/types/models/businesses/config'
 
 export let BusinessDummy: Business[] = []
 export let BusinessAllowedLocationDummy: BusiAllowedLocation[] = []
+export let BusiConfigDummy: BusiConfig[] = []
 export const initBusinessDummy = () => {
   BusinessDummy = [
     {
@@ -59,6 +61,20 @@ export const initBusinessAllowedLocationDummy = () => {
       lat: 37.596312,
       lon: 126.722515,
       meter: 10,
+      createdAt: dayjs().toISOString(),
+      updatedAt: dayjs().toISOString(),
+    },
+  ]
+}
+
+export const initBusiConfigDummy = () => {
+  BusiConfigDummy = [
+    {
+      id: 1,
+      busiId: 1,
+      isEnableSimple: true,
+      isEnableLocation: randBoolean(),
+      isEnableQrcode: randBoolean(),
       createdAt: dayjs().toISOString(),
       updatedAt: dayjs().toISOString(),
     },

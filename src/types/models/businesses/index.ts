@@ -1,5 +1,6 @@
 import { DefaultAttributes } from '@/types/models/attributes'
 import { BusiAllowedLocation } from '@/types/models/businesses/allowedLocation'
+import { BusiConfig } from '@/types/models/businesses/config'
 
 export interface Business extends DefaultAttributes {
   name: string
@@ -13,6 +14,7 @@ export interface Business extends DefaultAttributes {
 
 export interface BusinessInfo extends Business {
   allowedLocations: BusiAllowedLocation[]
+  busiConfig: BusiConfig
 }
 
 export interface BusinessAdminListInfo extends Business {

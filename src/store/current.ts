@@ -7,10 +7,11 @@ import { BusiUserDummy } from '@/dummies/users/busiUser'
 import { TempBusiUserWorkHistory } from '@/types/models/users/busiWorkHistory'
 import { TempBusiUserWorkHistoryDummy } from '@/dummies/users/busiUserWorkHistory'
 import dayjs from 'dayjs'
-import { BusinessAllowedLocationDummy, BusinessDummy } from '@/dummies/users/businesses'
+import { BusiConfigDummy, BusinessAllowedLocationDummy, BusinessDummy } from '@/dummies/users/businesses'
 import { UserDummy } from '@/dummies/users/user'
 import { UserNotification } from '@/types/models/users/notification'
 import { UserNotificationDummy } from '@/dummies/users/notifications'
+import { BusiConfig } from '@/types/models/businesses/config'
 
 export interface CurrentState {
   currentUser: User
@@ -201,7 +202,8 @@ export const useCurrentStore = defineStore('current', {
           this.currentBusiness = {
             ...foundDummy,
             allowedLocations: allowedLocationDummy,
-          } as BusinessInfo // @TODO: test
+            busiConfig: BusiConfigDummy.find(dummy => dummy.busiId === foundDummy.id && !dummy.deletedAt) || {} as BusiConfig
+          } as BusinessInfo
         }
       } else {
         this.currentBusiness = {} as BusinessInfo

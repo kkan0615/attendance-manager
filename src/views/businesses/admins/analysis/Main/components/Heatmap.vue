@@ -142,7 +142,7 @@ const options = computed(() => ({
             color: getCssVar('primary') || ''
           },
           {
-            from: 8,
+            from: 9,
             to: 24,
             name: 'Over',
             color: '#ef4444'
