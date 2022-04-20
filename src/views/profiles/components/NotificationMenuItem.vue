@@ -1,6 +1,6 @@
 <template>
   <q-item
-    :clickable="notificaiton.busiId"
+    :clickable="!!notificaiton.busiId"
     :to="notificaiton.busiId ? { name: 'BusiMyLayout', params: { busiId: notificaiton.busiId } } : undefined"
   >
     <q-item-section
