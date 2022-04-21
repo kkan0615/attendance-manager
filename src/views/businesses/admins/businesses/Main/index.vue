@@ -1,207 +1,231 @@
 <template>
-  <q-page
-    padding
-  >
-    <c-layout-menubar
-      title="Admin Business"
-      :breadcrumbs="breadcrumbs"
-    />
-    <div
-      class="tw-max-w-4xl tw-mx-auto"
+  <div>
+    <q-page
+      padding
     >
-      <q-form
-        class="tw-space-y-4"
-        @submit="onSubmitForm"
+      <c-layout-menubar
+        title="Admin Business"
+        :breadcrumbs="breadcrumbs"
+      />
+      <div
+        class="tw-max-w-4xl tw-mx-auto"
       >
-        <div
-          class="text-h6 c-text-first-uppercase"
+        <q-form
+          class="tw-space-y-4"
+          @submit="onSubmitForm"
         >
-          {{ $t('Commons.Titles.information') }}
-        </div>
-        <!-- logo -->
-        <div
-          class="tw-flex tw-space-x-4 tw-items-end"
-        >
-          <!-- small logo -->
-          <q-avatar
-            class="tw-border tw-flex tw-justify-center items-center"
-            size="38px"
-          >
-            <q-img
-              v-if="smallLogoToUrl || businessStore.BusinessAdmin.smallLogo"
-              fit="cover"
-              height="80%"
-              width="80%"
-              :src="smallLogoToUrl || businessStore.BusinessAdmin.smallLogo"
-            />
-            <span
-              v-else
-              class="tw-text-xs"
-            >
-              38px x 38px
-            </span>
-          </q-avatar>
-          <!-- medium logo -->
           <div
-            class="tw-border tw-flex tw-justify-center items-center logo"
-            style="max-width: 250px;"
+            id="header-information"
+            class="text-h6 tw-capitalize"
           >
-            <q-img
-              v-if="logoToUrl || businessStore.BusinessAdmin.logo"
-              height="100%"
-              width="100%"
-              fit="cover"
-              :src="logoToUrl || businessStore.BusinessAdmin.logo"
-            />
-            <span
-              v-else
-            >
-              250px x 100px
-            </span>
+            {{ $t('Commons.Titles.information') }}
           </div>
-        </div>
-        <q-file
-          v-model="smallLogo"
-          outlined
-          dense
-          label="Small Logo"
-          accept="image/*"
-        >
-          <template
-            #label
+          <!-- logo -->
+          <div
+            class="tw-flex tw-space-x-4 tw-items-end"
           >
-            <div
-              class="c-required-label c-text-first-uppercase"
+            <!-- small logo -->
+            <q-avatar
+              class="tw-border tw-flex tw-justify-center items-center"
+              size="38px"
             >
-              {{ $t('Types.Models.Businesses.smallLogo') }}
+              <q-img
+                v-if="smallLogoToUrl || businessStore.BusinessAdmin.smallLogo"
+                fit="cover"
+                height="80%"
+                width="80%"
+                :src="smallLogoToUrl || businessStore.BusinessAdmin.smallLogo"
+              />
+              <span
+                v-else
+                class="tw-text-xs"
+              >
+                38px x 38px
+              </span>
+            </q-avatar>
+            <!-- medium logo -->
+            <div
+              class="tw-border tw-flex tw-justify-center items-center logo"
+              style="max-width: 250px;"
+            >
+              <q-img
+                v-if="logoToUrl || businessStore.BusinessAdmin.logo"
+                height="100%"
+                width="100%"
+                fit="cover"
+                :src="logoToUrl || businessStore.BusinessAdmin.logo"
+              />
+              <span
+                v-else
+              >
+                250px x 100px
+              </span>
             </div>
-          </template>
-        </q-file>
-        <q-file
-          v-model="logo"
-          outlined
-          dense
-          label="Logo"
-          accept="image/*"
-        >
-          <template
-            #label
+          </div>
+          <q-file
+            v-model="smallLogo"
+            outlined
+            dense
+            label="Small Logo"
+            accept="image/*"
           >
-            <div
-              class="c-required-label c-text-first-uppercase"
+            <template
+              #label
             >
-              {{ $t('Types.Models.Businesses.logo') }}
-            </div>
-          </template>
-        </q-file>
-        <!-- Name -->
-        <q-input
-          v-model="name"
-          dense
-          label="Name"
-          outlined
-          :rules="rules.name"
-          hide-bottom-space
-        >
-          <template
-            #label
+              <div
+                class="c-required-label c-text-first-uppercase"
+              >
+                {{ $t('Types.Models.Businesses.smallLogo') }}
+              </div>
+            </template>
+          </q-file>
+          <q-file
+            v-model="logo"
+            outlined
+            dense
+            label="Logo"
+            accept="image/*"
           >
-            <div
-              class="c-required-label c-text-first-uppercase"
+            <template
+              #label
             >
-              {{ $t('Types.Models.Businesses.name') }}
-            </div>
-          </template>
-        </q-input>
-        <!-- Max work hour -->
-        <q-input
-          v-model="maxWorkHour"
-          label="Max work hour"
-          type="number"
-          dense
-          outlined
-          :rules="rules.maxWorkHour"
-          hide-bottom-space
-        >
-          <template
-            #label
+              <div
+                class="c-required-label c-text-first-uppercase"
+              >
+                {{ $t('Types.Models.Businesses.logo') }}
+              </div>
+            </template>
+          </q-file>
+          <!-- Name -->
+          <q-input
+            v-model="name"
+            dense
+            label="Name"
+            outlined
+            :rules="rules.name"
+            hide-bottom-space
           >
-            <div
-              class="c-required-label c-text-first-uppercase"
+            <template
+              #label
             >
-              {{ $t('Types.Models.Businesses.maxWorkHour') }}
-            </div>
-          </template>
-        </q-input>
-        <!-- Homepage -->
-        <q-input
-          v-model="homepage"
-          label="Homepage"
-          dense
-          outlined
-        />
-        <!-- Is allow to use nickname -->
-        <q-checkbox
-          v-model="isAllowNickname"
-          :label="$t('Types.Models.Businesses.Labels.isAllowNickname')"
-          dense
-        />
-        <!-- Description -->
-        <q-input
-          v-model="description"
-          label="Description"
-          type="textarea"
-          dense
-          outlined
-          :rules="rules.description"
-          hide-bottom-space
-        />
-        <q-separator />
-        <div
-          class="text-h6"
-        >
-          Overview
-        </div>
-        <!-- User count -->
-        <q-input
-          :model-value="businessStore.BusinessAdmin.userCount"
-          label="User Count"
-          dense
-          filled
-          readonly
-          outlined
-        />
-        <!-- Updated At -->
-        <q-input
-          v-model="createdAt"
-          label="Created At"
-          dense
-          filled
-          readonly
-          outlined
-        />
-        <!-- Created At -->
-        <q-input
-          v-model="updatedAt"
-          label="Updated At"
-          dense
-          filled
-          readonly
-          outlined
-        />
-        <q-separator />
-        <div
-          class="text-right tw-space-x-2"
-        >
-          <q-btn
-            color="primary"
-            type="submit"
-            :label="$t('Commons.Buttons.save')"
+              <div
+                class="c-required-label c-text-first-uppercase"
+              >
+                {{ $t('Types.Models.Businesses.name') }}
+              </div>
+            </template>
+          </q-input>
+          <!-- Max work hour -->
+          <q-input
+            v-model="maxWorkHour"
+            label="Max work hour"
+            type="number"
+            dense
+            outlined
+            :rules="rules.maxWorkHour"
+            hide-bottom-space
+          >
+            <template
+              #label
+            >
+              <div
+                class="c-required-label c-text-first-uppercase"
+              >
+                {{ $t('Types.Models.Businesses.maxWorkHour') }}
+              </div>
+            </template>
+          </q-input>
+          <!-- Homepage -->
+          <q-input
+            v-model="homepage"
+            label="Homepage"
+            dense
+            outlined
           />
-        </div>
-      </q-form>
-    </div>
-  </q-page>
+          <!-- Is allow to use nickname -->
+          <q-checkbox
+            v-model="isAllowNickname"
+            :label="$t('Types.Models.Businesses.Labels.isAllowNickname')"
+            dense
+          />
+          <!-- Description -->
+          <q-input
+            v-model="description"
+            label="Description"
+            type="textarea"
+            dense
+            outlined
+            :rules="rules.description"
+            hide-bottom-space
+          />
+          <q-separator />
+          <div
+            id="header-overview"
+            class="text-h6 tw-capitalize"
+          >
+            overview
+          </div>
+          <!-- User count -->
+          <q-input
+            :model-value="businessStore.BusinessAdmin.userCount"
+            label="User Count"
+            dense
+            filled
+            readonly
+            outlined
+          />
+          <!-- Updated At -->
+          <q-input
+            v-model="createdAt"
+            label="Created At"
+            dense
+            filled
+            readonly
+            outlined
+          />
+          <!-- Created At -->
+          <q-input
+            v-model="updatedAt"
+            label="Updated At"
+            dense
+            filled
+            readonly
+            outlined
+          />
+          <q-separator />
+          <div
+            id="header-config"
+            class="text-h6"
+          >
+            Config
+          </div>
+          <q-toggle
+            v-model="isEnableSimple"
+            label="enable simple work"
+          />
+          <q-toggle
+            v-model="isEnableQrcode"
+            label="enable qr code work"
+          />
+          <q-toggle
+            v-model="isEnableLocation"
+            label="enable location work"
+          />
+          <q-separator />
+          <div
+            class="text-right tw-space-x-2"
+          >
+            <q-btn
+              color="primary"
+              type="submit"
+              :label="$t('Commons.Buttons.save')"
+            />
+          </div>
+        </q-form>
+      </div>
+    </q-page>
+    <busi-admin-business-main-navigator />
+  </div>
 </template>
 <script lang="ts">
 export default {
@@ -217,11 +241,14 @@ import { useCurrentStore } from '@/store/current'
 import dayjs from 'dayjs'
 import { useBusinessStore } from '@/store/business'
 import CLayoutMenubar from '@/components/commons/layouts/Menubar/index.vue'
+import BusiAdminBusinessMainNavigator from '@/views/businesses/admins/businesses/Main/components/Navigator.vue'
+import { storeToRefs } from 'pinia'
 
 const i18n = useI18n()
 const currentStore = useCurrentStore()
 const businessStore = useBusinessStore()
 
+const { currentBusiness } = storeToRefs(currentStore)
 const logo = ref<File | undefined>()
 const smallLogo = ref<File | undefined>()
 const name = ref('')
@@ -231,6 +258,9 @@ const isAllowNickname = ref(false)
 const description = ref('')
 const createdAt = ref('')
 const updatedAt = ref('')
+const isEnableSimple = ref(false)
+const isEnableLocation = ref(false)
+const isEnableQrcode = ref(false)
 const rules = ref({
   name: [
     (val: string) => !!val || i18n.t('Commons.Messages.Validations.required', { field:'Name' }),
@@ -268,6 +298,9 @@ const initData = async () => {
     description.value = businessStore.BusinessAdmin.description || ''
     createdAt.value = dayjs(businessStore.BusinessAdmin.createdAt).format('ll')
     updatedAt.value = dayjs(businessStore.BusinessAdmin.updatedAt).format('ll')
+    isEnableSimple.value = currentBusiness.value.busiConfig.isEnableSimple || false
+    isEnableLocation.value = currentBusiness.value.busiConfig.isEnableLocation || false
+    isEnableQrcode.value = currentBusiness.value.busiConfig.isEnableQrcode || false
   } catch (e) {
     console.error(e)
   }
@@ -282,7 +315,7 @@ const onSubmitForm = async () => {
         smallLogoFile: smallLogo.value
       })
     }
-
+    /* Update business data */
     await businessStore.updateBusiness({
       id: currentStore.CurrentBusiness.id,
       name: name.value,
@@ -290,6 +323,13 @@ const onSubmitForm = async () => {
       maxWorkHour: maxWorkHour.value,
       isAllowNickname: isAllowNickname.value,
       description: description.value
+    })
+    /* Update business config data */
+    await businessStore.updateBusiConfig({
+      id: currentBusiness.value.busiConfig.id,
+      isEnableSimple: isEnableSimple.value,
+      isEnableLocation: isEnableLocation.value,
+      isEnableQrcode: isEnableQrcode.value,
     })
 
     /* Reload current store */

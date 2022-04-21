@@ -67,6 +67,13 @@ export const useCurrentStore = defineStore('current', {
       return state.currentBusiness
     },
     /**
+     * Current business config
+     * @param state
+     */
+    CurrentBusiConfig (state) {
+      return state.currentBusiness ? state.currentBusiness.busiConfig : {} as BusiConfig
+    },
+    /**
      * Current Business user
      * @param state
      */

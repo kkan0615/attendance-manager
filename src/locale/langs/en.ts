@@ -26,6 +26,7 @@ export const enDictionary = {
       comment: 'comment',
       information: 'information',
       overview: 'overview',
+      contentNavigator: 'on this page',
     },
     Messages: {
       cancelSave: 'Would you like to cancel save?',

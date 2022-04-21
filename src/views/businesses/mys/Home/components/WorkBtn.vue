@@ -13,7 +13,7 @@
     </div>
     <!-- Work option select -->
     <q-select
-      v-if="!currentStore.CurrentBusiUser.startWorkAt"
+      v-if="!currentBusiUser.startWorkAt"
       v-model="workOption"
       class="tw-mb-2"
       dense
@@ -22,10 +22,11 @@
       :options="options"
       emit-value
       map-options
+      :option-disable="workOptionDisable"
     />
     <!-- On the job button -->
     <q-btn
-      v-if="!currentStore.CurrentBusiUser.startWorkAt"
+      v-if="!currentBusiUser.startWorkAt"
       color="primary"
       rounded
       icon="login"
@@ -121,7 +122,7 @@ const i18n = useI18n()
 const currentStore = useCurrentStore()
 const busiUserStore = useBusiUserStore()
 
-const { currentBusiUser } = storeToRefs(currentStore)
+const { currentBusiUser, currentBusiness } = storeToRefs(currentStore)
 const workOption = ref<BusiUserWorkOption>('simple')
 const options = ref(busiUserWorkOptionSelectOption)
 const isQrCodeDialogOpen = ref(false)
@@ -311,5 +312,21 @@ const getCurrentPosition = (): Promise<{latitude?: number; longitude?: number}> 
       longitude: undefined,
     }))
   })
+}
+
+/**
+ * Make work select option disable or able
+ * @param opt - work option
+ */
+const workOptionDisable = (opt: { label: string; value: BusiUserWorkOption }) => {
+  if (currentBusiness.value.busiConfig.isEnableSimple && opt.value === 'simple') {
+    return false
+  } else if (currentBusiness.value.busiConfig.isEnableQrcode && opt.value === 'qrCode') {
+    return false
+  } else if (currentBusiness.value.busiConfig.isEnableLocation && opt.value === 'location') {
+    return false
+  } else {
+    return true
+  }
 }
 </script>

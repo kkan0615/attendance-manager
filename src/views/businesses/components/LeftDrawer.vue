@@ -144,6 +144,7 @@
         >
           <!-- QR code scanner (Camera is required) -->
           <q-item
+            v-if="currentBusiness.busiConfig.isEnableQrcode"
             clickable
             :to="{ name: 'BusiAdminQRCodeLayout' }"
             active-class="active-router"
@@ -227,9 +228,12 @@ export default {
 import { useBusiSettingStore } from '@/store/businessSetting'
 import { useCurrentStore } from '@/store/current'
 import { computed } from 'vue'
+import { storeToRefs } from 'pinia'
 
 const currentStore = useCurrentStore()
 const busiSettingStore = useBusiSettingStore()
+
+const { currentBusiness } = storeToRefs(currentStore)
 
 const isAdmin = computed(() =>
   currentStore.CurrentBusiUser.auth === 'admin'

@@ -6,3 +6,5 @@ export interface BusiConfig extends DefaultAttributes {
   isEnableLocation: boolean
   isEnableQrcode: boolean
 }
+
+export type BusiConfigUpdateForm = Omit<BusiConfig, 'busiId' | 'createdAt' | 'updatedAt' | 'deletedAt'>

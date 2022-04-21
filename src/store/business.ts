@@ -1,8 +1,9 @@
 import { defineStore } from 'pinia'
 import { BusinessAdminListInfo, BusinessUpdateForm, BusinessUploadForm } from '@/types/models/businesses'
 import { BusiUserDummy } from '@/dummies/users/busiUser'
-import { BusinessDummy } from '@/dummies/users/businesses'
+import { BusiConfigDummy, BusinessDummy } from '@/dummies/users/businesses'
 import dayjs from 'dayjs'
+import { BusiConfigUpdateForm } from '@/types/models/businesses/config'
 
 export interface BusinessState {
   businessListFilter: any
@@ -128,20 +129,25 @@ export const useBusinessStore = defineStore('business', {
      * Update business by id
      * @param payload - update form
      */
-    updateBusiness (payload: BusinessUpdateForm) {
-      if (import.meta.env.VITE_IS_USE_DUMMY) {
-        const foundDummy = BusinessDummy.find(dummy => dummy.id === payload.id)
-        if (foundDummy) {
-          foundDummy.name = payload.name
-          foundDummy.homepage = payload.homepage
-          foundDummy.maxWorkHour = payload.maxWorkHour
-          foundDummy.isAllowNickname = payload.isAllowNickname
-          foundDummy.description = payload.description
-          foundDummy.updatedAt = dayjs().toISOString()
+    async updateBusiness (payload: BusinessUpdateForm) {
+      try {
+        if (import.meta.env.VITE_IS_USE_DUMMY) {
+          const foundDummy = BusinessDummy.find(dummy => dummy.id === payload.id)
+          if (foundDummy) {
+            foundDummy.name = payload.name
+            foundDummy.homepage = payload.homepage
+            foundDummy.maxWorkHour = payload.maxWorkHour
+            foundDummy.isAllowNickname = payload.isAllowNickname
+            foundDummy.description = payload.description
+            foundDummy.updatedAt = dayjs().toISOString()
+          }
+          return 1
+        } else {
+          return 1
         }
-        return 1
-      } else {
-        return 1
+      } catch (e) {
+        console.error(e)
+        throw e
       }
     },
     /**
@@ -150,6 +156,29 @@ export const useBusinessStore = defineStore('business', {
      */
     deleteBusiness (payload: number) {
       return 0
-    }
+    },
+    /**
+     * Update business by id
+     * @param payload - update form
+     */
+    async updateBusiConfig (payload: BusiConfigUpdateForm) {
+      try {
+        if (import.meta.env.VITE_IS_USE_DUMMY) {
+          const foundDummy = BusiConfigDummy.find(dummy => dummy.id === payload.id)
+          if (foundDummy) {
+            foundDummy.isEnableSimple = payload.isEnableSimple
+            foundDummy.isEnableQrcode = payload.isEnableQrcode
+            foundDummy.isEnableLocation = payload.isEnableLocation
+            foundDummy.updatedAt = dayjs().toISOString()
+          }
+          return 1
+        } else {
+          return 1
+        }
+      } catch (e) {
+        console.error(e)
+        throw e
+      }
+    },
   }
 })

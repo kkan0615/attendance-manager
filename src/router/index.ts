@@ -14,7 +14,17 @@ export const routes: RouteRecordRaw[] = [
   ...busiRoutes,
 ]
 
+
 export const router = createRouter({
   history: createWebHistory(''),
   routes,
+  // scrollBehavior: (to, from, savedPosition) => {
+  //   if (to.hash) {
+  //     return { el: to.hash }
+  //   } else if (savedPosition) {
+  //     return savedPosition
+  //   } else {
+  //     return { top: 0 }
+  //   }
+  // }
 })

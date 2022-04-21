@@ -1,6 +1,6 @@
 <template>
   <q-layout
-    view="lHh Lpr lFf"
+    view="lHh LpR lFf"
     class="shadow-2 rounded-borders"
   >
     <!--  header  -->
