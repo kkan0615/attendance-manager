@@ -16,6 +16,7 @@
         >
           <div
             id="header-information"
+            name="header"
             class="text-h6 tw-capitalize"
           >
             {{ $t('Commons.Titles.information') }}
@@ -161,6 +162,7 @@
           <q-separator />
           <div
             id="header-overview"
+            name="header"
             class="text-h6 tw-capitalize"
           >
             overview
@@ -195,6 +197,7 @@
           <q-separator />
           <div
             id="header-config"
+            name="header"
             class="text-h6"
           >
             Config
