@@ -12,6 +12,11 @@ export const routes: RouteRecordRaw[] = [
   ...authRoutes,
   ...profileRoutes,
   ...busiRoutes,
+  {
+    path: '/:pathMatch(.*)*',
+    name: 'Error404',
+    component: () => import('@/views/errors/404/index.vue'),
+  },
 ]
 
 

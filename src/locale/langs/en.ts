@@ -120,16 +120,28 @@ export const enDictionary = {
     }
   },
   Pages: {
+    Home: {
+      title: 'home',
+    },
     Businesses: {
+      title: 'business',
+      Admins: {
+        title: 'admin business',
+      },
+      Apps: {
+        title: 'app business',
+      },
       Mys: {
+        title: 'my business',
         Homes: {
           Titles: {
             weeklyWorkHistory: 'week work history',
           }
         }
-      }
+      },
     },
     Profiles: {
+      title: 'profile',
       Homes: {
         title: 'home'
       },

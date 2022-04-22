@@ -17,6 +17,8 @@ import { useRoute, useRouter } from 'vue-router'
 import { showSnackbar } from '@/utils/libs/quasar/notify'
 import { useI18n } from 'vue-i18n'
 import ProfileLayoutHeader from '@/views/profiles/components/Header.vue'
+import { onMounted } from 'vue'
+import { toCapitalize } from '@/utils/commons/stringUtil'
 
 const route = useRoute()
 const router = useRouter()
@@ -42,4 +44,8 @@ const checkPageValidation = async () => {
 }
 
 checkPageValidation()
+
+onMounted(() => {
+  document.title = toCapitalize(i18n.t('Pages.Profiles.title'))
+})
 </script>
