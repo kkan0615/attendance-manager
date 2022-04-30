@@ -10,12 +10,18 @@
         class="scroll-y"
         style="width: 350px; max-height: 400px;"
       >
+        <q-card-section
+          class="q-py-sm"
+        >
+          Business list
+        </q-card-section>
+        <q-separator />
         <q-card-section>
           <div
-            class="tw-grid tw-grid-cols-3"
+            class="tw-grid tw-grid-cols-3 tw-gap-2"
           >
             <busi-layout-busi-list-item
-              v-for="business in currentStore.CurrentUserBusiList"
+              v-for="business in currentUserBusiList"
               :key="business.id"
               :business="business"
             />
@@ -34,8 +40,11 @@ export default {
 import { useCurrentStore } from '@/store/current'
 import { onBeforeUnmount } from 'vue'
 import BusiLayoutBusiListItem from '@/views/businesses/components/BusiListItem.vue'
+import { storeToRefs } from 'pinia'
 
 const currentStore = useCurrentStore()
+
+const { currentUserBusiList } = storeToRefs(currentStore)
 
 currentStore.loadCurrentUserBusiList()
 

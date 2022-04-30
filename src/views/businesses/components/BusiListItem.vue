@@ -1,6 +1,11 @@
 <template>
   <div
     class="text-center"
+    :class="{
+      'tw-border': isActive,
+      'tw-border-dotted': isActive,
+      'tw-border-q-primary': isActive,
+    }"
   >
     <router-link :to="{ name: 'BusiMyLayout', params: { busiId: business.id } }">
       <q-avatar
@@ -27,8 +32,12 @@ export default {
 }
 </script>
 <script setup lang="ts">
-import { PropType } from 'vue'
+import { computed, PropType } from 'vue'
 import { BusinessSimpleListInfo } from '@/types/models/businesses'
+import { useCurrentStore } from '@/store/current'
+import { storeToRefs } from 'pinia'
+
+const currentStore = useCurrentStore()
 
 const props = defineProps({
   business: {
@@ -38,4 +47,8 @@ const props = defineProps({
   }
 })
 
+const { currentBusiness } = storeToRefs(currentStore)
+
+/* If the current business and business id is same, it's active state */
+const isActive = computed(() => props.business && props.business.id === currentBusiness.value.id)
 </script>
