@@ -27,6 +27,7 @@ export const enDictionary = {
       information: 'information',
       overview: 'overview',
       contentNavigator: 'on this page',
+      getOffWork: 'get off the work of {name}'
     },
     Messages: {
       cancelSave: 'Would you like to cancel save?',
@@ -48,7 +49,8 @@ export const enDictionary = {
         passwordRule2: 'Password must include at least one capital letter',
       },
       Questions: {
-        delete: 'Would you like to delete?'
+        delete: 'Would you like to delete?',
+        getOffWork: 'would you like to get off {name}'
       }
     },
     Placeholders: {

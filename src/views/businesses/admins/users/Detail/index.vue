@@ -61,9 +61,8 @@ import { useI18n } from 'vue-i18n'
 import CLayoutMenubar from '@/components/commons/layouts/Menubar/index.vue'
 import BusiAdminUserDetailProfile from '@/views/businesses/admins/users/Detail/components/Profile.vue'
 import BusiAdminUserDetailHistoryList from '@/views/businesses/admins/users/Detail/components/HistoryList.vue'
-import BusiAdminUserDetailSchedule from '@/views/businesses/admins/users/Detail/components/Schedule.vue'
 import dayjs from 'dayjs'
-import { toCapitalize } from '@/utils/commons/stringUtil'
+import { toCapitalize, toCapitalizeFirstLetter } from '@/utils/commons/stringUtil'
 import { useBusiUserWorkHistoryStore } from '@/store/busiUserWorkHistory'
 import { storeToRefs } from 'pinia'
 
@@ -123,10 +122,8 @@ const initData = async () => {
 
 const onClickWorkOffBtn = () => {
   $q.dialog({
-    // @TODO: Adjust i18n
-    title: `Get off the work of ${busiUserStore.BusiUserAdmin.name}`,
-    // @TODO: Adjust i18n
-    message: `Would you to get off ${busiUserStore.BusiUserAdmin.name}`,
+    title: toCapitalizeFirstLetter(i18n.t('Commons.Titles.getOffWork', { name: busiUserAdmin.value.name })),
+    message: toCapitalizeFirstLetter(i18n.t('Commons.Messages.Questions.getOffWork', { name: busiUserAdmin.value.name })),
     cancel: true,
   }).onOk(async () => {
     try {
