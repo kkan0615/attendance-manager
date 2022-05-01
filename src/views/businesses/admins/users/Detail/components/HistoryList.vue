@@ -47,6 +47,7 @@
           :work-history-list="busiUserWorkHistoryList"
         />
       </div>
+      <!-- Table -->
       <div>
         <dx-data-grid
           :data-source="busiUserWorkHistoryList"
@@ -62,6 +63,17 @@
           <dx-scrolling
             column-rendering-mode="virtual"
           />
+          <template
+            #actionsCellTemplate="{ data }"
+          >
+            <div
+              class="tw-text-center"
+            >
+              <busi-admin-user-detail-work-history-form-dialog
+                :work-history="data.data"
+              />
+            </div>
+          </template>
         </dx-data-grid>
       </div>
     </q-card-section>
@@ -83,6 +95,8 @@ import { convertSeconds } from '@/utils/commons/datetime'
 import { storeToRefs } from 'pinia'
 import WorkHistoryOverviews from '@/components/WorkHistoryOverviews..vue'
 import { useBusiUserWorkHistoryStore } from '@/store/busiUserWorkHistory'
+import BusiAdminUserDetailWorkHistoryFormDialog
+  from '@/views/businesses/admins/users/Detail/components/WorkHistoryFormDialog.vue'
 
 const busiUserStore = useBusiUserStore()
 const busiUserWorkHistoryStore = useBusiUserWorkHistoryStore()
@@ -144,6 +158,18 @@ const columns = ref<Column[]>([
     calculateDisplayValue: (row: TempBusiUserWorkHistory) => {
       return row.endLatitude && row.endLongitude ? `${row.endLatitude}, ${row.endLongitude}` : ''
     }
+  },
+  {
+    caption: 'actions',
+    dataField: 'actions',
+    alignment: 'center',
+    cellTemplate: 'actionsCellTemplate',
+    allowEditing: false,
+    allowExporting: false,
+    allowFiltering: false,
+    allowGrouping: false,
+    allowSearch: false,
+    allowSorting: false
   }
 ])
 

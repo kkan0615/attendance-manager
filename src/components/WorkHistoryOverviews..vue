@@ -168,7 +168,7 @@ const maxWorkTime = computed(() => {
     return '00:00:00'
   }
   const filteredWorkHistoryList = props.workHistoryList
-    .filter(workHistory => workHistory.endedAt)
+  // .filter(workHistory => workHistory.endedAt)
   const max = Math.max(...filteredWorkHistoryList
     .map(workHistory => {
       const startedAt = dayjs(workHistory.startedAt)
@@ -184,7 +184,7 @@ const minWorkTime = computed(() => {
     return '00:00:00'
   }
   const filteredWorkHistoryList = props.workHistoryList
-    .filter(workHistory => workHistory.endedAt)
+  // .filter(workHistory => workHistory.endedAt)
   const min = Math.min(...filteredWorkHistoryList
     .map(workHistory => {
       const startedAt = dayjs(workHistory.startedAt)

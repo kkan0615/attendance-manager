@@ -3,7 +3,7 @@
     padding
   >
     <c-layout-menubar
-      :title="busiUserStore.BusiUserAdmin.name"
+      :title="busiUserAdmin.name"
       :breadcrumbs="breadcrumbs"
     />
     <div
@@ -13,7 +13,7 @@
         class="q-mb-md tw-flex tw-w-full"
       >
         <q-btn
-          v-if="busiUserStore.BusiUserAdmin.status !== 'off'"
+          v-if="busiUserAdmin.status !== 'off'"
           color="negative"
           :label="$t('Commons.Buttons.offWork')"
           @click="onClickWorkOffBtn"
@@ -40,7 +40,8 @@
       <busi-admin-user-detail-history-list
         class="q-mb-md"
       />
-      <busi-admin-user-detail-schedule />
+      <!-- @MEMO: Not use yet -->
+      <!--      <busi-admin-user-detail-schedule />-->
     </div>
   </q-page>
 </template>
@@ -64,6 +65,7 @@ import BusiAdminUserDetailSchedule from '@/views/businesses/admins/users/Detail/
 import dayjs from 'dayjs'
 import { toCapitalize } from '@/utils/commons/stringUtil'
 import { useBusiUserWorkHistoryStore } from '@/store/busiUserWorkHistory'
+import { storeToRefs } from 'pinia'
 
 const route = useRoute()
 const router = useRouter()
@@ -73,6 +75,8 @@ const busiUserStore = useBusiUserStore()
 const currentStore = useCurrentStore()
 const busiUserWorkHistoryStore = useBusiUserWorkHistoryStore()
 
+const { busiUserAdmin } = storeToRefs(busiUserStore)
+// @TODO: Adjust i18n
 const breadcrumbs = ref<QBreadcrumbsElProps[]>([
   {
     label: 'Admin',
@@ -90,10 +94,10 @@ const initData = async () => {
     const { id } = route.params
     if (id) {
       await busiUserStore.loadBusiUserAdmin(Number(id))
-      if (!busiUserStore.BusiUserAdmin || !busiUserStore.BusiUserAdmin.id) {
+      if (!busiUserAdmin.value || !busiUserAdmin.value.id) {
         throw new Error('BusiUserAdmin is not found')
       }
-      if (busiUserStore.BusiUserAdmin.busiId !== currentStore.CurrentBusiness.id) {
+      if (busiUserAdmin.value.busiId !== currentStore.CurrentBusiness.id) {
         throw new Error('Business id is not matched')
       }
 
@@ -119,7 +123,9 @@ const initData = async () => {
 
 const onClickWorkOffBtn = () => {
   $q.dialog({
+    // @TODO: Adjust i18n
     title: `Get off the work of ${busiUserStore.BusiUserAdmin.name}`,
+    // @TODO: Adjust i18n
     message: `Would you to get off ${busiUserStore.BusiUserAdmin.name}`,
     cancel: true,
   }).onOk(async () => {
