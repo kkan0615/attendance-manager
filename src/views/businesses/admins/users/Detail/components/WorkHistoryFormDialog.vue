@@ -29,7 +29,9 @@
         />
       </q-card-section>
       <q-separator />
-      <q-form>
+      <q-form
+        @submit="onSubmitForm"
+      >
         <q-card-section>
           <!-- Work option select -->
           <q-select
@@ -107,15 +109,22 @@ import { storeToRefs } from 'pinia'
 import { useCurrentStore } from '@/store/current'
 import { useI18n } from 'vue-i18n'
 import { showSnackbar } from '@/utils/libs/quasar/notify'
+import { useBusiUserWorkHistoryStore } from '@/store/busiUserWorkHistory'
 
 const i18n = useI18n()
 const currentStore = useCurrentStore()
+const busiUserWorkHistoryStore = useBusiUserWorkHistoryStore()
 
 const props = defineProps({
   workHistory: {
     type: Object as PropType<TempBusiUserWorkHistoryListInfo>,
     required: true,
     default: () => {},
+  },
+  isUpdate: {
+    type: Boolean,
+    required: true,
+    default: false,
   }
 })
 
@@ -126,7 +135,7 @@ const workOption = ref<BusiUserWorkOption | undefined>('simple')
 const options = ref(busiUserWorkOptionSelectOption)
 
 const onClickOpenBtn = () => {
-  if (props.workHistory) {
+  if (props.workHistory && props.isUpdate) {
     rangeDate.value = [dayjs(props.workHistory.startedAt).toDate(), dayjs(props.workHistory.endedAt).toDate()]
     workOption.value = props.workHistory.workOption
   } else {
@@ -165,7 +174,26 @@ const workOptionDisable = (opt: { label: string; value: BusiUserWorkOption }) =>
 
 const onSubmitForm = async () => {
   try {
-  //
+    if (props.isUpdate && !props.workHistory) {
+      throw new Error('no props')
+    }
+
+    if (props.isUpdate) {
+      await busiUserWorkHistoryStore.updateBusiUserWorkHistory({
+        id: props.workHistory.id
+      //
+      })
+    } else {
+      await busiUserWorkHistoryStore.createBusiUserWorkHistory({
+      //
+      })
+    }
+    /* Load work history */
+    // await busiUserWorkHistoryStore.loadBusiUserWorkHistoryList({
+    //   busiUserId: busiUserStore.BusiUserAdmin.id,
+    //   rangeStartAt: dayjs(rangeDate.value[0]).toISOString(),
+    //   rangeEndAt: dayjs(rangeDate.value[1]).toISOString(),
+    // })
     showSnackbar({
       message: i18n.t('Commons.Messages.saved'),
       color: 'positive'
