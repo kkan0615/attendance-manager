@@ -118,7 +118,16 @@ export const useBusiUserWorkHistoryStore = defineStore('busiUserWorkHistory', {
      * @param payload - create form
      */
     createBusiUserWorkHistory (payload: any) {
-      return 0
+      try {
+        if (import.meta.env.VITE_IS_USE_DUMMY) {
+          return 1
+        } else {
+          return 1
+        }
+      } catch (e) {
+        console.error(e)
+        throw e
+      }
     },
     /**
      * Update busiUserWorkHistory by id

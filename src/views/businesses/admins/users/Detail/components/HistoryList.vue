@@ -67,6 +67,7 @@
             #actionsCellTemplate="{ data }"
           >
             <div
+              v-if="data.data.endedAt"
               class="tw-text-center"
             >
               <busi-admin-user-detail-work-history-form-dialog
