@@ -63,6 +63,20 @@
           <dx-scrolling
             column-rendering-mode="virtual"
           />
+          <dx-toolbar>
+            <dx-item
+              location="after"
+              template="createDialogTemplate"
+            />
+            <dx-item
+              name="columnChooserButton"
+            />
+          </dx-toolbar>
+          <template
+            #createDialogTemplate
+          >
+            <busi-admin-user-detail-work-history-form-dialog />
+          </template>
           <template
             #actionsCellTemplate="{ data }"
           >
@@ -71,6 +85,7 @@
               class="tw-text-center"
             >
               <busi-admin-user-detail-work-history-form-dialog
+                is-update
                 :work-history="data.data"
               />
             </div>
@@ -89,7 +104,7 @@ export default {
 import { useBusiUserStore } from '@/store/busiUser'
 import dayjs from 'dayjs'
 import { ref } from 'vue'
-import { DxDataGrid, DxColumnChooser, DxScrolling } from 'devextreme-vue/data-grid'
+import { DxDataGrid, DxColumnChooser, DxScrolling, DxToolbar, DxItem } from 'devextreme-vue/data-grid'
 import { Column } from 'devextreme/ui/data_grid'
 import { TempBusiUserWorkHistory } from '@/types/models/users/busiWorkHistory'
 import { convertSeconds } from '@/utils/commons/datetime'

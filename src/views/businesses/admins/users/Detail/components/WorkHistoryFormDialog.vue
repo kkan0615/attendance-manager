@@ -6,7 +6,7 @@
     round
     padding="0"
     color="primary"
-    icon="edit"
+    :icon="isUpdate ? 'edit' : 'add'"
     @click="onClickOpenBtn"
   />
   <q-dialog
@@ -36,6 +36,7 @@
           <!-- Work option select -->
           <q-select
             v-model="workOption"
+            hide-bottom-space
             class="tw-mb-2"
             dense
             outlined
@@ -44,6 +45,7 @@
             emit-value
             map-options
             :option-disable="workOptionDisable"
+            :rules="rules.workOption"
           >
             <template
               #label
@@ -60,6 +62,8 @@
             label="Range"
             dense
             outlined
+            hide-bottom-space
+            :rules="rules.rangeDate"
           >
             <date-picker
               v-model="rangeDate"
@@ -118,21 +122,33 @@ const busiUserWorkHistoryStore = useBusiUserWorkHistoryStore()
 const props = defineProps({
   workHistory: {
     type: Object as PropType<TempBusiUserWorkHistoryListInfo>,
-    required: true,
+    required: false,
     default: () => {},
   },
   isUpdate: {
     type: Boolean,
-    required: true,
+    required: false,
     default: false,
   }
 })
 
-const { currentBusiness } = storeToRefs(currentStore)
+const { currentUser, currentBusiness, currentBusiUser } = storeToRefs(currentStore)
 const isOpen = ref(false)
 const rangeDate = ref<Date[]>([])
-const workOption = ref<BusiUserWorkOption | undefined>('simple')
+const workOption = ref<BusiUserWorkOption | undefined>(undefined)
 const options = ref(busiUserWorkOptionSelectOption)
+const rules = ref({
+  rangeDate: [
+    (val: Date[]) => () => {
+      // !!val.length || val.length !== 2 || i18n.t('Commons.Messages.Validations.required', { field:'Name' }),
+      console.log(val)
+      return 'hu>??'
+    }
+  ],
+  workOption: [
+    (val: string) => !!val || i18n.t('Commons.Messages.Validations.required', { field:'work option' }),
+  ],
+})
 
 const onClickOpenBtn = () => {
   if (props.workHistory && props.isUpdate) {
@@ -140,15 +156,16 @@ const onClickOpenBtn = () => {
     workOption.value = props.workHistory.workOption
   } else {
     rangeDate.value = [dayjs().startOf('day').toDate(), dayjs().toDate()]
-    if (currentBusiness.value.busiConfig.isEnableSimple) {
-      workOption.value = 'simple'
-    } else if (currentBusiness.value.busiConfig.isEnableQrcode) {
-      workOption.value = 'qrCode'
-    } else if (currentBusiness.value.busiConfig.isEnableLocation) {
-      workOption.value = 'location'
-    } else {
-      workOption.value = undefined
-    }
+    // if (currentBusiness.value.busiConfig.isEnableSimple) {
+    //   workOption.value = 'simple'
+    // } else if (currentBusiness.value.busiConfig.isEnableQrcode) {
+    //   workOption.value = 'qrCode'
+    // } else if (currentBusiness.value.busiConfig.isEnableLocation) {
+    //   workOption.value = 'location'
+    // } else {
+    //   workOption.value = undefined
+    // }
+    workOption.value = undefined
   }
 
   nextTick(() => {
@@ -178,16 +195,27 @@ const onSubmitForm = async () => {
       throw new Error('no props')
     }
 
-    if (props.isUpdate) {
-      await busiUserWorkHistoryStore.updateBusiUserWorkHistory({
-        id: props.workHistory.id
-      //
-      })
-    } else {
-      await busiUserWorkHistoryStore.createBusiUserWorkHistory({
-      //
-      })
-    }
+    // if (props.isUpdate) {
+    //   await busiUserWorkHistoryStore.updateBusiUserWorkHistory({
+    //     id: props.workHistory.id,
+    //     busiId: currentBusiness.value.id,
+    //     userId: currentUser.value.id,
+    //     busiUserId: currentBusiUser.value.id,
+    //     startedAt: dayjs(rangeDate.value[0]).toISOString(),
+    //     endedAt: dayjs(rangeDate.value[1]).toISOString(),
+    //     workOption: workOption.value || 'simple',
+    //   //
+    //   })
+    // } else {
+    //   await busiUserWorkHistoryStore.createBusiUserWorkHistory({
+    //     busiId: currentBusiness.value.id,
+    //     userId: currentUser.value.id,
+    //     busiUserId: currentBusiUser.value.id,
+    //     startedAt: dayjs(rangeDate.value[0]).toISOString(),
+    //     endedAt: dayjs(rangeDate.value[1]).toISOString(),
+    //     workOption: workOption.value || 'simple',
+    //   })
+    // }
     /* Load work history */
     // await busiUserWorkHistoryStore.loadBusiUserWorkHistoryList({
     //   busiUserId: busiUserStore.BusiUserAdmin.id,

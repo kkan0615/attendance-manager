@@ -1,7 +1,8 @@
 import { defineStore } from 'pinia'
 import {
+  TempBusiUserWorkHistoryCreateForm,
   TempBusiUserWorkHistoryListInfo,
-  TempBusiUserWorkHistorySelectListQuery
+  TempBusiUserWorkHistorySelectListQuery, TempBusiUserWorkHistoryUpdateForm
 } from '@/types/models/users/busiWorkHistory'
 import { TempBusiUserWorkHistoryDummy } from '@/dummies/users/busiUserWorkHistory'
 import dayjs from 'dayjs'
@@ -117,10 +118,27 @@ export const useBusiUserWorkHistoryStore = defineStore('busiUserWorkHistory', {
      * Create busiUserWorkHistory
      * @param payload - create form
      */
-    createBusiUserWorkHistory (payload: any) {
+    createBusiUserWorkHistory (payload: TempBusiUserWorkHistoryCreateForm) {
       try {
         if (import.meta.env.VITE_IS_USE_DUMMY) {
-          return 1
+          const newId = TempBusiUserWorkHistoryDummy.length + 1
+          TempBusiUserWorkHistoryDummy.push({
+            id: newId,
+            busiId: payload.busiId,
+            userId: payload.userId,
+            busiUserId: payload.busiUserId,
+            workOption: payload.workOption,
+            startedAt: payload.startedAt,
+            endedAt: payload.endedAt,
+            startLatitude: payload.startLatitude,
+            startLongitude: payload.startLongitude,
+            endLatitude: payload.endLatitude,
+            endLongitude: payload.endLongitude,
+            createdAt: dayjs().toISOString(),
+            updatedAt: dayjs().toISOString(),
+          })
+
+          return newId
         } else {
           return 1
         }
@@ -133,8 +151,23 @@ export const useBusiUserWorkHistoryStore = defineStore('busiUserWorkHistory', {
      * Update busiUserWorkHistory by id
      * @param payload - update form
      */
-    updateBusiUserWorkHistory (payload: any) {
-      return 0
+    updateBusiUserWorkHistory (payload: TempBusiUserWorkHistoryUpdateForm) {
+      try {
+        if (import.meta.env.VITE_IS_USE_DUMMY) {
+          const foundDummy = TempBusiUserWorkHistoryDummy.find(dummy => dummy.id === payload.id)
+          if (!foundDummy) {
+            throw new Error('no found data by id')
+          }
+
+          foundDummy.endedAt = payload.endedAt
+          foundDummy.endLatitude = payload.endLatitude
+          foundDummy.endLongitude = payload.endLongitude
+          foundDummy.updatedAt = dayjs().toISOString()
+        }
+      } catch (e) {
+        console.error(e)
+        throw e
+      }
     },
     /**
      * Delete busiUserWorkHistory by id
