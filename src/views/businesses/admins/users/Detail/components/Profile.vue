@@ -11,36 +11,36 @@
         >
           <q-avatar
             :class="{
-              'tw-ring-4': busiUserStore.BusiUserAdmin.status,
-              'tw-ring-status-work': busiUserStore.BusiUserAdmin.status === 'work',
-              'tw-ring-status-rest': busiUserStore.BusiUserAdmin.status === 'rest',
-              'tw-ring-status-off': busiUserStore.BusiUserAdmin.status === 'off',
+              'tw-ring-4': busiUserAdmin.status,
+              'tw-ring-status-work': busiUserAdmin.status === 'work',
+              'tw-ring-status-rest': busiUserAdmin.status === 'rest',
+              'tw-ring-status-off': busiUserAdmin.status === 'off',
             }"
             size="250px"
           >
             <q-img
-              v-if="busiUserStore.BusiUserAdmin.img"
+              v-if="busiUserAdmin.img"
               class="profile-image"
               fit="cover"
-              :src="busiUserStore.BusiUserAdmin.img"
+              :src="busiUserAdmin.img"
             />
             <span
               v-else
             >
-              {{ busiUserStore.BusiUserAdmin.name[0] }}
+              {{ busiUserAdmin.name[0] }}
             </span>
           </q-avatar>
           <busi-user-status-badge
             class="status-badge"
-            :status="busiUserStore.BusiUserAdmin.status"
+            :status="busiUserAdmin.status"
           />
         </div>
         <div
-          v-if="busiUserStore.BusiUserAdmin.startWorkAt"
+          v-if="busiUserAdmin.lastWorkHistory && busiUserAdmin.lastWorkHistory.startedAt"
           class="text-center q-mt-md"
         >
           <work-timer
-            :start-time="busiUserStore.BusiUserAdmin.startWorkAt"
+            :start-time="busiUserAdmin.lastWorkHistory.startedAt"
           />
         </div>
       </div>
@@ -59,7 +59,7 @@
           <div
             class="c-display-row-end--content c-text-first-uppercase"
           >
-            {{ busiUserStore.BusiUserAdmin.name }}
+            {{ busiUserAdmin.name }}
           </div>
         </div>
         <!-- Email -->
@@ -74,7 +74,7 @@
           <div
             class="c-display-row-end--content c-text-first-uppercase"
           >
-            {{ busiUserStore.BusiUserAdmin.email }}
+            {{ busiUserAdmin.email }}
           </div>
         </div>
         <!-- Auth -->
@@ -89,7 +89,7 @@
           <div
             class="c-display-row-end--content c-text-first-uppercase"
           >
-            {{ $t(`Types.Models.BusiUsers.UserAuths.${busiUserStore.BusiUserAdmin.auth}`) }}
+            {{ $t(`Types.Models.BusiUsers.UserAuths.${busiUserAdmin.auth}`) }}
           </div>
         </div>
       </div>
@@ -105,8 +105,11 @@ export default {
 import { useBusiUserStore } from '@/store/busiUser'
 import WorkTimer from '@/components/WorkTimer.vue'
 import BusiUserStatusBadge from '@/components/BusiUserStatusBadge.vue'
+import { storeToRefs } from 'pinia'
 
 const busiUserStore = useBusiUserStore()
+
+const { busiUserAdmin } = storeToRefs(busiUserStore)
 
 </script>
 <style

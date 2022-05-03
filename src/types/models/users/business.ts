@@ -75,8 +75,12 @@ export type BusiUserCurrentInfo = BusiUser & {
 }
 
 /* Use for admin user page */
-export type BusiUserAdminListInfo = BusiUser
-export type BusiUserAdminInfo = BusiUser
+export type BusiUserAdminListInfo = BusiUser & {
+  lastWorkHistory?: TempBusiUserWorkHistory
+}
+export type BusiUserAdminInfo = BusiUser & {
+  lastWorkHistory?: TempBusiUserWorkHistory
+}
 
 /* Forms */
 export type CurrentBusiUserForm = Pick<BusiUser, 'userId' | 'busiId'>

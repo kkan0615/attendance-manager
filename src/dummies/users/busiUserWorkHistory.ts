@@ -85,23 +85,64 @@ export const initBusiUserWorkHistoryDummy = () => {
       updatedAt: startedAt.toISOString(),
     } as TempBusiUserWorkHistory
   })
-  // TempBusiUserWorkHistoryDummy.unshift({
-  //   id: 1,
-  //   busiId: 1,
-  //   busiUserId: 1,
-  //   userId: 1,
-  //   workOption: 'simple',
-  //   startedAt: dayjs().startOf('week').startOf('day').add(23, 'hours').toISOString(),
-  //   endedAt: dayjs().startOf('week').startOf('day').add(1, 'day').add(2, 'hours').toISOString(),
-  //   startLatitude: 37.6015565,
-  //   startLongitude: 126.7280587,
-  //   endLatitude: 37.6015565,
-  //   endLongitude: 126.7280587,
-  //   createdAt: dayjs().startOf('week').startOf('day').toISOString(),
-  //   updatedAt: dayjs().startOf('week').startOf('day').toISOString(),
-  // } as TempBusiUserWorkHistory)
   const found = BusiUserDummy.find(dummy => dummy.id === 1)
   if (found) {
     found.lastWorkHistoryId = TempBusiUserWorkHistoryDummy[loopDays - 1].id
+  }
+
+  TempBusiUserWorkHistoryDummy = TempBusiUserWorkHistoryDummy.concat([ ...Array(loopDays).keys() ].map(i => {
+    const workOption = rand(_staticBusiUserWorkOption)
+    const addHours = randNumber({ min: 1, max: 8 })
+    const startedAt = dayjs().startOf('week').startOf('day')
+      .add(i, 'days') // For id order
+      .add(10, 'hours')
+    return {
+      id: i + loopDays + 1,
+      busiId: 1,
+      busiUserId: 3,
+      userId: 4,
+      workOption,
+      startedAt: startedAt.isAfter(dayjs()) ? dayjs().toISOString() : startedAt.toISOString(),
+      endedAt: i !== loopDays - 1 ? startedAt.add(addHours, 'hours').toISOString() : undefined,
+      startLatitude: workOption !== 'qrCode' ? 37.6015565 : undefined,
+      startLongitude: workOption !== 'qrCode' ? 126.7280587 : undefined,
+      endLatitude: i !== loopDays - 1 && workOption !== 'qrCode' ? 37.6015565 : undefined,
+      endLongitude: i !== loopDays - 1 && workOption !== 'qrCode' ? 126.7280587 : undefined,
+      createdAt: startedAt.toISOString(),
+      updatedAt: startedAt.toISOString(),
+    } as TempBusiUserWorkHistory
+  }))
+  const found3 = BusiUserDummy.find(dummy => dummy.id === 3)
+  if (found3) {
+    found3.status = 'work'
+    found3.lastWorkHistoryId = TempBusiUserWorkHistoryDummy[loopDays - 1].id
+  }
+
+  TempBusiUserWorkHistoryDummy = TempBusiUserWorkHistoryDummy.concat([ ...Array(loopDays).keys() ].map(i => {
+    const workOption = rand(_staticBusiUserWorkOption)
+    const addHours = randNumber({ min: 1, max: 8 })
+    const startedAt = dayjs().startOf('week').startOf('day')
+      .add(i, 'days') // For id order
+      .add(10, 'hours')
+    return {
+      id: i + loopDays + loopDays + 1 + 1,
+      busiId: 1,
+      busiUserId: 12,
+      userId: 13,
+      workOption,
+      startedAt: startedAt.isAfter(dayjs()) ? dayjs().toISOString() : startedAt.toISOString(),
+      endedAt: i !== loopDays - 1 ? startedAt.add(addHours, 'hours').toISOString() : undefined,
+      startLatitude: workOption !== 'qrCode' ? 37.6015565 : undefined,
+      startLongitude: workOption !== 'qrCode' ? 126.7280587 : undefined,
+      endLatitude: i !== loopDays - 1 && workOption !== 'qrCode' ? 37.6015565 : undefined,
+      endLongitude: i !== loopDays - 1 && workOption !== 'qrCode' ? 126.7280587 : undefined,
+      createdAt: startedAt.toISOString(),
+      updatedAt: startedAt.toISOString(),
+    } as TempBusiUserWorkHistory
+  }))
+  const found12 = BusiUserDummy.find(dummy => dummy.id === 12)
+  if (found12) {
+    found12.status = 'rest'
+    found12.lastWorkHistoryId = TempBusiUserWorkHistoryDummy[loopDays - 1].id
   }
 }

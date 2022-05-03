@@ -37,8 +37,8 @@
         style="min-height: 52px;"
       >
         <work-timer
-          v-if="user.startWorkAt"
-          :start-time="user.startWorkAt"
+          v-if="user.lastWorkHistory && user.lastWorkHistory.startedAt"
+          :start-time="user.lastWorkHistory.startedAt"
         />
       </div>
       <!-- Name -->

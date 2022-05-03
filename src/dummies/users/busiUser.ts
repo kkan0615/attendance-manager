@@ -23,7 +23,7 @@ export const initBusiUserDummy = () => {
       updatedAt: dayjs().toISOString(),
     } as BusiUser
   ].concat([ ...Array(20).keys() ].map(i => {
-    const status = rand(_staticBusiUserStatus)
+    // const status = rand(_staticBusiUserStatus)
     const auth = rand(_staticBusiUserAuth)
     const firstname = randFirstName({ length: 1 })
     return {
@@ -33,8 +33,7 @@ export const initBusiUserDummy = () => {
       name: randFullName(),
       nickname: randUserName(),
       email: randEmail({ firstName: firstname.join(''), lastName: '', suffix: '' }),
-      startWorkAt: status === 'work' || status === 'rest' ? dayjs().toISOString() : null,
-      status: status,
+      status: 'off',
       auth: auth,
       joinAt: dayjs().toISOString(),
       createdAt: dayjs().toISOString(),

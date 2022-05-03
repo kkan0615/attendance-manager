@@ -109,13 +109,6 @@ const initData = async () => {
         rangeStartAt: busiUserWorkHistoryListFilter.value.rangeStartAt,
         rangeEndAt: busiUserWorkHistoryListFilter.value.rangeEndAt,
       })
-
-      /* Load work total work seconds  */
-      await busiUserStore.loadBusiUserAdminTotalWorkSeconds({
-        busiUserId: busiUserStore.BusiUserAdmin.id,
-        startDateAt: busiUserWorkHistoryListFilter.value.rangeStartAt || '',
-        endDateAt: busiUserWorkHistoryListFilter.value.rangeEndAt || '',
-      })
     }
   } catch (e) {
     console.error(e)

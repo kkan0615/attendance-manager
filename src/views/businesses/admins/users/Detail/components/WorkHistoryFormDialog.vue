@@ -240,19 +240,13 @@ const onSubmitForm = async () => {
         workOption: workOption.value || 'simple',
       })
     }
-    /* Load work history */
+    /* Reload work history */
     await busiUserWorkHistoryStore.loadBusiUserWorkHistoryList({
       busiUserId: busiUserAdmin.value.id,
       rangeStartAt: busiUserWorkHistoryListFilter.value.rangeStartAt,
       rangeEndAt: busiUserWorkHistoryListFilter.value.rangeEndAt,
     })
 
-    /* Load work total work seconds  */
-    await busiUserStore.loadBusiUserAdminTotalWorkSeconds({
-      busiUserId: busiUserStore.BusiUserAdmin.id,
-      startDateAt: busiUserWorkHistoryListFilter.value.rangeStartAt || '',
-      endDateAt: busiUserWorkHistoryListFilter.value.rangeEndAt || '',
-    })
     showSnackbar({
       message: i18n.t('Commons.Messages.saved'),
       color: 'positive'
