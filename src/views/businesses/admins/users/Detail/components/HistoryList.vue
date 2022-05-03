@@ -117,7 +117,8 @@ import BusiAdminUserDetailWorkHistoryFormDialog
 const busiUserStore = useBusiUserStore()
 const busiUserWorkHistoryStore = useBusiUserWorkHistoryStore()
 
-const { busiUserWorkHistoryList } = storeToRefs(busiUserWorkHistoryStore)
+const { busiUserAdmin } = storeToRefs(busiUserStore)
+const { busiUserWorkHistoryListFilter, busiUserWorkHistoryList } = storeToRefs(busiUserWorkHistoryStore)
 const rangeDate = ref([dayjs().startOf('week').toDate(), dayjs().endOf('week').toDate()])
 const columns = ref<Column[]>([
   {
@@ -176,7 +177,7 @@ const columns = ref<Column[]>([
     }
   },
   {
-    caption: 'actions',
+    caption: 'Actions',
     dataField: 'actions',
     alignment: 'center',
     cellTemplate: 'actionsCellTemplate',
@@ -186,23 +187,33 @@ const columns = ref<Column[]>([
     allowGrouping: false,
     allowSearch: false,
     allowSorting: false
-  }
+  },
+  {
+    caption: 'Description',
+    dataField: 'description',
+    visible: false,
+  },
 ])
 
 const onClickSearchBtn = async () => {
   try {
+    /* Set the filter data */
+    busiUserWorkHistoryListFilter.value.busiUserId = busiUserAdmin.value.id
+    busiUserWorkHistoryListFilter.value.rangeStartAt = dayjs(rangeDate.value[0]).toISOString()
+    busiUserWorkHistoryListFilter.value.rangeEndAt = dayjs(rangeDate.value[1]).toISOString()
+
     /* Load work history */
     await busiUserWorkHistoryStore.loadBusiUserWorkHistoryList({
       busiUserId: busiUserStore.BusiUserAdmin.id,
-      rangeStartAt: dayjs(rangeDate.value[0]).toISOString(),
-      rangeEndAt: dayjs(rangeDate.value[1]).toISOString(),
+      rangeStartAt: busiUserWorkHistoryListFilter.value.rangeStartAt,
+      rangeEndAt: busiUserWorkHistoryListFilter.value.rangeEndAt,
     })
 
     /* Load work total work seconds  */
     await busiUserStore.loadBusiUserAdminTotalWorkSeconds({
       busiUserId: busiUserStore.BusiUserAdmin.id,
-      startDateAt: dayjs(rangeDate.value[0]).toISOString(),
-      endDateAt: dayjs(rangeDate.value[1]).toISOString(),
+      startDateAt: busiUserWorkHistoryListFilter.value.rangeStartAt || '',
+      endDateAt: busiUserWorkHistoryListFilter.value.rangeEndAt || '',
     })
   } catch (e) {
     console.error(e)

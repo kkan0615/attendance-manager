@@ -75,6 +75,7 @@ const currentStore = useCurrentStore()
 const busiUserWorkHistoryStore = useBusiUserWorkHistoryStore()
 
 const { busiUserAdmin } = storeToRefs(busiUserStore)
+const { busiUserWorkHistoryListFilter } = storeToRefs(busiUserWorkHistoryStore)
 // @TODO: Adjust i18n
 const breadcrumbs = ref<QBreadcrumbsElProps[]>([
   {
@@ -100,24 +101,33 @@ const initData = async () => {
         throw new Error('Business id is not matched')
       }
 
+      initFilterData()
+
       /* Load work history */
       await busiUserWorkHistoryStore.loadBusiUserWorkHistoryList({
         busiUserId: busiUserStore.BusiUserAdmin.id,
-        rangeStartAt: dayjs().startOf('week').toISOString(),
-        rangeEndAt: dayjs().endOf('week').toISOString(),
+        rangeStartAt: busiUserWorkHistoryListFilter.value.rangeStartAt,
+        rangeEndAt: busiUserWorkHistoryListFilter.value.rangeEndAt,
       })
 
       /* Load work total work seconds  */
       await busiUserStore.loadBusiUserAdminTotalWorkSeconds({
         busiUserId: busiUserStore.BusiUserAdmin.id,
-        startDateAt: dayjs().startOf('week').toISOString(),
-        endDateAt: dayjs().endOf('week').toISOString(),
+        startDateAt: busiUserWorkHistoryListFilter.value.rangeStartAt || '',
+        endDateAt: busiUserWorkHistoryListFilter.value.rangeEndAt || '',
       })
     }
   } catch (e) {
     console.error(e)
     await router.push({ name: 'BusiMyLayout' })
   }
+}
+
+const initFilterData = () => {
+  /* Set the filter data */
+  busiUserWorkHistoryListFilter.value.busiUserId = busiUserAdmin.value.id
+  busiUserWorkHistoryListFilter.value.rangeStartAt = dayjs().startOf('week').toISOString()
+  busiUserWorkHistoryListFilter.value.rangeEndAt = dayjs().endOf('week').toISOString()
 }
 
 const onClickWorkOffBtn = () => {

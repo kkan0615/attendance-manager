@@ -28,6 +28,7 @@ export interface TempBusiUserWorkHistory extends DefaultAttributes {
   startLongitude?: number
   endLatitude?: number
   endLongitude?: number
+  description?: string
 }
 
 export type TempBusiUserWorkHistoryCreateForm = Omit<TempBusiUserWorkHistory, 'id' | 'createdAt' | 'updatedAt' | 'deletedAt'>

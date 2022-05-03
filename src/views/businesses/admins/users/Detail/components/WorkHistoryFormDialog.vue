@@ -32,7 +32,9 @@
       <q-form
         @submit="onSubmitForm"
       >
-        <q-card-section>
+        <q-card-section
+          class="tw-space-y-4"
+        >
           <!-- Work option select -->
           <q-select
             v-model="workOption"
@@ -84,6 +86,16 @@
               </div>
             </template>
           </q-field>
+          <!-- Description -->
+          <q-input
+            v-model="description"
+            label="Description"
+            type="textarea"
+            dense
+            outlined
+            :rules="rules.description"
+            hide-bottom-space
+          />
         </q-card-section>
         <q-separator />
         <q-card-section
@@ -114,9 +126,11 @@ import { useCurrentStore } from '@/store/current'
 import { useI18n } from 'vue-i18n'
 import { showSnackbar } from '@/utils/libs/quasar/notify'
 import { useBusiUserWorkHistoryStore } from '@/store/busiUserWorkHistory'
+import { useBusiUserStore } from '@/store/busiUser'
 
 const i18n = useI18n()
 const currentStore = useCurrentStore()
+const busiUserStore = useBusiUserStore()
 const busiUserWorkHistoryStore = useBusiUserWorkHistoryStore()
 
 const props = defineProps({
@@ -133,20 +147,30 @@ const props = defineProps({
 })
 
 const { currentUser, currentBusiness, currentBusiUser } = storeToRefs(currentStore)
+const { busiUserAdmin } = storeToRefs(busiUserStore)
+const { busiUserWorkHistoryListFilter } = storeToRefs(busiUserWorkHistoryStore)
 const isOpen = ref(false)
 const rangeDate = ref<Date[]>([])
 const workOption = ref<BusiUserWorkOption | undefined>(undefined)
 const options = ref(busiUserWorkOptionSelectOption)
+const description = ref('')
 const rules = ref({
   rangeDate: [
-    (val: Date[]) => () => {
-      // !!val.length || val.length !== 2 || i18n.t('Commons.Messages.Validations.required', { field:'Name' }),
+    (val: string) => !!val || i18n.t('Commons.Messages.Validations.required', { field:'work option' }),
+    (val: Date[]) => {
       console.log(val)
-      return 'hu>??'
+      if (val.length !== 2 || !val[0] || !val[1]) {
+        return i18n.t('Commons.Messages.Validations.required', { field:'work option' })
+      } else {
+        return true
+      }
     }
   ],
   workOption: [
     (val: string) => !!val || i18n.t('Commons.Messages.Validations.required', { field:'work option' }),
+  ],
+  description: [
+    (val: string) => val.length <= 200 || i18n.t('Commons.Messages.Validations.lengthMax', { length: 200 })
   ],
 })
 
@@ -195,33 +219,40 @@ const onSubmitForm = async () => {
       throw new Error('no props')
     }
 
-    // if (props.isUpdate) {
-    //   await busiUserWorkHistoryStore.updateBusiUserWorkHistory({
-    //     id: props.workHistory.id,
-    //     busiId: currentBusiness.value.id,
-    //     userId: currentUser.value.id,
-    //     busiUserId: currentBusiUser.value.id,
-    //     startedAt: dayjs(rangeDate.value[0]).toISOString(),
-    //     endedAt: dayjs(rangeDate.value[1]).toISOString(),
-    //     workOption: workOption.value || 'simple',
-    //   //
-    //   })
-    // } else {
-    //   await busiUserWorkHistoryStore.createBusiUserWorkHistory({
-    //     busiId: currentBusiness.value.id,
-    //     userId: currentUser.value.id,
-    //     busiUserId: currentBusiUser.value.id,
-    //     startedAt: dayjs(rangeDate.value[0]).toISOString(),
-    //     endedAt: dayjs(rangeDate.value[1]).toISOString(),
-    //     workOption: workOption.value || 'simple',
-    //   })
-    // }
+    if (props.isUpdate) {
+      await busiUserWorkHistoryStore.updateBusiUserWorkHistory({
+        id: props.workHistory.id,
+        busiId: currentBusiness.value.id,
+        userId: currentUser.value.id,
+        busiUserId: currentBusiUser.value.id,
+        startedAt: dayjs(rangeDate.value[0]).toISOString(),
+        endedAt: dayjs(rangeDate.value[1]).toISOString(),
+        workOption: workOption.value || 'simple',
+      //
+      })
+    } else {
+      await busiUserWorkHistoryStore.createBusiUserWorkHistory({
+        busiId: currentBusiness.value.id,
+        userId: currentUser.value.id,
+        busiUserId: currentBusiUser.value.id,
+        startedAt: dayjs(rangeDate.value[0]).toISOString(),
+        endedAt: dayjs(rangeDate.value[1]).toISOString(),
+        workOption: workOption.value || 'simple',
+      })
+    }
     /* Load work history */
-    // await busiUserWorkHistoryStore.loadBusiUserWorkHistoryList({
-    //   busiUserId: busiUserStore.BusiUserAdmin.id,
-    //   rangeStartAt: dayjs(rangeDate.value[0]).toISOString(),
-    //   rangeEndAt: dayjs(rangeDate.value[1]).toISOString(),
-    // })
+    await busiUserWorkHistoryStore.loadBusiUserWorkHistoryList({
+      busiUserId: busiUserAdmin.value.id,
+      rangeStartAt: busiUserWorkHistoryListFilter.value.rangeStartAt,
+      rangeEndAt: busiUserWorkHistoryListFilter.value.rangeEndAt,
+    })
+
+    /* Load work total work seconds  */
+    await busiUserStore.loadBusiUserAdminTotalWorkSeconds({
+      busiUserId: busiUserStore.BusiUserAdmin.id,
+      startDateAt: busiUserWorkHistoryListFilter.value.rangeStartAt || '',
+      endDateAt: busiUserWorkHistoryListFilter.value.rangeEndAt || '',
+    })
     showSnackbar({
       message: i18n.t('Commons.Messages.saved'),
       color: 'positive'
