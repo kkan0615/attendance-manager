@@ -65,6 +65,7 @@ import { useI18n } from 'vue-i18n'
 import { storeToRefs } from 'pinia'
 import { convertSeconds } from '@/utils/commons/datetime'
 import WorkHistoryOverviews from '@/components/WorkHistoryOverviews..vue'
+import { toCapitalizeFirstLetter } from '@/utils/commons/stringUtil'
 
 const i18n = useI18n()
 const currentStore = useCurrentStore()
@@ -72,12 +73,12 @@ const { currentBusiUserWorkHistoryList } = storeToRefs(currentStore)
 
 const columns = ref<Column[]>([
   {
-    caption: 'Option',
+    caption: toCapitalizeFirstLetter(i18n.t('Types.Models.BusiUserWorkHistory.Columns.Labels.workOption')),
     dataField: 'workOption',
     width: 80,
   },
   {
-    caption: 'Started At',
+    caption: toCapitalizeFirstLetter(i18n.t('Types.Models.BusiUserWorkHistory.startedAt')),
     dataField: 'startedAt',
     minWidth: 180,
     calculateDisplayValue: (row: TempBusiUserWorkHistory) => {
@@ -85,7 +86,7 @@ const columns = ref<Column[]>([
     },
   },
   {
-    caption: 'Ended at',
+    caption: toCapitalizeFirstLetter(i18n.t('Types.Models.BusiUserWorkHistory.endedAt')),
     dataField: 'endedAt',
     minWidth: 180,
     calculateDisplayValue: (row: TempBusiUserWorkHistory) => {
@@ -93,7 +94,7 @@ const columns = ref<Column[]>([
     },
   },
   {
-    caption: 'Time',
+    caption: toCapitalizeFirstLetter(i18n.t('Types.Models.BusiUserWorkHistory.Columns.Labels.time')),
     dataField: 'time',
     minWidth: 100,
     calculateDisplayValue: (row: TempBusiUserWorkHistory) => {
@@ -112,20 +113,26 @@ const columns = ref<Column[]>([
     },
   },
   {
-    caption: 'Start (lat, long)',
+    caption: toCapitalizeFirstLetter(i18n.t('Types.Models.BusiUserWorkHistory.Columns.Labels.startCoordination')),
     dataField: 'startCoordination',
+    visible: false,
     calculateDisplayValue: (row: TempBusiUserWorkHistory) => {
       return row.startLatitude && row.startLongitude ? `${row.startLatitude}, ${row.startLongitude}` : ''
     }
   },
   {
-    caption: 'End (lat, long)',
+    caption: toCapitalizeFirstLetter(i18n.t('Types.Models.BusiUserWorkHistory.Columns.Labels.endCoordination')),
     dataField: 'endCoordination',
     visible: false,
     calculateDisplayValue: (row: TempBusiUserWorkHistory) => {
       return row.endLatitude && row.endLongitude ? `${row.endLatitude}, ${row.endLongitude}` : ''
     }
-  }
+  },
+  {
+    caption: toCapitalizeFirstLetter(i18n.t('Types.Models.BusiUserWorkHistory.description')),
+    dataField: 'description',
+    visible: false,
+  },
 ])
 const formattedStartDateAt = ref(dayjs().startOf('week').format('ll'))
 const formattedEndDateAt = ref(dayjs().endOf('week').format('ll'))

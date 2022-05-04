@@ -35,8 +35,10 @@
           icon="search"
           @click="onClickSearchBtn"
         >
-          <q-tooltip>
-            Search
+          <q-tooltip
+            class="tw-capitalize"
+          >
+            {{ $t('Commons.Tooltips.search') }}
           </q-tooltip>
         </q-btn>
       </div>
@@ -48,10 +50,11 @@
       <busi-history-main-line-chart />
       <q-card>
         <q-card-section
-          class="q-py-sm text-h6"
+          class="q-py-sm text-h6 tw-capitalize"
         >
-          Work History
+          {{ $t('Pages.Businesses.Mys.Histories.Main.Titles.workHistory') }}
         </q-card-section>
+        <!-- Table -->
         <q-card-section
           class="q-pt-none"
         >
@@ -95,6 +98,7 @@ import { convertSeconds } from '@/utils/commons/datetime'
 import CLayoutMenubar from '@/components/commons/layouts/Menubar/index.vue'
 import BusiHistoryMainLineChart from '@/views/businesses/mys/histories/Main/components/LineChart.vue'
 import WorkHistoryOverviews from '@/components/WorkHistoryOverviews..vue'
+import { toCapitalize, toCapitalizeFirstLetter } from '@/utils/commons/stringUtil'
 
 const i18n = useI18n()
 const currentStore = useCurrentStore()
@@ -104,25 +108,25 @@ const { currentBusiUser } = storeToRefs(currentStore)
 const { busiUserWorkHistoryListFilter, busiUserWorkHistoryList } = storeToRefs(busiUserWorkHistoryStore)
 const breadcrumbs = ref<QBreadcrumbsElProps[]>([
   {
-    label: 'My Home',
+    label: toCapitalize(i18n.t('Pages.Businesses.Mys.Homes.title')),
     to: { name: 'BusiMyHome' }
   },
   {
-    label: 'History',
+    label: toCapitalize(i18n.t('Pages.Businesses.Mys.Histories.title')),
   },
   {
-    label: 'main'
+    label: toCapitalize(i18n.t('Pages.Businesses.Mys.Histories.Main.title')),
   }
 ])
 const rangeDate = ref([dayjs().startOf('week').toDate(), dayjs().endOf('week').toDate()])
 const columns = ref<Column[]>([
   {
-    caption: 'Option',
+    caption: toCapitalizeFirstLetter(i18n.t('Types.Models.BusiUserWorkHistory.Columns.Labels.workOption')),
     dataField: 'workOption',
     width: 80,
   },
   {
-    caption: 'Started At',
+    caption: toCapitalizeFirstLetter(i18n.t('Types.Models.BusiUserWorkHistory.startedAt')),
     dataField: 'startedAt',
     minWidth: 180,
     calculateDisplayValue: (row: TempBusiUserWorkHistory) => {
@@ -130,7 +134,7 @@ const columns = ref<Column[]>([
     },
   },
   {
-    caption: 'Ended at',
+    caption: toCapitalizeFirstLetter(i18n.t('Types.Models.BusiUserWorkHistory.endedAt')),
     dataField: 'endedAt',
     minWidth: 180,
     calculateDisplayValue: (row: TempBusiUserWorkHistory) => {
@@ -138,7 +142,7 @@ const columns = ref<Column[]>([
     },
   },
   {
-    caption: 'Time',
+    caption: toCapitalizeFirstLetter(i18n.t('Types.Models.BusiUserWorkHistory.Columns.Labels.time')),
     dataField: 'time',
     minWidth: 100,
     calculateDisplayValue: (row: TempBusiUserWorkHistory) => {
@@ -157,20 +161,25 @@ const columns = ref<Column[]>([
     },
   },
   {
-    caption: 'Start (lat, long)',
+    caption: toCapitalizeFirstLetter(i18n.t('Types.Models.BusiUserWorkHistory.Columns.Labels.startCoordination')),
     dataField: 'startCoordination',
     calculateDisplayValue: (row: TempBusiUserWorkHistory) => {
       return row.startLatitude && row.startLongitude ? `${row.startLatitude}, ${row.startLongitude}` : ''
     }
   },
   {
-    caption: 'End (lat, long)',
+    caption: toCapitalizeFirstLetter(i18n.t('Types.Models.BusiUserWorkHistory.Columns.Labels.endCoordination')),
     dataField: 'endCoordination',
     visible: false,
     calculateDisplayValue: (row: TempBusiUserWorkHistory) => {
       return row.endLatitude && row.endLongitude ? `${row.endLatitude}, ${row.endLongitude}` : ''
     }
-  }
+  },
+  {
+    caption: toCapitalizeFirstLetter(i18n.t('Types.Models.BusiUserWorkHistory.description')),
+    dataField: 'description',
+    visible: false,
+  },
 ])
 
 const initFilterData = () => {

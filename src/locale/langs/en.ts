@@ -1,10 +1,11 @@
 export const enDictionary = {
   Commons: {
     Tooltips: {
-      edit: 'Edit',
+      search: 'search',
+      edit: 'edit',
       delete: 'delete',
       ok: 'ok',
-      reject: 'reject'
+      reject: 'reject',
     },
     Buttons: {
       create: 'create',
@@ -55,6 +56,9 @@ export const enDictionary = {
     },
     Placeholders: {
       noData: 'No data',
+    },
+    Labels: {
+      action: 'action',
     }
   },
   Types: {
@@ -118,6 +122,27 @@ export const enDictionary = {
         Badges: {
           isNotification: 'notice',
         }
+      },
+      BusiUserWorkHistory: {
+        busiId: 'business',
+        userId: 'user',
+        busiUserId: 'business user',
+        startedAt: 'started at',
+        endedAt: 'ended at',
+        workOption: 'work option',
+        startLatitude: 'start latitude',
+        startLongitude: 'start longitude',
+        endLatitude: 'end latitude',
+        endLongitude: 'end longitude',
+        description: 'description',
+        Columns: {
+          Labels: {
+            workOption: 'option',
+            time: 'time',
+            startCoordination: 'start (lat, long)',
+            endCoordination: 'end (lat, long)',
+          }
+        }
       }
     }
   },
@@ -136,8 +161,18 @@ export const enDictionary = {
       Mys: {
         title: 'my business',
         Homes: {
+          title: 'my home',
           Titles: {
             weeklyWorkHistory: 'week work history',
+          }
+        },
+        Histories: {
+          title: 'history',
+          Main: {
+            title: 'main',
+            Titles: {
+              workHistory: 'work history'
+            }
           }
         }
       },

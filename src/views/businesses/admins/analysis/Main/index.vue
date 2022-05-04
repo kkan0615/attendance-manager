@@ -35,8 +35,10 @@
           icon="search"
           @click="onClickSearchBtn"
         >
-          <q-tooltip>
-            Search
+          <q-tooltip
+            class="tw-capitalize"
+          >
+            {{ $t('Commons.Tooltips.search') }}
           </q-tooltip>
         </q-btn>
       </div>
