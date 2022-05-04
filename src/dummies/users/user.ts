@@ -8,7 +8,7 @@ export const initUserDummy = () => {
     {
       id: 1,
       img: 'https://picsum.photos/id/1003/500/500',
-      email: 'deer@demo.com',
+      email: 'demo@demo.com',
       name: 'Deer',
       nickname: 'Sasum',
       createdAt: dayjs().toISOString(),

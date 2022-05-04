@@ -17,6 +17,18 @@
           Login
         </div>
         <q-banner
+          v-if="infoMessage"
+          dense
+          class="bg-info text-white q-mb-md"
+        >
+          <template #avatar>
+            <q-icon
+              name="info"
+            />
+          </template>
+          {{ infoMessage }}
+        </q-banner>
+        <q-banner
           v-if="errorMessage"
           class="bg-negative text-white q-mb-md"
         >
@@ -103,9 +115,10 @@ const router = useRouter()
 const i18n = useI18n()
 const currentStore = useCurrentStore()
 
-const email = ref('')
-const password = ref('')
+const email = ref(import.meta.env.VITE_IS_USE_DUMMY ? 'demo@demo.com' : '')
+const password = ref(import.meta.env.VITE_IS_USE_DUMMY ? 'some-password' : '')
 const isDisplayPassword = ref(false)
+const infoMessage = ref(import.meta.env.VITE_IS_USE_DUMMY ? 'If you are in demo site, just press login button!' : '')
 const errorMessage = ref('')
 const rules = ref({
   email: [
