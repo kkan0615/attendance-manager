@@ -3,14 +3,29 @@
     @submit="onSubmitForm"
   >
     <div
-      class="tw-flex tw-items-center"
+      class="tw-flex tw-items-center tw-space-x-2"
     >
-      <q-input
-        v-model="title"
+      <!-- @TODO: Add i18n to label -->
+      <q-select
+        v-model="option"
+        class="tw-w-40"
+        hide-bottom-space
         dense
         outlined
-        label="title"
+        label="option"
+        :options="options"
+        emit-value
+        map-options
       />
+      <!-- Title -->
+      <q-input
+        v-model="str"
+        class="tw-grow"
+        dense
+        outlined
+        :placeholder="strPlaceholder"
+      />
+      <!-- Search button -->
       <q-btn
         class="tw-ml-auto"
         color="primary"
@@ -28,17 +43,39 @@ export default {
 <script setup lang="ts">
 import { useBusiPostStore } from '@/store/busiPost'
 import { storeToRefs } from 'pinia'
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
+import { toCapitalizeFirstLetter } from '@/utils/commons/stringUtil'
+import { BusiPostListSelectListQueryOptionType } from '@/types/models/businesses/post'
 
 const busiPostStore = useBusiPostStore()
 
 const { busiPostListFilter } = storeToRefs(busiPostStore)
-const title = ref('')
+const option = ref<BusiPostListSelectListQueryOptionType | undefined>(busiPostListFilter.value.option)
+const str = ref('')
+// @TODO: Add i18n to label
+const options = ref<{ label: string; value: BusiPostListSelectListQueryOptionType}[]>([
+  {
+    label: toCapitalizeFirstLetter('title'),
+    value: 'title',
+  },
+  {
+    label: toCapitalizeFirstLetter('author'),
+    value: 'author',
+  },
+  {
+    label: toCapitalizeFirstLetter('title + author'),
+    value: 'titleAndAuthor',
+  }
+])
+
+// @TODO: Add i18n to label
+const strPlaceholder = computed(() => option.value ? option.value : '')
 
 const onSubmitForm = async () => {
   try {
     /* Set the filter options */
-    busiPostListFilter.value.title = title.value
+    busiPostListFilter.value.option = option.value
+    busiPostListFilter.value.str = str.value
     /* Load busi post list, not load notification */
     await busiPostStore.loadBusiPostList()
   } catch (e) {

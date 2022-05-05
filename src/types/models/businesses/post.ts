@@ -30,8 +30,11 @@ export interface BusiPostInfo extends BusiPost {
   busiUser: BusiUser
   attachments: BusiPostAttachment[]
 }
+
+export type BusiPostListSelectListQueryOptionType = 'title' | 'titleAndAuthor' | 'author'
 export interface BusiPostListSelectListQuery extends DefaultSelectListQuery {
-  title?: string
+  option?: BusiPostListSelectListQueryOptionType
+  str?: string
   limit: number
   page: number
 }

@@ -9,9 +9,11 @@
     <div
       class="tw-max-w-4xl tw-mx-auto"
     >
+      <!-- Actions -->
       <div
         class="text-right q-mb-md"
       >
+        <!-- Create button -->
         <q-btn
           color="primary"
           :label="$t('Commons.Buttons.create')"
@@ -19,6 +21,7 @@
         />
       </div>
       <div>
+        <!-- Filter -->
         <busi-app-notification-main-filter
           class="q-mb-sm"
         />
@@ -162,13 +165,19 @@ const maxPagination = computed(() => Math.ceil((busiPostStore.BusiPostListCount 
 
 const initData = async () => {
   try {
+    /* Load post list */
     await busiPostStore.loadBusiPostList()
+    /* Load notification list */
     await busiPostStore.loadBusiNotificationPostList()
   } catch (e) {
     console.error(e)
   }
 }
 
+/**
+ * When data-grid rows are prepared
+ * @param row
+ */
 const onRowPrepared = (row: RowPreparedEvent<BusiPostListInfo>) => {
   /* Change color of notification post row */
   if (row.data && row.data.isNotification) {

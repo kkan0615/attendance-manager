@@ -30,6 +30,7 @@ export const useBusiPostStore = defineStore('busiPost', {
   state: (): BusiPostState => {
     return {
       busiPostListFilter: {
+        option: 'title',
         page: 0,
         limit: 20,
       } as BusiPostListSelectListQuery,
@@ -105,6 +106,7 @@ export const useBusiPostStore = defineStore('busiPost', {
      */
     resetBusiPostListFilter () {
       this.busiPostListFilter = {
+        option: 'title',
         page: 0,
         limit: 20,
       } as BusiPostListSelectListQuery
@@ -119,9 +121,7 @@ export const useBusiPostStore = defineStore('busiPost', {
           const filterDummies: BusiPostListInfo[] = BusiPostDummy.filter(dummy =>
             dummy.busiId === currentStore.CurrentBusiness.id && !dummy.isNotification
             && !dummy.deletedAt
-          ).filter(dummy => {
-            return this.busiPostListFilter.title ? dummy.title.toLowerCase().includes(this.busiPostListFilter.title.toLowerCase()) : true
-          }).map(dummy => {
+          ).map(dummy => {
             return {
               ...dummy,
               isAttachment: BusiPostAttachmentDummy.filter(dummyAttachment => dummyAttachment.busiPostId === dummy.id && !dummyAttachment.deletedAt).length > 0,
@@ -129,8 +129,22 @@ export const useBusiPostStore = defineStore('busiPost', {
               busiUser: BusiUserDummy.find(userDummy => userDummy.id === dummy.busiUserId) || {} as BusiUser,
             }
           })
+            .filter(dummy => {
+              let result = true
+              if (this.busiPostListFilter.option && this.busiPostListFilter.str) {
+                if (this.busiPostListFilter.option === 'title') {
+                  result = dummy.title.toLowerCase().includes(this.busiPostListFilter.str.toLowerCase())
+                } else if (this.busiPostListFilter.option === 'author') {
+                  result = dummy.busiUser.name.toLowerCase().includes(this.busiPostListFilter.str.toLowerCase())
+                } else if (this.busiPostListFilter.option === 'titleAndAuthor') {
+                  result = dummy.title.toLowerCase().includes(this.busiPostListFilter.str.toLowerCase())
+                    || dummy.busiUser.name.toLowerCase().includes(this.busiPostListFilter.str.toLowerCase())
+                }
+              }
+              return result
+            })
             .sort((a, b) => dayjs(b.updatedAt).diff(a.updatedAt, 'milliseconds'))
-          this.busiPostListCount = BusiPostDummy.length
+          this.busiPostListCount = filterDummies.length
           this.busiPostList = filterDummies.slice(this.busiPostListFilter.page * this.busiPostListFilter.limit,
             ((this.busiPostListFilter.page + 1) * this.busiPostListFilter.limit))
         } else {
