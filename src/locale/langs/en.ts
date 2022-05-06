@@ -40,6 +40,7 @@ export const enDictionary = {
       offWorkFailed: 'Fail to get off the work',
       noImg: 'No Image',
       notMatched: 'It is not matched',
+      noData: 'no data',
       Validations: {
         required: '{field} field is required',
         lengthMin: '{length} is minimum',
@@ -112,6 +113,11 @@ export const enDictionary = {
         updatedAt: 'updated at',
         Extends: {
           user: 'author'
+        },
+        Columns: {
+          Labels: {
+            user: 'user'
+          }
         },
         Labels: {
           isNotification: 'Notification post',

@@ -38,6 +38,7 @@
           <template
             #isNotificationCellTemplate="{ data }"
           >
+            <!-- If it's notification post -->
             <q-badge
               v-if="data.data.isNotification"
             >
@@ -47,6 +48,7 @@
                 {{ $t('Types.Models.BusiPost.Badges.isNotification') }}
               </div>
             </q-badge>
+            <!-- else (general post) -->
             <span
               v-else
             >
@@ -113,7 +115,10 @@ import { Column, RowPreparedEvent } from 'devextreme/ui/data_grid'
 import dayjs from 'dayjs'
 import BusiAppNotificationMainFilter from '@/views/businesses/apps/posts/Main/components/Filter.vue'
 import { storeToRefs } from 'pinia'
+import { toCapitalize, toCapitalizeFirstLetter } from '@/utils/commons/stringUtil'
+import { useI18n } from 'vue-i18n'
 
+const i18n = useI18n()
 const router = useRouter()
 const busiPostStore = useBusiPostStore()
 
@@ -137,18 +142,18 @@ const columns = ref<Column[]>([
     cellTemplate: 'isNotificationCellTemplate',
   },
   {
-    caption: 'title',
+    caption: toCapitalizeFirstLetter(i18n.t('Types.Models.BusiPost.title')),
     dataField: 'title',
     minWidth: 500,
     cellTemplate: 'titleCellTemplate',
   },
   {
-    caption: 'user',
+    caption: toCapitalizeFirstLetter(i18n.t('Types.Models.BusiPost.Columns.Labels.user')),
     dataField: 'busiUser.name',
     width: '100px',
   },
   {
-    caption: 'updatedAt',
+    caption: toCapitalize(i18n.t('Types.Models.BusiPost.updatedAt')),
     dataField: 'updatedAt',
     width: '120px',
     calculateDisplayValue: (row: BusiPostListInfo) => {
@@ -190,7 +195,6 @@ const onRowPrepared = (row: RowPreparedEvent<BusiPostListInfo>) => {
  * @param newPage - new page number
  */
 const onUpdatePage = async (newPage: string) => {
-
   try {
     /* Set the filter options */
     busiPostListFilter.value.page = parseInt(newPage) - 1

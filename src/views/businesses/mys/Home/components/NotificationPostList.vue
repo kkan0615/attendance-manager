@@ -83,6 +83,7 @@ import { useI18n } from 'vue-i18n'
 import { BusiPostListInfo } from '@/types/models/businesses/post'
 import { useBusiPostStore } from '@/store/busiPost'
 import { storeToRefs } from 'pinia'
+import { toCapitalize, toCapitalizeFirstLetter } from '@/utils/commons/stringUtil'
 
 const i18n = useI18n()
 const currentStore = useCurrentStore()
@@ -97,18 +98,18 @@ const columns = ref<Column[]>([
     cellTemplate: 'isNotificationCellTemplate',
   },
   {
-    caption: 'title',
+    caption: toCapitalizeFirstLetter(i18n.t('Types.Models.BusiPost.title')),
     dataField: 'title',
     minWidth: 500,
     cellTemplate: 'titleCellTemplate',
   },
   {
-    caption: 'user',
+    caption: toCapitalizeFirstLetter(i18n.t('Types.Models.BusiPost.Columns.Labels.user')),
     dataField: 'busiUser.name',
     width: '100px',
   },
   {
-    caption: 'updatedAt',
+    caption: toCapitalize(i18n.t('Types.Models.BusiPost.updatedAt')),
     dataField: 'updatedAt',
     width: '120px',
     calculateDisplayValue: (row: BusiPostListInfo) => {
