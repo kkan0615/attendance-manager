@@ -1,6 +1,6 @@
 <template>
   <div
-    class="text-center"
+    class="text-center hover:tw-bg-gray-100"
     :class="{
       'tw-border': isActive,
       'tw-border-dotted': isActive,

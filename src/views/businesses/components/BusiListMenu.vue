@@ -18,7 +18,7 @@
         <q-separator />
         <q-card-section>
           <div
-            class="tw-grid tw-grid-cols-3 tw-gap-2"
+            class="tw-grid tw-grid-cols-3 tw-gap-1"
           >
             <busi-layout-busi-list-item
               v-for="business in currentUserBusiList"

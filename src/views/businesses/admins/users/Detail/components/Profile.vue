@@ -62,6 +62,21 @@
             {{ busiUserAdmin.name }}
           </div>
         </div>
+        <!-- Nickname -->
+        <div
+          class="c-display-row-end"
+        >
+          <div
+            class="c-display-row-end--label c-text-first-uppercase"
+          >
+            {{ $t('Types.Models.BusiUsers.nickname') }}
+          </div>
+          <div
+            class="c-display-row-end--content c-text-first-uppercase"
+          >
+            {{ busiUserAdmin.nickname }}
+          </div>
+        </div>
         <!-- Email -->
         <div
           class="c-display-row-end"
@@ -92,6 +107,21 @@
             {{ $t(`Types.Models.BusiUsers.UserAuths.${busiUserAdmin.auth}`) }}
           </div>
         </div>
+        <!-- join at -->
+        <div
+          class="c-display-row-end"
+        >
+          <div
+            class="c-display-row-end--label c-text-first-uppercase"
+          >
+            {{ $t('Types.Models.BusiUsers.joinAt') }}
+          </div>
+          <div
+            class="c-display-row-end--content c-text-first-uppercase"
+          >
+            {{ formattedJoinAt }}
+          </div>
+        </div>
       </div>
     </q-card-section>
   </q-card>
@@ -106,10 +136,14 @@ import { useBusiUserStore } from '@/store/busiUser'
 import WorkTimer from '@/components/WorkTimer.vue'
 import BusiUserStatusBadge from '@/components/BusiUserStatusBadge.vue'
 import { storeToRefs } from 'pinia'
+import { computed } from 'vue'
+import dayjs from 'dayjs'
 
 const busiUserStore = useBusiUserStore()
 
 const { busiUserAdmin } = storeToRefs(busiUserStore)
+
+const formattedJoinAt = computed(() => dayjs(busiUserAdmin.value.joinAt).format('ll'))
 
 </script>
 <style

@@ -92,6 +92,7 @@ export const enDictionary = {
         email: 'email',
         nickname: 'nickname',
         description: 'description',
+        joinAt: 'join at',
         createdAt: 'join date',
         UserAuths: {
           user: 'user',
