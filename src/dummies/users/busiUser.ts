@@ -40,21 +40,21 @@ export const initBusiUserDummy = () => {
       updatedAt: dayjs().toISOString(),
     } as BusiUser
   }))
-    .concat([ ...Array(20).keys() ].map(i => {
-      return     {
-        id: i + 22,
-        img: 'https://picsum.photos/id/1003/500/500',
-        email: 'hanamaru@demo.com',
-        name: 'Hanamaru',
-        nickname: 'Hanamaru',
-        userId: 1,
-        busiId: i + 2,
-        status: 'off',
-        startWorkAt: null,
-        auth: 'superAdmin',
-        joinAt: dayjs().toISOString(),
-        createdAt: dayjs().toISOString(),
-        updatedAt: dayjs().toISOString(),
-      } as BusiUser
-    }))
+  // .concat([ ...Array(20).keys() ].map(i => {
+  //   return     {
+  //     id: i + 22,
+  //     img: 'https://picsum.photos/id/1003/500/500',
+  //     email: 'hanamaru@demo.com',
+  //     name: 'Hanamaru',
+  //     nickname: 'Hanamaru',
+  //     userId: 1,
+  //     busiId: i + 2,
+  //     status: 'off',
+  //     startWorkAt: null,
+  //     auth: 'superAdmin',
+  //     joinAt: dayjs().toISOString(),
+  //     createdAt: dayjs().toISOString(),
+  //     updatedAt: dayjs().toISOString(),
+  //   } as BusiUser
+  // }))
 }

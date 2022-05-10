@@ -15,6 +15,7 @@
       />
       <q-avatar
         style="height: 38px; width: 38px;"
+        @click="moveToHome"
       >
         <q-img
           :src="currentStore.CurrentBusiness.smallLogo"
@@ -23,7 +24,10 @@
           width="80%"
         />
       </q-avatar>
-      <q-toolbar-title>
+      <q-toolbar-title
+        class="tw-cursor-pointer"
+        @click="moveToHome"
+      >
         {{ currentStore.CurrentBusiness.name }}
       </q-toolbar-title>
       <!-- Business list dropdown -->
@@ -48,9 +52,18 @@ import { useCurrentStore } from '@/store/current'
 import BusiLayoutUserMenu from '@/views/businesses/components/UserMenu.vue'
 import BusiLayoutBusiListMenu from '@/views/businesses/components/BusiListMenu.vue'
 import BusiLayoutNotificationMenu from '@/views/businesses/components/NotificationMenu.vue'
+import { useRouter } from 'vue-router'
 
+const router = useRouter()
 const currentStore = useCurrentStore()
 const busiSettingStore = useBusiSettingStore()
+
+/**
+ * Redirect to business home (mys)
+ */
+const moveToHome = () => {
+  router.push({ name: 'BusiMyHome' })
+}
 
 const onClickMenuBtn = () => {
   busiSettingStore.setLeftDrawer(!busiSettingStore.IsLeftDrawerOpen)
