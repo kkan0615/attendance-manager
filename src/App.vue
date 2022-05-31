@@ -1,4 +1,5 @@
 <template>
+  <c-reload-prompt />
   <router-view />
 </template>
 <script lang="ts">
@@ -8,6 +9,7 @@ export default {
 </script>
 <script setup lang="ts">
 import { useSettingStore } from '@/store/setting'
+import CReloadPrompt from '@/components/ReloadPrompt.vue'
 
 const settingStore = useSettingStore()
 

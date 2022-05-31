@@ -11,9 +11,28 @@ export default defineConfig({
       template: { transformAssetUrls }
     }),
     VitePWA({
+      mode: 'development',
       devOptions: {
         enabled: true,
-      }
+      },
+      manifest: {
+        name: 'attendance-manager',
+        short_name: 'attendance',
+        start_url: './',
+        description: 'Manager your employers attendance easily!',
+        theme_color: '#FFA726',
+        display: 'standalone',
+        icons: [
+          {
+            src: './icons/logo_48x48.png',
+            sizes: '48x48',
+          },
+          {
+            src: './icons/logo_256x256.png',
+            sizes: '256x256'
+          },
+        ]
+      },
     }),
     // VitePWA({
     //   mode: 'development',
